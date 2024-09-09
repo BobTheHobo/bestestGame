@@ -21,3 +21,4 @@ nbdist/
 /*.dll
 /*.dylib
 /*.so
+.DS_Store
