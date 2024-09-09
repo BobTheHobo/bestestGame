@@ -7,7 +7,7 @@
 
 **Inspiration:**  
 	Inscryption  
-![][image1]  
+![Inscryption Inspiration Image](https://static.wikia.nocookie.net/buckshot-roulette/images/3/32/GameRoom.png/revision/latest/scale-to-width-down/1000?cb=20240112231309)
 Buckshot Roulette
 
 **Gameplay:**  
