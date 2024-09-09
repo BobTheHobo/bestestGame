@@ -10,11 +10,13 @@ A dark, atmospheric escape room game where you must defeat enemies in a card bas
 
 ## Inscryption
 Main inspiration for the game.  Atmosphere, table, and escape room elements all heavily inspired by Inscryption’s mechanics, but in a pirate setting instead of a fantasy cabin.  The relative simplicity of the card game in Inscryption compared to other deck-builders on the market to instead focus on an engaging setting is something we wish to emulate so we can put more focus on the graphical aspects of our game.
+
 <img src="https://umlconnector.com/wp-content/uploads/inscryption-1.webp" alt="Inscryption Inspiration Image" width="500"/>
 <a href="https://store.steampowered.com/app/1092790/Inscryption/" alt="Inscryption Steam Page"/>Inscryption Steam Page</a>
 
 ## Buckshot Roulette
 Another game inspired by Inscryption’s perspective with the table and interactable items.  Closer to the fidelity of what we expect with our assets.  The grittiness and sparseness of Buckshot Roulette’s environment compared to Inscryption’s more involved effects provide a good example of how to create the atmosphere we want while keeping our workload reasonable.
+
 <img src="https://static.wikia.nocookie.net/buckshot-roulette/images/3/32/GameRoom.png/revision/latest/scale-to-width-down/1000?cb=20240112231309" alt="Buckshot Roulette Inspiration Image" width="500"/>
 <a href="https://store.steampowered.com/app/2835570/Buckshot_Roulette/" alt="Buckshot Roulette Steam Page"/>Buckshot Roulette Steam Page</a>
 
