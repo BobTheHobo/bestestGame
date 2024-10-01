@@ -35,14 +35,16 @@ public class Card {
     public Card(AssetManager assetManager, String name, int count) {
         this.assetManager = assetManager;
         parent = null; //Base case of a card before it is played
-        this.name = String.format("Card%s-%d", name, count);
+        this.name = String.format("Card%s-%d", name, count);//count is used so all cards have unique names
         self = new Geometry(this.name, mesh);
         selfNode = new Node();
         
         
         Material mat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.White);
+        mat.setColor("Color", ColorRGBA.White);//Default look, should never be in 3d scene
+        
+        //Changes card to look how it should based on it's name
         switch (this.name.substring(4, this.name.indexOf("-"))) {// Just get the card type
             case "Swashbuckler":
                 power = 4;
@@ -64,6 +66,7 @@ public class Card {
                 break;
         }
         
+        //We only want to print the power and what card type it is
         topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
         
         BitmapFont font = assetManager.loadFont("Interface/Fonts/LucidaCalligraphy.fnt");
@@ -75,6 +78,7 @@ public class Card {
         self.setMaterial(mat);
         self.center();
         
+        //Put the text on the top of the card
         topText.center();
         topText.move(-.11f, .01f, -.13f);
         Quaternion back = new Quaternion();
@@ -97,6 +101,7 @@ public class Card {
         return selfNode;
     }
     
+    //Negative i indicates a weakening, positive for buffing
     public int changePower(int i) {
         power += i;
         topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));

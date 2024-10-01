@@ -131,9 +131,11 @@ public class Board {
         showPlayerHand(); //Update hand spatials
         enemyMove();
         
+        /*
         if (playerHand.isEmpty()) {
             nextRound();
         }
+        */
     }
     
     //All galleys are paired, gets the opposite one
@@ -171,15 +173,18 @@ public class Board {
         
         ArrayList<Galley> open = new ArrayList<>();// To collect all galleys that are valid
         for (int i = 0; i < 3; i++) {
-            if(!galleys.get(i).getSunk() && galleys.get(i).open()) {// Galley has an open slot and is not sunk
+            if(!galleys.get(i).getSunk() && galleys.get(i).open()
+                && !galleys.get(i).opposite().getSunk()) {// Galley has an open slot and is in play
                 open.add(galleys.get(i));
             }
         }
         
-        pull = rand.nextInt(open.size());//Get a random valid galley
-        open.get(pull).playRandom(card);//Play the card on the galley
-        
-        table.attachChild(card.getSelfNode());//Show the card in space
+        if (!open.isEmpty()) {//Ensures there's a place to play
+            pull = rand.nextInt(open.size());//Get a random valid galley
+            open.get(pull).playRandom(card);//Play the card on the galley
+
+            table.attachChild(card.getSelfNode());//Show the card in space
+        }
         
     }
     
@@ -193,6 +198,7 @@ public class Board {
         return null;
     }
     
+    //Gets the Slot object that corresponds to the 'slot' spatial
     private Slot getSlot(Spatial slot) {
         int galley = Integer.parseInt(slot.toString().substring(4,5));
         int space = Integer.parseInt(slot.toString().substring(6,7));

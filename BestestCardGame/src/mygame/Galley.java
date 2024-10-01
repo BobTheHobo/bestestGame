@@ -55,12 +55,14 @@ public class Galley {
         parent.getSelfNode().attachChild(selfNode);
     }
     
+    //Initializes the slots array and the slots in the 3d scene
     private void makeSlots(){
         for (int i = 0; i < 6; i++) {
             slots.add(new Slot(this, i));
         }
     }
     
+    //Plays the card on a random available slot
     public void playRandom(Card card) {
         ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are valid
         for (int i = 0; i < 3; i++) {
@@ -75,6 +77,7 @@ public class Galley {
         
     }
     
+    //Changes a singular random card on the galley, negative power for weakening
     public void buffRandom(int power) {
         ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are filled
         for (int i = 0; i < slots.size(); i++) {
@@ -89,6 +92,7 @@ public class Galley {
         }
     }
     
+    //Changes all cards on galley by 'power', negative power for weakening
     public void buffAll(int power) {
         for (int i = 0; i < slots.size(); i++) {
             if(slots.get(i).getFilled()) {//Slot has a card
@@ -121,6 +125,7 @@ public class Galley {
         return selfNode;
     }
     
+    //If there is a playable slot on the galley
     public boolean open() {
         ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are valid
         for (int i = 0; i < 3; i++) {
@@ -131,6 +136,7 @@ public class Galley {
         return !open.isEmpty(); //No open slots on this galley
     }
     
+    //Sums power of each slot
     public int getPower() {
         int toReturn = 0;
         for (int i = 0; i < 3; i++) {
@@ -141,6 +147,7 @@ public class Galley {
         return toReturn;
     }
     
+    //Removes all currently played cards from the galley
     public void clear() {
         for (int i = 0; i < slots.size(); i++) {
             if (slots.get(i).getFilled()) {// There is a card

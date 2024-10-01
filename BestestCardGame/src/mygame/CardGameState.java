@@ -245,6 +245,8 @@ public class CardGameState extends AbstractAppState {
                                 position = 0;
                                 look = 0;
                                 board.showPlayerHand();
+                            } else if (position == 1) {
+                                board.nextRound();
                             }
                             break;
                     }
