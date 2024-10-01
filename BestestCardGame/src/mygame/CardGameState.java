@@ -52,46 +52,56 @@ public class CardGameState extends AbstractAppState {
     private final static Trigger TRIGGER_A = new KeyTrigger(KeyInput.KEY_A);
     private final static Trigger TRIGGER_S = new KeyTrigger(KeyInput.KEY_S);
     private final static Trigger TRIGGER_D = new KeyTrigger(KeyInput.KEY_D);
+    private final static Trigger TRIGGER_Q = new KeyTrigger(KeyInput.KEY_Q);
     private final static Trigger TRIGGER_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
     private final static String MAPPING_FORWARD = "Move Forward";
     private final static String MAPPING_BACK = "Move Backwards";
     private final static String MAPPING_LEFT = "Look Left";
     private final static String MAPPING_RIGHT = "Look Right";
     private final static String MAPPING_LEFT_CLICK = "Selected";
+    private final static String MAPPING_RESET = "Reset";
     private int position = 0;
     private int look = 0;
     private int enemy = 0;
     private int friendly = 0;
     private Random random = new Random();
+    private Board board;
+    private final Vector3f seatedPos = new Vector3f(0.02f, 2.5f, 5.5f);
+    private final Quaternion seatedAng = new Quaternion(-2.6305395E-4f, 0.997723f, -0.06733209f, -0.0038974239f);
+    private final Vector3f boardPos = new Vector3f(0.02f, 5f, 2.8f);
+    private final Quaternion boardAng = new Quaternion(-5.3E-4f, 0.8f, -.6f, -0.0038974239f);
+    private Spatial selected = null;
    
     
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
-        super.initialize(stateManager, app);
+        super.initialize(stateManager, app); //Initialize fields
         this.app = (SimpleApplication) app;
         this.cam = this.app.getCamera();
         this.rootNode = this.app.getRootNode();
         this.assetManager = this.app.getAssetManager();
         
+        //Initialize inputs
         inputManager = this.app.getInputManager();
         inputManager.addMapping(MAPPING_FORWARD, TRIGGER_W);
         inputManager.addMapping(MAPPING_LEFT, TRIGGER_A);
         inputManager.addMapping(MAPPING_BACK, TRIGGER_S);
         inputManager.addMapping(MAPPING_RIGHT, TRIGGER_D);
         inputManager.addMapping(MAPPING_LEFT_CLICK, TRIGGER_LEFT_CLICK);
+        inputManager.addMapping(MAPPING_RESET, TRIGGER_Q);
         
         inputManager.addListener(actionListener, MAPPING_FORWARD);
         inputManager.addListener(actionListener, MAPPING_BACK);
         inputManager.addListener(actionListener, MAPPING_LEFT);
         inputManager.addListener(actionListener, MAPPING_RIGHT);
         inputManager.addListener(actionListener, MAPPING_LEFT_CLICK);
+        inputManager.addListener(actionListener, MAPPING_RESET);
         
-        
-
-        
+        //We don't give free move while sitting
         flyCam = this.app.getFlyByCamera();     
         flyCam.setEnabled(false);
         
+        //Initialize basic scene w/ lighting and moving table
         setUpLight();
         
         Node tableNode = new Node("table");
@@ -101,15 +111,14 @@ public class CardGameState extends AbstractAppState {
         rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
         table.rotate(rotate90);
         tableNode.attachChild(table);
-        
+               
         tableNode.scale(3f);
         tableNode.center();
-        tableNode.move(0f, -1f, 1f);
         
-        makeGalleys(tableNode);
-        
+        board = new Board(tableNode, assetManager); //Populates table with game mat
         rootNode.attachChild(tableNode); 
         
+        /*
         Spatial galley1 = rootNode.getChild("Galley1");
         Spatial galley4 = rootNode.getChild("Galley4");
         Vector3f location1 = galley1.getWorldTranslation();
@@ -124,13 +133,16 @@ public class CardGameState extends AbstractAppState {
         button.move(0f, .43f, .55f);
         button.scale(.035f, .001f, .035f);
         tableNode.attachChild(button);
+        */
         
         
-        cam.setLocation(new Vector3f(0.02f, 1.5f, 6.5f));
-        cam.setRotation(new Quaternion(-2.6305395E-4f, 0.997723f, -0.06733209f, -0.0038974239f));
+        //Sets our camera to the position at the chair
+        cam.setLocation(seatedPos);
+        cam.setRotation(seatedAng);
             
     }
     
+    //All of our button mappings
     private ActionListener actionListener = new ActionListener() {
             @Override
             public void onAction(String name, boolean isPressed, float tpf)
@@ -138,31 +150,28 @@ public class CardGameState extends AbstractAppState {
                 if (!isPressed) {
                     switch (name) {
                         case MAPPING_FORWARD:
-                            if (position == -1) {
-                                cam.setLocation(new Vector3f(0.02f, 1.5f, 6.5f));
-                                cam.setRotation(new Quaternion(-2.6305395E-4f, 0.997723f, -0.06733209f, -0.0038974239f));
-                                flyCam.setEnabled(false);
-                                position = 0;
-                                look = 0;
-                            } else if (position == 0) {
-                                cam.setLocation(new Vector3f(0.02f, 4f, 3.8f));
-                                cam.setRotation(new Quaternion(-5.3E-4f, 0.8f, -.6f, -0.0038974239f));
+                            if (position == 0) {
+                                cam.setLocation(boardPos);
+                                cam.setRotation(boardAng);
                                 
                                 position = 1;
                                 look = 0;
                             }
                             break;
                         case MAPPING_BACK:
-                            if (position == 0) {
+                            if (position == 0) {// Sitting in chari
                                 flyCam.setEnabled(true);
                                 position = -1;
                                 look = 0;
-                            } else if (position == 1) {
-                                cam.setLocation(new Vector3f(0.02f, 1.5f, 6.5f));
-                                cam.setRotation(new Quaternion(-2.6305395E-4f, 0.997723f, -0.06733209f, -0.0038974239f));
+                                board.hideHand();
+                                selected = null;
+                            } else if (position == 1) {// Looking at board
+                                cam.setLocation(seatedPos);
+                                cam.setRotation(seatedAng);
              
                                 position = 0;
-                                look = 0;
+                                look = 0;             
+
                             }
                             break;
                         case MAPPING_LEFT:
@@ -182,31 +191,56 @@ public class CardGameState extends AbstractAppState {
                             }
                             break;
                         case MAPPING_LEFT_CLICK:
-                            if (position == 1) {
-                                CollisionResults results = new CollisionResults();
-                                Vector2f click2d = inputManager.getCursorPosition();
-                                Vector3f click3d = cam.getWorldCoordinates(
-                                    new Vector2f(click2d.getX(), click2d.getY()), 0f);
-                                Vector3f dir = cam.getWorldCoordinates(
-                                    new Vector2f(click2d.getX(), click2d.getY()), 1f).
-                                    subtractLocal(click3d);
-                                ray = new Ray(click3d, dir);
-                                rootNode.collideWith(ray, results);
-                                if (results.size() > 0) {
+                            //Get what we clicked
+                            CollisionResults results = new CollisionResults();
+                            Vector2f click2d = inputManager.getCursorPosition();
+                            Vector3f click3d = cam.getWorldCoordinates(
+                                new Vector2f(click2d.getX(), click2d.getY()), 0f);
+                            Vector3f dir = cam.getWorldCoordinates(
+                                new Vector2f(click2d.getX(), click2d.getY()), 1f).
+                                subtractLocal(click3d);
+                            ray = new Ray(click3d, dir);
+                            rootNode.collideWith(ray, results);
+                                
+                            if (position == 1) {// Looking at game state
+                                if (results.size() > 0) { //We clicked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
-                                    if (clicked.toString().contains("Slot3") || 
+                                    if (clicked.toString().contains("Slot3") || //Clicked a slot
                                         clicked.toString().contains("Slot4") ||
-                                        clicked.toString().contains("Slot5")) {
+                                        clicked.toString().contains("Slot5")) { //Set slot pink :)
                                         Material mat = new Material(assetManager,
                                         "Common/MatDefs/Misc/Unshaded.j3md");
                                         mat.setColor("Color", ColorRGBA.Pink);
                                         clicked.setMaterial(mat);
                                         friendly++;
                                         enemyMove();
-                                    } else if (clicked.toString().contains("Roger")) {
+                                    } else if (clicked.toString().contains("Roger")) { //Currently nonfunctional
                                         fight();
                                     }
                                 }
+                            } else if (position == 0) {// Looking at hand
+                                 if (results.size() > 0) { //We clicked something
+                                    Spatial clicked = results.getClosestCollision().getGeometry();
+                                    if (clicked.toString().contains("Card")) { //Raise clicked :)
+                                        if (selected != null) {
+                                            selected.getParent().move(0, -0.05f, 0);
+                                        }
+                                        selected = clicked;
+                                        selected.getParent().move(0, 0.05f, 0);
+                                        
+                                        
+                                    }
+                                }
+                            }
+                            break;
+                        case MAPPING_RESET:
+                            if (position == -1) {
+                                cam.setLocation(seatedPos);
+                                cam.setRotation(seatedAng);
+                                flyCam.setEnabled(false);
+                                position = 0;
+                                look = 0;
+                                board.showHand();
                             }
                             break;
                     }
@@ -236,58 +270,6 @@ public class CardGameState extends AbstractAppState {
             System.out.println("You lose!");
         }
         
-    }
-    
-    
-    /*
-    Attatches the 6 galleys to the board
-    Params:
-        Node Table: The table node 
-    */
-    public void makeGalleys(Node table) {
-        for (int i = 0; i < 6; i++) {
-            Node galley = makeGalley(i);
-            galley.center();
-            galley.move((-.25f + ((i % 3)) * .25f), .43f, (.3f + ((i / 3) * .5f)));
-            table.attachChild(galley);
-        }
-    }
-    
-    /*
-    Makes a galley with the 6 card slots
-    Params:
-        int count: Which galley (from 0-5) this is
-    */
-    public Node makeGalley(int count) {
-        String galleyName = String.format("Galley%d", count);
-        Node toReturn = new Node(galleyName);
-        
-        String tileName = String.format("GalleyMat%d", count);
-        Geometry tile = new Geometry(tileName, card);
-        Material tileMat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        tileMat.setColor("Color", ColorRGBA.Brown);
-        tile.setMaterial(tileMat);
-        tile.center();
-        tile.scale(.35f, .001f, .8f);
-        toReturn.attachChild(tile);
-        
-        for (int i = 0; i < 6; i++) {
-            String slotName = String.format("Slot%d.%d", count, i);
-            Geometry geom = new Geometry(slotName, card);
-            Material mat = new Material(assetManager,
-            "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.White);
-            geom.setMaterial(mat);
-            geom.center();
-            geom.scale(.14f, .001f, .24f);
-            geom.move(-.15f + ((i % 2) * .3f), .001f, (-.5f + ((i / 2) * .5f)));
-            toReturn.attachChild(geom);
-        }
-        
-        toReturn.scale(0.25f);
-        
-        return toReturn;
     }
     
     @Override
