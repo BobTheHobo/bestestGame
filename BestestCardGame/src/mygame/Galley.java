@@ -12,6 +12,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -26,6 +27,8 @@ public class Galley {
     private String name; //The Galley's name
     private Node selfNode; //The Galley's node
     private AssetManager assetManager; //Asset manager
+    private Random rand = new Random();
+    private boolean sunk = false;
     
     public Galley(Board parent, int index) {
         this.parent = parent;
@@ -58,6 +61,50 @@ public class Galley {
         }
     }
     
+    public void playRandom(Card card) {
+        ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are valid
+        for (int i = 0; i < 3; i++) {
+            if(!slots.get(i).getFilled()) {//Slot does not have a card
+                open.add(slots.get(i));
+            }
+        }
+        
+        
+        int pull = rand.nextInt(open.size());//Choose randomly from available slots        
+        open.get(pull).setCard(card);//Put card in slot
+        
+    }
+    
+    public void buffRandom(int power) {
+        ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are filled
+        for (int i = 0; i < slots.size(); i++) {
+            if(slots.get(i).getFilled()) {//Slot has a card
+                open.add(slots.get(i));
+            }
+        }
+        
+        if (!open.isEmpty()) {
+            int pull = rand.nextInt(open.size());//Choose randomly from available slots
+            open.get(pull).getCard().changePower(power);//Affect the card
+        }
+    }
+    
+    public void buffAll(int power) {
+        for (int i = 0; i < slots.size(); i++) {
+            if(slots.get(i).getFilled()) {//Slot has a card
+                slots.get(i).getCard().changePower(power);
+            }
+        }
+    }
+    
+    public Galley opposite() {
+        return parent.getOppositeGalley(index);
+    }
+    
+    public Slot getSlot(int slot) {
+        return slots.get(slot);
+    }
+    
     public int getIndex() {
         return index;
     }
@@ -74,4 +121,42 @@ public class Galley {
         return selfNode;
     }
     
+    public boolean open() {
+        ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are valid
+        for (int i = 0; i < 3; i++) {
+            if(!slots.get(i).getFilled()) {//Slot does not have a card
+                open.add(slots.get(i));
+            }
+        }
+        return !open.isEmpty(); //No open slots on this galley
+    }
+    
+    public int getPower() {
+        int toReturn = 0;
+        for (int i = 0; i < 3; i++) {
+            if(slots.get(i).getFilled()) {//Slot has a card
+                toReturn += slots.get(i).getCard().getPower();
+            }
+        }
+        return toReturn;
+    }
+    
+    public void clear() {
+        for (int i = 0; i < slots.size(); i++) {
+            if (slots.get(i).getFilled()) {// There is a card
+                slots.get(i).getCard().getSelfNode().removeFromParent();//Remove it from scene
+                slots.get(i).getCard().setParent(null);//Update object
+            }
+            //Empty the slots
+            slots.get(i).setFilled(false);
+        }
+    }
+    
+    public boolean getSunk() {
+        return sunk;
+    }
+    
+    public void setSunk(boolean sunk) {
+        this.sunk = sunk;
+    }
 }

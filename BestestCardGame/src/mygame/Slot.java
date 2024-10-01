@@ -50,6 +50,43 @@ public class Slot {
         parent.getSelfNode().attachChild(selfNode);
     }
     
+    public void setCard(Card card) {
+        this.card = card;
+        filled = true;
+        card.setParent(this);
+        
+                                        
+        //Moves played card to center of played galley
+        card.getSelf().getParent().center();
+        card.getSelf().getParent().setLocalTranslation(self.getParent().getParent().getLocalTranslation());
+        card.getSelf().getParent().setLocalRotation(self.getParent().getParent().getLocalRotation());
+        card.getSelf().getParent().move(0, 0.012f, 0);
+        
+        if (index % 2 == 0) { //Moves played card to correct column
+        card.getSelf().getParent().move(-0.15f / 4, 0, 0);
+        } else {
+            card.getSelf().getParent().move(0.15f / 4, 0, 0);
+        }
+        
+        if (index / 2 == 0) { //Moves played card to correct row
+            card.getSelf().getParent().move(0.0f, 0, -0.5f / 4);
+        } else if (index / 2 == 2) {
+            card.getSelf().getParent().move(0.0f, 0, 0.5f / 4);
+        }
+        
+    
+        //Trigger any card effects
+        String cardName = card.getName();
+        switch (cardName.substring(4, cardName.indexOf("-"))) {
+            case "Cook":
+                parent.buffAll(1);
+                break;
+            case "Gunner":
+                parent.opposite().buffRandom(-3);
+                break;
+        }
+    }
+        
     
     public int getIndex() {
         return index;
@@ -61,5 +98,17 @@ public class Slot {
     
     public AssetManager getAssetManager() {
         return assetManager;
+    }
+    
+    public boolean getFilled() {
+        return filled;
+    }
+    
+    public Card getCard() {
+        return card;
+    }
+    
+    public void setFilled(boolean filled) {
+        this.filled = filled;
     }
 }

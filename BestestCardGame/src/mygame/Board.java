@@ -26,8 +26,10 @@ public class Board {
     private Node table; //Table node where we place our board
     private Node selfNode; //The node representing this board
     private ArrayList<Galley> galleys = new ArrayList<>(); //Array of Galleys on board
-    private ArrayList<Card> deck = new ArrayList<>(); //Array representing player deck
-    private ArrayList<Card> hand = new ArrayList<>(); //Array representing player hand
+    private ArrayList<Card> playerDeck = new ArrayList<>(); //Array representing player deck
+    private ArrayList<Card> playerHand = new ArrayList<>(); //Array representing player hand
+    private ArrayList<Card> enemyDeck = new ArrayList<>(); //Array representing enemy deck
+    private ArrayList<Card> enemyHand = new ArrayList<>(); //Array representing enemy hand
     private AssetManager assetManager; //Asset manager
     private Spatial self;
     private Random rand = new Random();
@@ -54,8 +56,9 @@ public class Board {
         makeGalleys();
         table.attachChild(selfNode);
         selfNode.move(0, 0.01f, 0.0f);
-        draw(7);
-        showHand();
+        draw(7, true);
+        draw(7, false);
+        showPlayerHand();
     }
     
     private void makeGalleys() {
@@ -64,7 +67,8 @@ public class Board {
         }
     }
     
-    private void draw(int count) {
+    private void draw(int count, boolean player) {
+        ArrayList<Card> hand = player ? playerHand : enemyHand;
         for (int i = 0; i < count; i++) {
             int pull = rand.nextInt(101);
             if (pull <= 49) {
@@ -77,13 +81,13 @@ public class Board {
         }
     }
     
-    public void showHand() {
-        int count = hand.size();
+    public void showPlayerHand() {
+        int count = playerHand.size();
         Vector3f middle = new Vector3f(0, 0.5f, 1.4f);
         Quaternion angle = new Quaternion();
         angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(1,0,0));
         for (int i = 0; i < count; i++) {
-            Node card = hand.get(i).getSelfNode();
+            Node card = playerHand.get(i).getSelfNode();
             card.center();
             card.move(middle);
             int direction = i % 2;
@@ -99,11 +103,93 @@ public class Board {
         }
     }
     
-    public void hideHand() {
-        for (int i = 0; i < hand.size(); i++) {
-            Node card = hand.get(i).getSelfNode();
+    public void showEnemyHand() {
+        
+    }
+    
+    public void hidePlayerHand() {
+        for (int i = 0; i < playerHand.size(); i++) {
+            Node card = playerHand.get(i).getSelfNode();
             card.removeFromParent();
         }
+    }
+    
+    
+    
+    public void play(Spatial card, Spatial slot) {
+        Card cardObj = getCard(card, playerHand);  //Get our card and slot
+        Slot slotObj = getSlot(slot);
+        
+        slotObj.setCard(cardObj); //Put card in slot
+        
+        playerHand.remove(cardObj); //Take card from hand
+       
+        showPlayerHand(); //Update hand spatials
+        enemyMove();
+        
+        if (playerHand.isEmpty()) {
+            nextRound();
+        }
+    }
+    
+    public Galley getOppositeGalley(int i) {
+        if (i < 3) {//Enemy galley
+            return galleys.get(i + 3);
+        } else {//Friendly galley
+            return galleys.get(i - 3);
+        }
+    }
+    
+    public void nextRound() {
+        for (int i = 0; i < galleys.size(); i++) {//Remove galleys that are weaker than opposites            
+            if (galleys.get(i).getPower() < galleys.get(i).opposite().getPower()) {
+                galleys.get(i).setSunk(true);
+                galleys.get(i).getSelfNode().removeFromParent();
+            }  
+        }
+        
+        for (int i = 0; i < galleys.size(); i++) {//Remove galleys that are weaker than opposites
+            galleys.get(i).clear();
+        }
+        
+        draw(2, true);//Each player draws 2
+        draw(2, false);
+        showPlayerHand();
+    }
+    
+    private void enemyMove() {
+        int pull = rand.nextInt(enemyHand.size()); //Get a random index hand
+        Card card = enemyHand.get(pull); //Get a the card corresponding to index
+        enemyHand.remove(card); //Remove the card from the enemy hand
+        
+        ArrayList<Galley> open = new ArrayList<>();// To collect all galleys that are valid
+        for (int i = 0; i < 3; i++) {
+            if(!galleys.get(i).getSunk() && galleys.get(i).open()) {// Galley has an open slot and is not sunk
+                open.add(galleys.get(i));
+            }
+        }
+        
+        pull = rand.nextInt(open.size());
+        
+        open.get(pull).playRandom(card);
+        table.attachChild(card.getSelfNode());
+        
+    }
+    
+    private Card getCard(Spatial card, ArrayList<Card> hand) {
+        for (int i = 0; i < hand.size(); i++) {
+            if (hand.get(i).getSelf() == card) {
+                return hand.get(i);
+            }
+        }
+        return null;
+    }
+    
+    private Slot getSlot(Spatial slot) {
+        int galley = Integer.parseInt(slot.toString().substring(4,5));
+        int space = Integer.parseInt(slot.toString().substring(6,7));
+        
+        return galleys.get(galley).getSlot(space);
     }
     
     public AssetManager getAssetManager() {

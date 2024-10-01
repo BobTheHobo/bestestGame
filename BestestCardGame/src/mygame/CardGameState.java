@@ -163,7 +163,7 @@ public class CardGameState extends AbstractAppState {
                                 flyCam.setEnabled(true);
                                 position = -1;
                                 look = 0;
-                                //board.hideHand();
+                                board.hidePlayerHand();
                                 selected = null;
                             } else if (position == 1) {// Looking at board
                                 cam.setLocation(seatedPos);
@@ -205,30 +205,14 @@ public class CardGameState extends AbstractAppState {
                             if (position == 1) {// Looking at game state
                                 if (results.size() > 0) { //We clicked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
-                                    if ((clicked.toString().contains("Slot3") || //Clicked a slot
+                                    if ((clicked.toString().contains("Slot3") || //Clicked a friendly slot
                                         clicked.toString().contains("Slot4") ||
                                         clicked.toString().contains("Slot5")) &&
-                                            selected != null) { //Set slot pink :)
-                                        selected.getParent().center();
-                                        
-                                        int slot = Integer.parseInt(clicked.toString().substring(6,7));
-                                        
-                                        selected.getParent().setLocalTranslation(clicked.getParent().getParent().getLocalTranslation());
-                                        selected.getParent().setLocalRotation(clicked.getParent().getParent().getLocalRotation());
-                                        selected.getParent().move(0, 0.012f, 0);
-                                        if (slot % 2 == 0) {
-                                            selected.getParent().move(-0.15f / 4, 0, 0);
-                                        } else {
-                                            selected.getParent().move(0.15f / 4, 0, 0);
-                                        }
-                                        if (slot / 2 == 0) {
-                                            selected.getParent().move(0.0f, 0, -0.5f / 4);
-                                        } else if (slot / 2 == 2) {
-                                            selected.getParent().move(0.0f, 0, 0.5f / 4);
-                                        }
+                                        selected != null) {// We have a card selected from our hand
+
+                                        board.play(selected, clicked);
                                         selected = null;
-                                        
-                         
+      
                                         //position = -1;
                                         //flyCam.setEnabled(true);
                                         
@@ -262,7 +246,7 @@ public class CardGameState extends AbstractAppState {
                                 flyCam.setEnabled(false);
                                 position = 0;
                                 look = 0;
-                                board.showHand();
+                                board.showPlayerHand();
                             }
                             break;
                     }

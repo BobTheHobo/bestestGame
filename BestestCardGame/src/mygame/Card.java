@@ -38,8 +38,6 @@ public class Card {
         this.name = String.format("Card%s-%d", name, count);
         self = new Geometry(this.name, mesh);
         selfNode = new Node();
-        System.out.println(this.name);
-        System.out.println(this.name.substring(4, this.name.indexOf("-")));
         
         
         Material mat = new Material(assetManager,
@@ -53,13 +51,13 @@ public class Card {
         mat.setColor("Color", ColorRGBA.Pink);
                 break;
             case "Cook":
-                power = 3;
+                power = 2;
                 mat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Orange);
                 break;
             case "Gunner":
-                power = 3;
+                power = 2;
                 mat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Green);
@@ -101,14 +99,26 @@ public class Card {
     
     public int changePower(int i) {
         power += i;
-        topString = String.format("%d-%s", power, name);
+        topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
         topText.setText(topString);
         if (power <= 0) {//Card was killed, remove it.
            selfNode.removeFromParent();
-            return 0;
+           parent.setFilled(false);
+           return 0;
         } else {//Card is not killed
-            return 1;
+           return 1;
         }
     }
     
+    public String getName() {
+        return name;
+    }
+    
+    public void setParent(Slot slot) {
+        parent = slot;
+    }
+    
+    public int getPower() {
+        return power;
+    }
 }
