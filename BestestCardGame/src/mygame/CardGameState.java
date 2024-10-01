@@ -163,7 +163,7 @@ public class CardGameState extends AbstractAppState {
                                 flyCam.setEnabled(true);
                                 position = -1;
                                 look = 0;
-                                board.hideHand();
+                                //board.hideHand();
                                 selected = null;
                             } else if (position == 1) {// Looking at board
                                 cam.setLocation(seatedPos);
@@ -205,15 +205,33 @@ public class CardGameState extends AbstractAppState {
                             if (position == 1) {// Looking at game state
                                 if (results.size() > 0) { //We clicked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
-                                    if (clicked.toString().contains("Slot3") || //Clicked a slot
+                                    if ((clicked.toString().contains("Slot3") || //Clicked a slot
                                         clicked.toString().contains("Slot4") ||
-                                        clicked.toString().contains("Slot5")) { //Set slot pink :)
-                                        Material mat = new Material(assetManager,
-                                        "Common/MatDefs/Misc/Unshaded.j3md");
-                                        mat.setColor("Color", ColorRGBA.Pink);
-                                        clicked.setMaterial(mat);
-                                        friendly++;
-                                        enemyMove();
+                                        clicked.toString().contains("Slot5")) &&
+                                            selected != null) { //Set slot pink :)
+                                        selected.getParent().center();
+                                        
+                                        int slot = Integer.parseInt(clicked.toString().substring(6,7));
+                                        
+                                        selected.getParent().setLocalTranslation(clicked.getParent().getParent().getLocalTranslation());
+                                        selected.getParent().setLocalRotation(clicked.getParent().getParent().getLocalRotation());
+                                        selected.getParent().move(0, 0.012f, 0);
+                                        if (slot % 2 == 0) {
+                                            selected.getParent().move(-0.15f / 4, 0, 0);
+                                        } else {
+                                            selected.getParent().move(0.15f / 4, 0, 0);
+                                        }
+                                        if (slot / 2 == 0) {
+                                            selected.getParent().move(0.0f, 0, -0.5f / 4);
+                                        } else if (slot / 2 == 2) {
+                                            selected.getParent().move(0.0f, 0, 0.5f / 4);
+                                        }
+                                        selected = null;
+                                        
+                         
+                                        //position = -1;
+                                        //flyCam.setEnabled(true);
+                                        
                                     } else if (clicked.toString().contains("Roger")) { //Currently nonfunctional
                                         fight();
                                     }
@@ -223,10 +241,14 @@ public class CardGameState extends AbstractAppState {
                                     Spatial clicked = results.getClosestCollision().getGeometry();
                                     if (clicked.toString().contains("Card")) { //Raise clicked :)
                                         if (selected != null) {
-                                            selected.getParent().move(0, -0.05f, 0);
+                                            selected.getParent().move(0, -0.05f, 0);                                           
                                         }
-                                        selected = clicked;
-                                        selected.getParent().move(0, 0.05f, 0);
+                                        if (clicked == selected) {
+                                            selected = null;
+                                        } else {
+                                            selected = clicked;
+                                            selected.getParent().move(0, 0.05f, 0);
+                                        }
                                         
                                         
                                     }
