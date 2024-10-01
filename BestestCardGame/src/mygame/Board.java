@@ -61,12 +61,14 @@ public class Board {
         showPlayerHand();
     }
     
+    //Initializes our array and galleys in the scene
     private void makeGalleys() {
         for (int i = 0; i < 6; i++) {
             galleys.add(new Galley(this, i));
         }
     }
     
+    //Draws 'count' cards to a hand; player's hand if 'player' is true, enemy if else 
     private void draw(int count, boolean player) {
         ArrayList<Card> hand = player ? playerHand : enemyHand;
         for (int i = 0; i < count; i++) {
@@ -81,15 +83,16 @@ public class Board {
         }
     }
     
+    //Attatches the cards in our hand to the 3d scene
     public void showPlayerHand() {
         int count = playerHand.size();
-        Vector3f middle = new Vector3f(0, 0.5f, 1.4f);
-        Quaternion angle = new Quaternion();
+        Vector3f middle = new Vector3f(0, 0.5f, 1.4f);//Where the center card is
+        Quaternion angle = new Quaternion();//So we can read the card sitting down
         angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(1,0,0));
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < count; i++) {//Get each card
             Node card = playerHand.get(i).getSelfNode();
             card.center();
-            card.move(middle);
+            card.move(middle);//Move it to the central card
             int direction = i % 2;
             int step = (i + 1) / 2;
             if (direction == 0) {//Move card to right
@@ -98,15 +101,16 @@ public class Board {
                 card.move(-.07f * step, 0, -.01f * step);
             }
             card.setLocalRotation(angle);
-            //card.rotate(angle);
             table.attachChild(card);
         }
     }
     
+    //Will be added later to attatch enemy cards to 3d scene so you know how many they have
     public void showEnemyHand() {
         
     }
     
+    //Removes the cards from the 3d scene
     public void hidePlayerHand() {
         for (int i = 0; i < playerHand.size(); i++) {
             Node card = playerHand.get(i).getSelfNode();
@@ -115,7 +119,7 @@ public class Board {
     }
     
     
-    
+    //Puts the 'card' in the 'slot' applying game logic
     public void play(Spatial card, Spatial slot) {
         Card cardObj = getCard(card, playerHand);  //Get our card and slot
         Slot slotObj = getSlot(slot);
@@ -132,6 +136,7 @@ public class Board {
         }
     }
     
+    //All galleys are paired, gets the opposite one
     public Galley getOppositeGalley(int i) {
         if (i < 3) {//Enemy galley
             return galleys.get(i + 3);
@@ -140,6 +145,7 @@ public class Board {
         }
     }
     
+    //Advances game state to next round
     public void nextRound() {
         for (int i = 0; i < galleys.size(); i++) {//Remove galleys that are weaker than opposites            
             if (galleys.get(i).getPower() < galleys.get(i).opposite().getPower()) {
@@ -157,6 +163,7 @@ public class Board {
         showPlayerHand();
     }
     
+    //Currently very basic AI for how the enemy acts
     private void enemyMove() {
         int pull = rand.nextInt(enemyHand.size()); //Get a random index hand
         Card card = enemyHand.get(pull); //Get a the card corresponding to index
@@ -169,13 +176,14 @@ public class Board {
             }
         }
         
-        pull = rand.nextInt(open.size());
+        pull = rand.nextInt(open.size());//Get a random valid galley
+        open.get(pull).playRandom(card);//Play the card on the galley
         
-        open.get(pull).playRandom(card);
-        table.attachChild(card.getSelfNode());
+        table.attachChild(card.getSelfNode());//Show the card in space
         
     }
     
+    //Gets the Card object that corresponds to the 'card' spatial
     private Card getCard(Spatial card, ArrayList<Card> hand) {
         for (int i = 0; i < hand.size(); i++) {
             if (hand.get(i).getSelf() == card) {

@@ -118,7 +118,7 @@ public class CardGameState extends AbstractAppState {
         board = new Board(tableNode, assetManager); //Populates table with game mat
         rootNode.attachChild(tableNode); 
         
-        /*
+        /* Will use later
         Spatial galley1 = rootNode.getChild("Galley1");
         Spatial galley4 = rootNode.getChild("Galley4");
         Vector3f location1 = galley1.getWorldTranslation();
@@ -150,7 +150,8 @@ public class CardGameState extends AbstractAppState {
                 if (!isPressed) {
                     switch (name) {
                         case MAPPING_FORWARD:
-                            if (position == 0) {
+                            if (position == 0) {//Sitting in chair
+                                
                                 cam.setLocation(boardPos);
                                 cam.setRotation(boardAng);
                                 
@@ -159,7 +160,7 @@ public class CardGameState extends AbstractAppState {
                             }
                             break;
                         case MAPPING_BACK:
-                            if (position == 0) {// Sitting in chari
+                            if (position == 0) {//Sitting in chair
                                 flyCam.setEnabled(true);
                                 position = -1;
                                 look = 0;
@@ -175,7 +176,7 @@ public class CardGameState extends AbstractAppState {
                             }
                             break;
                         case MAPPING_LEFT:
-                            if (position == 0 && look > -1){
+                            if (position == 0 && look > -1){//Look left if seated
                                 Quaternion left = new Quaternion();
                                 left.fromAngleAxis(FastMath.QUARTER_PI / 2, new Vector3f(0,1,0));
                                 cam.setRotation(cam.getRotation().mult(left));
@@ -183,7 +184,7 @@ public class CardGameState extends AbstractAppState {
                             }
                             break;
                         case MAPPING_RIGHT:
-                            if (position == 0 && look < 1) {
+                            if (position == 0 && look < 1) {//Look right if seated
                                 Quaternion right = new Quaternion();
                                 right.fromAngleAxis(-FastMath.QUARTER_PI / 2, new Vector3f(0,1,0));
                                 cam.setRotation(cam.getRotation().mult(right));
@@ -212,24 +213,21 @@ public class CardGameState extends AbstractAppState {
 
                                         board.play(selected, clicked);
                                         selected = null;
-      
-                                        //position = -1;
-                                        //flyCam.setEnabled(true);
-                                        
+
                                     } else if (clicked.toString().contains("Roger")) { //Currently nonfunctional
-                                        fight();
+                                        
                                     }
                                 }
                             } else if (position == 0) {// Looking at hand
                                  if (results.size() > 0) { //We clicked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
                                     if (clicked.toString().contains("Card")) { //Raise clicked :)
-                                        if (selected != null) {
+                                        if (selected != null) {//Lower previously selected card
                                             selected.getParent().move(0, -0.05f, 0);                                           
                                         }
-                                        if (clicked == selected) {
+                                        if (clicked == selected) {//We are unselecting
                                             selected = null;
-                                        } else {
+                                        } else {//Selecting new card
                                             selected = clicked;
                                             selected.getParent().move(0, 0.05f, 0);
                                         }
@@ -240,7 +238,7 @@ public class CardGameState extends AbstractAppState {
                             }
                             break;
                         case MAPPING_RESET:
-                            if (position == -1) {
+                            if (position == -1) {// Sits back in chair, currently mapped to 'q'
                                 cam.setLocation(seatedPos);
                                 cam.setRotation(seatedAng);
                                 flyCam.setEnabled(false);
@@ -253,31 +251,7 @@ public class CardGameState extends AbstractAppState {
                 }
             }
        };
-    
-    public void enemyMove() { 
-        int galley = random.nextInt(3);
-        int slot = random.nextInt(6);
-        int move = random.nextInt(2);
-        if (move == 1) {
-            String slotString = String.format("Slot%d.%d", galley, slot);
-            Spatial slotSpatial = rootNode.getChild(slotString);
-            Material mat = new Material(assetManager,
-            "Common/MatDefs/Misc/Unshaded.j3md");
-            mat.setColor("Color", ColorRGBA.Pink);
-            slotSpatial.setMaterial(mat);
-            enemy++;
-        }
-    }
-    
-    public void fight() {
-        if (friendly > enemy) {
-            System.out.println("You Win!");
-        } else {
-            System.out.println("You lose!");
-        }
-        
-    }
-    
+
     @Override
     public void update(float tpf) {
         //TODO: implement behavior during runtime

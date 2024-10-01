@@ -50,6 +50,7 @@ public class Slot {
         parent.getSelfNode().attachChild(selfNode);
     }
     
+    //Plays a card on this slot and triggers game logic
     public void setCard(Card card) {
         this.card = card;
         filled = true;
