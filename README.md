@@ -61,6 +61,9 @@ TBD
 ### Set Modeling
 TBD
 
+### Running Instructions
+Transition from the Card Game "scene" to the interaction demo "scene" using 'S' while sitting.
+Transition from the interaction demo "scene" to the model demo "scene" using 'Q'.
 
 
   
