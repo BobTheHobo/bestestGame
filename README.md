@@ -53,7 +53,14 @@ Our work for this deliverable consists of three main components:
 - Set Modeling (model imports, level design, basic atmosphere)
 
 ### Basic Card Game Function
-TBD
+The card game scene is implemented in an appState that creates and moves a table spatial as well as many placeholder boxes to create a playmat, grouped card slots(galleys), individual card slots, and cards.  The card spatials are translated through space to indicate selection and place the selected card on a card slots.  This is handled using triggers, mappings, and an ActionListener.  The ActionListener is also used to implement alternate means of looking around and at the game board as the mouse cursor is used to select and play cards while seated.  Game logic including drawing cards, cards affecting the board state, the opponent drawing and playing cards, progression of turns is handled in a set of java files(Board, Galley, Slot, Card).  These files modify the 3d space by moving cards or changing the text on cards to represent effects while maintaining an internal representation of the game state.
+<img src="https://imgur.com/n3Il7YC" alt="CardGame1" width="500"/>
+<img src="https://imgur.com/NjMkFVE" alt="CardGame2" width="500"/>
+<img src="https://imgur.com/rRM0AeK" alt="CardGame3" width="500"/>
+<img src="https://imgur.com/Veo45n2" alt="CardGame4" width="500"/>
+<img src="https://imgur.com/304klXU" alt="CardGame5" width="500"/>
+<img src="https://imgur.com/TuBu68c" alt="CardGame6" width="500"/>
+<img src="https://imgur.com/PSoMY0Y" alt="CardGame6" width="500"/>
 
 ### First Person Movement and World Interaction
 TBD
