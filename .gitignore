@@ -17,6 +17,7 @@ nbdist/
 /build/
 /nbproject/
 /private/
+/Written Assets/
 /*.dll
 /*.dylib
 /*.so
