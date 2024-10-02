@@ -32,7 +32,6 @@ public class SceneManager {
         createBox("Item1", new Vector3f(3, 0.3f, 3), new Vector3f(0.3f, 0.3f, 0.3f), ColorRGBA.Green, true);
     }
 
-    // Helper method to create a box and add physics
     private void createBox(String name, Vector3f position, Vector3f size, ColorRGBA color, boolean canBePickedUp) {
         // Create the box geometry
         Box box = new Box(size.x, size.y, size.z);
@@ -44,11 +43,16 @@ public class SceneManager {
         mat.setColor("Color", color);
         geom.setMaterial(mat);  // Ensure the material is set
 
+        // Set the canBePickedUp flag as user data
+        geom.setUserData("canBePickedUp", canBePickedUp);
+
         // Add physics to the geometry
         PhysicsHelper.addPhysics(geom, canBePickedUp, bulletAppState);
 
         // Attach geometry to the scene graph
         rootNode.attachChild(geom);
     }
+
+
 
 }
