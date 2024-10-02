@@ -48,8 +48,12 @@ Graphics:
 
 ## First Deliverable 
 Our work for this deliverable consists of three main components:
-- Basic card game function
-- First Person Movement and world interaction
-- Set Modeling
+- Basic Card Game Function (card playing, basic GUI, game board, turns)
+- First Person Movement and World Interaction (free look and walk, collisions, crosshair, item pick up/drop)
+- Set Modeling (model imports, level design, basic atmosphere)
+
+### Basic 
+
+
 
   
