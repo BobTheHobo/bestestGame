@@ -1,5 +1,9 @@
 package com.mygame;
 
+import com.jme3.app.Application;
+import com.jme3.app.SimpleApplication;
+import com.jme3.app.state.AbstractAppState;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
@@ -9,6 +13,7 @@ import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.Camera;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -18,13 +23,26 @@ import com.jme3.scene.shape.Box;
 /**
  * @author viet
  */
-public class RoomSetup {
-    private final Node rootNode;
-    private final AssetManager assetManager;
+public class SceneAppState extends AbstractAppState {
 
-    public RoomSetup(Node rootNode, AssetManager assetManager) {
-	this.rootNode = rootNode;
-	this.assetManager = assetManager;
+    private Node rootNode;
+    private AssetManager assetManager;
+    private SimpleApplication app;
+
+    @Override
+    public void initialize(AppStateManager stateManager, Application app) {
+        super.initialize(stateManager, app); //Initialize fields
+        this.app = (SimpleApplication) app;
+        this.rootNode = this.app.getRootNode();
+        this.assetManager = this.app.getAssetManager();
+
+	setupScene();
+
+	GameLighting lighting = new GameLighting(rootNode, assetManager);
+	lighting.setupLighting();
+
+        CardGameState state = new CardGameState();
+        stateManager.attach(state);
     }
 
     // Spawns models in and places them
@@ -157,6 +175,19 @@ public class RoomSetup {
 	table_node.attachChild(table);
 
 	return table_node;
+    }
+
+    @Override
+    public void update(float tpf) {
+        //TODO: implement behavior during runtime
+    }
+    
+    @Override
+    public void cleanup() {
+        super.cleanup();
+        //TODO: clean up what you initialized in the initialize method,
+        //e.g. remove all spatials from rootNode
+        //this is called on the OpenGL thread after the AppState has been detached
     }
 
 }

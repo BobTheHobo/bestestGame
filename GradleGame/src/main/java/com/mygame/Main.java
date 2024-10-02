@@ -32,14 +32,7 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-
-	GameLighting lighting = new GameLighting(rootNode, assetManager);
-	lighting.setupLighting();
-
-	RoomSetup room = new RoomSetup(rootNode, assetManager);
-	room.setupScene();
-
-        CardGameState state = new CardGameState();
+        SceneAppState state = new SceneAppState();
         stateManager.attach(state);
     }
 
