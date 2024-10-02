@@ -52,7 +52,14 @@ Our work for this deliverable consists of three main components:
 - First Person Movement and World Interaction (free look and walk, collisions, crosshair, item pick up/drop)
 - Set Modeling (model imports, level design, basic atmosphere)
 
-### Basic 
+### Basic Card Game Function
+TBD
+
+### First Person Movement and World Interaction
+TBD
+
+### Set Modeling
+TBD
 
 
 
