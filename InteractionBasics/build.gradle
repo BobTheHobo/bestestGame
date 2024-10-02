@@ -1,0 +1,78 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+group 'com.mygame'
+version '1.0'
+
+application {
+    applicationName = 'InteractionBasics'
+    mainClass = 'com.mygame.Main'
+    // Mac OS with LWJGL 3 needs to be started with this JVM argument
+    if (System.getProperty("os.name").toLowerCase().contains("mac")) {
+        applicationDefaultJvmArgs = ['-XstartOnFirstThread']
+    }
+}
+
+repositories {
+    mavenCentral()  // Use Maven Central as the repository
+    maven {
+        url 'https://jitpack.io'  // Required for pulling some dependencies
+    }
+}
+
+
+project.ext {
+  jmeVer = '3.6.1-stable'
+}
+
+project(":assets") {
+    apply plugin: "java"
+
+    buildDir = rootProject.file("build/assets")
+
+    sourceSets {
+        main {
+            resources {
+                srcDir '.'
+            }
+        }
+    }
+
+    java {
+        toolchain {
+            languageVersion = JavaLanguageVersion.of(17)
+        }
+    }
+}
+
+dependencies {
+    // Core JMonkeyEngine dependencies for 3.6.1
+    implementation "org.jmonkeyengine:jme3-core:3.6.1-stable"
+    implementation "org.jmonkeyengine:jme3-desktop:3.6.1-stable"
+    implementation "org.jmonkeyengine:jme3-lwjgl3:3.6.1-stable"
+
+    // Bullet Physics for jMonkeyEngine 3.6.1
+    //implementation "org.jmonkeyengine:jme3-bullet:3.6.1-stable"
+
+    // Asset sub-project (if needed)
+    runtimeOnly project(':assets')
+}
+
+
+jar {
+    manifest {
+        attributes 'Main-Class': application.mainClass
+    }
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+wrapper {
+    gradleVersion = '8.4'
+}
