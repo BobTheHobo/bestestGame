@@ -46,8 +46,10 @@ public class SceneAppState extends AbstractAppState {
         this.rootNode = this.app.getRootNode();
         this.assetManager = this.app.getAssetManager();
         
+        
         InputManager inputManager = this.app.getInputManager();
         inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
+        inputManager.addListener(actionListener, MAPPING_SCENE);
 
 	setupScene();
 
@@ -64,7 +66,7 @@ public class SceneAppState extends AbstractAppState {
             {
                 if (!isPressed) {
                     if (name.equals(MAPPING_SCENE)) {
-                        nextScene = true;
+                        app.getFlyByCamera().setEnabled(true);
                     }
                     }
                 }

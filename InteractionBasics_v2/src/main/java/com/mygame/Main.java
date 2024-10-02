@@ -16,7 +16,7 @@ public class Main extends SimpleApplication {
 
         // Application settings
         AppSettings settings = new AppSettings(true);
-        settings.setResolution(640, 480);
+        //settings.setResolution(640, 480);
         settings.setFullscreen(false);
         settings.setTitle("InteractionBasics");
 
@@ -49,6 +49,7 @@ public class Main extends SimpleApplication {
             stateManager.detach(interactiveDemoAppState);
             sceneState = new SceneAppState();
             stateManager.attach(sceneState);
+            scene = 2;
         }
     }
 }

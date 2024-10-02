@@ -284,7 +284,8 @@ public class CardGameState extends AbstractAppState {
     @Override
     public void cleanup() {
         super.cleanup();
-        inputManager.reset();
+        //inputManager.clearMappings();
+        inputManager.removeListener(actionListener);
         tableNode.removeFromParent();
     }
     

@@ -26,6 +26,7 @@ public class InteractiveDemoAppState extends AbstractAppState {
     private boolean nextScene = false;
     private Node rootNode;
     
+    private InputManager inputManager;
     private final static Trigger TRIGGER_P= new KeyTrigger(KeyInput.KEY_P);
     private final static String MAPPING_SCENE = "Next Scene";
 
@@ -35,8 +36,9 @@ public class InteractiveDemoAppState extends AbstractAppState {
         this.app = (SimpleApplication) app;
         this.rootNode = this.app.getRootNode();
         
-        InputManager inputManager = this.app.getInputManager();
+        inputManager = this.app.getInputManager();
         inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
+        inputManager.addListener(actionListener, MAPPING_SCENE);
 
         // Initialize Bullet Physics System
         bulletAppState = new BulletAppState();
@@ -113,9 +115,11 @@ public class InteractiveDemoAppState extends AbstractAppState {
     @Override
     public void cleanup() {
         super.cleanup();
+        nextScene = false;
 
         // Clean up resources and detach states if necessary
         app.getStateManager().detach(bulletAppState);
+        inputManager.removeListener(actionListener);
         
         rootNode.getChild("Floor").getParent().scale(0.00001f);
         
