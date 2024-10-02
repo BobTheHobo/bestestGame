@@ -1,3 +1,6 @@
+# Title:
+Mutiny
+
 # Game Summary:
 A dark, atmospheric escape room game where you must defeat enemies in a card based board game to receive items to escape.  The setting is that you are a mutineer who is being held below deck after your mutiny failed.
 
@@ -41,3 +44,13 @@ A minigame in a larger RPG that is intentionally simple, but effective to not di
 Graphics:
 - First-person perspective with low-poly graphics
 - High contrast lighting with particle systems for card playing and surrounding terrain
+
+# Development
+
+## First Deliverable 
+Our work for this deliverable consists of three main components:
+- Basic card game function
+- First Person Movement and world interaction
+- Set Modeling
+
+  
