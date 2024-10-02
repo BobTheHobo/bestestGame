@@ -44,10 +44,6 @@ public class RoomSetup {
 	Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v3/mdl_room_main_v3.j3o");
 	room_node.attachChild(room_model);
 
-	// Main game table
-	Spatial main_table = assetManager.loadModel("Models/mdl_table_main_v2/mdl_table_main_v2.j3o");
-	room_node.attachChild(main_table);
-
 	// Grandfather clock
 	Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
 	room_node.attachChild(clock);
@@ -55,7 +51,7 @@ public class RoomSetup {
 	// Note when referring to blender positions, x is the same, y and z are swapped
 	// Also, flip signs between the y coords
 	
-	Spatial table_candle = insertCandle(new Vector3f(0f, 2.1f, 0f));
+	Spatial table_candle = insertCandle(new Vector3f(0.6f, 2.1f, -1f));
 	room_node.attachChild(table_candle);
 
 	Spatial chest = insertChest(new Vector3f(-5f, 1f, 0.2f));
@@ -149,6 +145,18 @@ public class RoomSetup {
 	clock_node.attachChild(clock);
 
 	return clock_node;
+    }
+
+    private Spatial insertTable(Vector3f loc) {
+	// Invisible table node everything is attached to
+	Node table_node = new Node("Table node");
+	table_node.setLocalTranslation(loc);
+
+	// Load actual model and attach it to table node
+	Spatial table = assetManager.loadModel("Models/mdl_table_main_v2/mdl_table_main_v2.j3o");
+	table_node.attachChild(table);
+
+	return table_node;
     }
 
 }

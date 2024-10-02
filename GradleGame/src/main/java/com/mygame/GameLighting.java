@@ -30,7 +30,7 @@ public class GameLighting {
 	// sun.setColor(ColorRGBA.White.mult(0.5f));
 	// rootNode.addLight(sun);
 
-	//Small pointlight just arbitrarily to light up scene
+	// Small pointlight just arbitrarily to light up scene
 	PointLight pl = new PointLight();
 	pl.setColor(ColorRGBA.White.mult(0.4f)); //Adjust mult value to increase/decrease brightness
 	pl.setRadius(18f);

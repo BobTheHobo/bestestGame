@@ -11,13 +11,13 @@ nbdist/
 .nb-gradle/
 
 # Pulled from a gradle template
-/.gradle/
-/.idea/
-/.nb-gradle/
-/build/
-/nbproject/
-/private/
-/Written Assets/
+GradleGame/.gradle/
+GradleGame/.idea/
+GradleGame/.nb-gradle/
+GradleGame/build/
+GradleGame/nbproject/
+GradleGame/private/
+GradleGame/Written Assets/
 /*.dll
 /*.dylib
 /*.so

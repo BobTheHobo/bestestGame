@@ -32,18 +32,15 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-	setupCamera();
 
 	GameLighting lighting = new GameLighting(rootNode, assetManager);
 	lighting.setupLighting();
 
 	RoomSetup room = new RoomSetup(rootNode, assetManager);
 	room.setupScene();
-    }
 
-    private void setupCamera() {
-	// Set camera position to something more natural to scene
-	cam.setLocation(new Vector3f(0f, 4f, 7f));
+        CardGameState state = new CardGameState();
+        stateManager.attach(state);
     }
 
     @Override
