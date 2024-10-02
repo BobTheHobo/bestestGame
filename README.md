@@ -1,4 +1,4 @@
-# Mutiny
+# - Mutiny -
 
 # Game Summary:
 A dark, atmospheric escape room game where you must defeat enemies in a card based board game to receive items to escape.  The setting is that you are a mutineer who is being held below deck after your mutiny failed.
