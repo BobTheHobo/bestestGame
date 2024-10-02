@@ -261,6 +261,7 @@ public class CardGameState extends AbstractAppState {
                                 position = 0;
                                 look = 0;
                                 board.showPlayerHand();
+                                System.out.println("Resetting");
                             } else if (position == 1) {
                                 board.nextRound();
                             }
@@ -283,6 +284,7 @@ public class CardGameState extends AbstractAppState {
     @Override
     public void cleanup() {
         super.cleanup();
+        inputManager.reset();
         tableNode.removeFromParent();
     }
     

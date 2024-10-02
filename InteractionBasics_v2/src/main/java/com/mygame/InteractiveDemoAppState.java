@@ -5,7 +5,13 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.input.InputManager;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
 
 public class InteractiveDemoAppState extends AbstractAppState {
 
@@ -17,11 +23,20 @@ public class InteractiveDemoAppState extends AbstractAppState {
     private PlayerInteractionManager interactionManager; // Interaction manager
     private CameraManager cameraManager; // Camera manager
     private InputHandler inputHandler; // Input handler
+    private boolean nextScene = false;
+    private Node rootNode;
+    
+    private final static Trigger TRIGGER_P= new KeyTrigger(KeyInput.KEY_P);
+    private final static String MAPPING_SCENE = "Next Scene";
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
         super.initialize(stateManager, app);
         this.app = (SimpleApplication) app;
+        this.rootNode = this.app.getRootNode();
+        
+        InputManager inputManager = this.app.getInputManager();
+        inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
 
         // Initialize Bullet Physics System
         bulletAppState = new BulletAppState();
@@ -69,7 +84,9 @@ public class InteractiveDemoAppState extends AbstractAppState {
             interactionManager
         );
     }
-
+        
+    
+        
     @Override
     public void update(float tpf) {
         // Synchronize the camera position with the player
@@ -99,9 +116,28 @@ public class InteractiveDemoAppState extends AbstractAppState {
 
         // Clean up resources and detach states if necessary
         app.getStateManager().detach(bulletAppState);
+        
+        rootNode.getChild("Floor").getParent().scale(0.00001f);
+        
 
         // Perform any additional cleanup if required
     }
+    
+    public boolean getNextScene() {
+        return nextScene;
+    }
+    
+    private ActionListener actionListener = new ActionListener() {
+            @Override
+            public void onAction(String name, boolean isPressed, float tpf)
+            {
+                if (!isPressed) {
+                    if (name.equals(MAPPING_SCENE)) {   
+                     nextScene = true;
+                    }
+            }
+    }
+    };
 
     // Optional: Implement stateAttached and stateDetached if needed
     // @Override

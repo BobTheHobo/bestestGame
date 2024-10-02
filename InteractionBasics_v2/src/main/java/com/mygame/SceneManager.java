@@ -14,6 +14,7 @@ public class SceneManager {
     private BulletAppState bulletAppState;
     private Node rootNode;
     private AssetManager assetManager;
+    private Node geomsNode;
 
     public SceneManager(BulletAppState bulletAppState, Node rootNode, AssetManager assetManager) {
         this.bulletAppState = bulletAppState;
@@ -23,6 +24,8 @@ public class SceneManager {
 
     // Set up the scene with floor, walls, obstacles, and pickable items
     public void setupScene() {
+        geomsNode = new Node();
+        rootNode.attachChild(geomsNode);
         createBox("Floor", new Vector3f(0, -1, 0), new Vector3f(10, 1, 10), ColorRGBA.Orange, false);
         createBox("Wall1", new Vector3f(0, 2, -10), new Vector3f(10, 2, 1), ColorRGBA.Brown, false);
         createBox("Wall2", new Vector3f(0, 2, 10), new Vector3f(10, 2, 1), ColorRGBA.Brown, false);
@@ -50,7 +53,7 @@ public class SceneManager {
         PhysicsHelper.addPhysics(geom, canBePickedUp, bulletAppState);
 
         // Attach geometry to the scene graph
-        rootNode.attachChild(geom);
+        geomsNode.attachChild(geom);
     }
 
 
