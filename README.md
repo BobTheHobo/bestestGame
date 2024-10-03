@@ -86,7 +86,7 @@ Collisions and physics are handled through the jBullet plugin. The player and al
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/a38lkK5"  ><a href="//imgur.com/a/a38lkK5">Picking Up</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 By left clicking again, the held object is dropped at the vector originating from the camera position and going to where the player is looking, but dropped at the same range (magnitude) as the pickup range. Physics are re-enabled on the object after dropping.
-<blockquote class="imgur-embed-pub" lang="en" data-id="a/N0xybuo"  ><a href="//imgur.com/a/N0xybuo">Dropping</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/N0xybuo"  ><a href="//imgur.com/a/N0xybuo">Dropping</a></blockquote>
 
 
 ### Set Modeling
