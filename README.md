@@ -67,7 +67,30 @@ The card game scene is implemented in an appState that creates and moves a table
 TBD
 
 ### Set Modeling
+### Basic Card Game Function
+The card game scene is implemented in an appState that creates and moves a table spatial as well as many placeholder boxes to create a playmat, grouped card slots(galleys), individual card slots, and cards.  The card spatials are translated through space to indicate selection and place the selected card on a card slots.  This is handled using triggers, mappings, and an ActionListener.  The ActionListener is also used to implement alternate means of looking around and at the game board as the mouse cursor is used to select and play cards while seated.  Game logic including drawing cards, cards affecting the board state, the opponent drawing and playing cards, progression of turns is handled in a set of java files(Board, Galley, Slot, Card).  These files modify the 3d space by moving cards or changing the text on cards to represent effects while maintaining an internal representation of the game state.
+
+<a href="https://imgur.com/n3Il7YC"><img src="https://i.imgur.com/n3Il7YC.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/NjMkFVE"><img src="https://i.imgur.com/NjMkFVE.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/rRM0AeK"><img src="https://i.imgur.com/rRM0AeK.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/Veo45n2"><img src="https://i.imgur.com/Veo45n2.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/304klXU"><img src="https://i.imgur.com/304klXU.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/TuBu68c"><img src="https://i.imgur.com/TuBu68c.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/PSoMY0Y"><img src="https://i.imgur.com/PSoMY0Y.png" title="source: imgur.com" width="250" /></a>
+
+### First Person Movement and World Interaction
 TBD
+
+### Set Modeling
+The ship hull that acts as the main room for the game was created in Blender. It was modeled by hand using a cylinder base mesh and gradually adding the walls and ceiling to achieve the current look. It has a grate at the top that will be used to let in light, and features portholes (circular windows) as well as larger, rectangular windows that will allow the player to look out and observe the ocean/world in a future update. Inside the room is a table, chest, candle, and grandfather clock, all sourced from Poly Pizza and credits linked below. The table is used to play the card game. The chest and grandfather clock will have puzzle functionality attached to them, but is not present at this time. All of the items were attached to nodes, and then the nodes attached to the rootnode using helper methods for each object. 
+
+Right now, the candle acts as the sole lighting for the scene, but sets the atmosphere as a dark, dimly lit hold that a prisoner would be held in. The candle doesn't light up the entirety of the scene which is by design, as in the future we want the player to use the candle and/or a lantern to illuminate certain objects for the puzzles, and as mentioned previously makes the game feel more ominous and dark. The candle uses a point light with an orange color, which is attached to a node above the candle model. The reason for this choice is to allow the light to illuminate the candle itself, and cast light below itself more effectively. Setting the point light right at the flame part of the model results in the base of the candle and the flame itself to not be lit. We plan to add more lights through the form of lanterns, the sun/moon using directional light, and perhaps other items/cards.
+
+#### Model Attributions:
+- Candle: Candle by Nick Slough [CC-BY](https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/HFpLq6iqKu)
+- Table: Table by Darwin Yamamoto [CC-BY](https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/2UW71XCeyGh)
+- Grandfather Clock: Grandfathers Clock by CreativeTrio (https://poly.pizza/m/09YKIkFZnA)
+- Chest: Chest by Quaternius (https://poly.pizza/m/O72u4Drp8k)
 
 ### Running Instructions
 Transition from the Card Game "scene" to the interaction demo "scene" using 'S' while sitting.
