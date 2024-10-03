@@ -20,7 +20,6 @@ import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -28,14 +27,13 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.mygame.PhysicsHelper;
 import java.util.Random;
 
 import com.jme3.bullet.BulletAppState;
+import com.jme3.light.LightList;
 
 /**
  *
@@ -287,6 +285,10 @@ public class CardGameState extends AbstractAppState {
         //inputManager.clearMappings();
         inputManager.removeListener(actionListener);
         tableNode.removeFromParent();
+        
+        LightList lights = rootNode.getLocalLightList();
+        lights.clear();
+        
     }
     
     private void setUpLight() {
@@ -299,6 +301,7 @@ public class CardGameState extends AbstractAppState {
         dl.setColor(ColorRGBA.White);
         dl.setDirection(new Vector3f(2.8f, -2.8f, -2.8f).normalizeLocal());
         rootNode.addLight(dl);
+        
     }
     
 }

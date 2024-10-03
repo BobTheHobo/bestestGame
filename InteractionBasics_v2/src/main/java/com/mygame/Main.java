@@ -16,7 +16,7 @@ public class Main extends SimpleApplication {
 
         // Application settings
         AppSettings settings = new AppSettings(true);
-        //settings.setResolution(640, 480);
+        settings.setResolution(1280, 960);
         settings.setFullscreen(false);
         settings.setTitle("InteractionBasics");
 

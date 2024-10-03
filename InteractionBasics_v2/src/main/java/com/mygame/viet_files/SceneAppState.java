@@ -56,8 +56,8 @@ public class SceneAppState extends AbstractAppState {
 	GameLighting lighting = new GameLighting(rootNode, assetManager);
 	lighting.setupLighting();
 
-        //CardGameState state = new CardGameState();
-        //stateManager.attach(state);
+        CardGameState state = new CardGameState();
+        stateManager.attach(state);
     }
     
     private ActionListener actionListener = new ActionListener() {
