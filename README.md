@@ -89,6 +89,13 @@ The ship hull that acts as the main room for the game was created in Blender. It
 
 Right now, the candle acts as the sole lighting for the scene, but sets the atmosphere as a dark, dimly lit hold that a prisoner would be held in. The candle doesn't light up the entirety of the scene which is by design, as in the future we want the player to use the candle and/or a lantern to illuminate certain objects for the puzzles, and as mentioned previously makes the game feel more ominous and dark. The candle uses a point light with an orange color, which is attached to a node above the candle model. The reason for this choice is to allow the light to illuminate the candle itself, and cast light below itself more effectively. Setting the point light right at the flame part of the model results in the base of the candle and the flame itself to not be lit. We plan to add more lights through the form of lanterns, the sun/moon using directional light, and perhaps other items/cards.
 
+![Perspective sitting at table while playing](https://github.com/user-attachments/assets/eb9129af-0cfe-47dc-bdde-68bcadcdf11f)
+![Looking left at table](https://github.com/user-attachments/assets/52b5908c-a057-4f26-b9f9-24da4ff997b5)
+![Looking right at table](https://github.com/user-attachments/assets/a1ece375-5be6-461f-9ad0-747bb012d6e4)
+![Looking into room from windows](https://github.com/user-attachments/assets/d8b1f5ff-d4a2-4066-b69c-47627d2a6cb6)
+![Looking inside from doorway](https://github.com/user-attachments/assets/59e83ea6-5923-46ae-8470-bcc263761bee)
+![Hull Model in Blender](https://github.com/user-attachments/assets/3d45f8ee-b7f3-41f5-94e1-bf20a0ac569d)
+
 #### Model Attributions:
 - Candle: Candle by Nick Slough [CC-BY](https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/HFpLq6iqKu)
 - Table: Table by Darwin Yamamoto [CC-BY](https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/2UW71XCeyGh)
