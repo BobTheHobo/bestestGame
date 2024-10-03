@@ -82,8 +82,11 @@ The card game scene is implemented in an appState that creates and moves a table
 Movement and free look are controlled through WASD and cursor tracking, respectively, and are implemented through a modified version of JME's built in flyCam. There is also a small crosshair that is on the GUINode.
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/pAj2WXc"  ><a href="//imgur.com/a/pAj2WXc">Movement/Free Look</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
-Collisions and physics are handled through the jBullet plugin. The player and all objects in the scene are affected by collisions. If an object has the `canBePickedUp` tag (green object in demo), the player can "pick up" the object if they are in a defined range and are looking at the object. The object will float at the center of the screen until it is dropped.
+Collisions and physics are handled through the jBullet plugin. The player and all objects in the scene are affected by collisions. If an object has the `canBePickedUp` tag (green object in demo), the player can "pick up" the object if they are in a defined range and are looking at the object. The object will float at the center of the screen until it is dropped. Physics on the object are disabled after pickup. Only ONE object can be picked up at a time. The bind for picking up an object is currently set to left mouse click.
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/a38lkK5"  ><a href="//imgur.com/a/a38lkK5">Picking Up</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
+
+By left clicking again, the held object is dropped at the vector originating from the camera position and going to where the player is looking, but dropped at the same range (magnitude) as the pickup range. Physics are re-enabled on the object after dropping.
+<blockquote class="imgur-embed-pub" lang="en" data-id="a/N0xybuo"  ><a href="//imgur.com/a/N0xybuo">Dropping</a></blockquote><script async src="//s.imgur.com/min/embed.js" charset="utf-8"></script>
 
 
 ### Set Modeling
