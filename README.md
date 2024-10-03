@@ -65,13 +65,13 @@ The card game scene is implemented in an appState that creates and moves a table
 
 ### First Person Movement and World Interaction
 Movement and free look are controlled through WASD and cursor tracking, respectively, and are implemented through a modified version of JME's built in flyCam. There is also a small crosshair that is on the GUINode.
-<img width="1089" alt="Interaction 1" src="https://github.com/user-attachments/assets/52357e3f-a7e6-42a8-88b4-852bc628d2c6">
+<img width="250" alt="Interaction 1" src="https://github.com/user-attachments/assets/52357e3f-a7e6-42a8-88b4-852bc628d2c6">
 
 Collisions and physics are handled through the jBullet plugin. The player and all objects in the scene are affected by collisions. If an object has the `canBePickedUp` tag (green object in demo), the player can "pick up" the object if they are in a defined range and are looking at the object. The object will float at the center of the screen until it is dropped. Physics on the object are disabled after pickup. Only ONE object can be picked up at a time. The bind for picking up an object is currently set to left mouse click.
-<img width="1087" alt="Interaction 2" src="https://github.com/user-attachments/assets/a7375043-1504-4d51-bc33-58924b748257">
+<img width="250" alt="Interaction 2" src="https://github.com/user-attachments/assets/a7375043-1504-4d51-bc33-58924b748257">
 
 By left clicking again, the held object is dropped at the vector originating from the camera position and going to where the player is looking, but dropped at the same range (magnitude) as the pickup range. Physics are re-enabled on the object after dropping.
-<img width="1085" alt="Interaction 3" src="https://github.com/user-attachments/assets/01349b36-33aa-43af-99ee-89dd544758cb">
+<img width="250" alt="Interaction 3" src="https://github.com/user-attachments/assets/01349b36-33aa-43af-99ee-89dd544758cb">
 
 ### Set Modeling
 The ship hull that acts as the main room for the game was created in Blender. It was modeled by hand using a cylinder base mesh and gradually adding the walls and ceiling to achieve the current look. It has a grate at the top that will be used to let in light, and features portholes (circular windows) as well as larger, rectangular windows that will allow the player to look out and observe the ocean/world in a future update. Inside the room is a table, chest, candle, and grandfather clock, all sourced from Poly Pizza and credits linked below. The table is used to play the card game. The chest and grandfather clock will have puzzle functionality attached to them, but is not present at this time. All of the items were attached to nodes, and then the nodes attached to the rootnode using helper methods for each object. 
