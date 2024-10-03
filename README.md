@@ -80,7 +80,7 @@ The card game scene is implemented in an appState that creates and moves a table
 
 ### First Person Movement and World Interaction
 Movement and free look are controlled through WASD and cursor tracking, respectively, and are implemented through a modified version of JME's built in flyCam. There is also a small crosshair that is on the GUINode.
-![Alt text]([https://i.imgur.com/yourimageID.png](https://imgur.com/a/pAj2WXc))
+![Alt text](https://imgur.com/a/pAj2WXc)
 
 Collisions and physics are handled through the jBullet plugin. The player and all objects in the scene are affected by collisions.
 
