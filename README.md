@@ -1,3 +1,5 @@
+# - Mutiny -
+
 # Game Summary:
 A dark, atmospheric escape room game where you must defeat enemies in a card based board game to receive items to escape.  The setting is that you are a mutineer who is being held below deck after your mutiny failed.
 
@@ -41,3 +43,57 @@ A minigame in a larger RPG that is intentionally simple, but effective to not di
 Graphics:
 - First-person perspective with low-poly graphics
 - High contrast lighting with particle systems for card playing and surrounding terrain
+
+# Development
+
+## First Deliverable 
+Our work for this deliverable consists of three main components:
+- Basic Card Game Function (card playing, basic GUI, game board, turns)
+- First Person Movement and World Interaction (free look and walk, collisions, crosshair, item pick up/drop)
+- Set Modeling (model imports, level design, basic atmosphere)
+
+### Basic Card Game Function
+The card game scene is implemented in an appState that creates and moves a table spatial as well as many placeholder boxes to create a playmat, grouped card slots(galleys), individual card slots, and cards.  The card spatials are translated through space to indicate selection and place the selected card on a card slots.  This is handled using triggers, mappings, and an ActionListener.  The ActionListener is also used to implement alternate means of looking around and at the game board as the mouse cursor is used to select and play cards while seated.  Game logic including drawing cards, cards affecting the board state, the opponent drawing and playing cards, progression of turns is handled in a set of java files(Board, Galley, Slot, Card).  These files modify the 3d space by moving cards or changing the text on cards to represent effects while maintaining an internal representation of the game state.
+
+<a href="https://imgur.com/n3Il7YC"><img src="https://i.imgur.com/n3Il7YC.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/NjMkFVE"><img src="https://i.imgur.com/NjMkFVE.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/rRM0AeK"><img src="https://i.imgur.com/rRM0AeK.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/Veo45n2"><img src="https://i.imgur.com/Veo45n2.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/304klXU"><img src="https://i.imgur.com/304klXU.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/TuBu68c"><img src="https://i.imgur.com/TuBu68c.png" title="source: imgur.com" width="250" /></a>
+<a href="https://imgur.com/PSoMY0Y"><img src="https://i.imgur.com/PSoMY0Y.png" title="source: imgur.com" width="250" /></a>
+
+### First Person Movement and World Interaction
+Movement and free look are controlled through WASD and cursor tracking, respectively, and are implemented through a modified version of JME's built in flyCam. There is also a small crosshair that is on the GUINode.
+<img width="500" alt="Interaction 1" src="https://github.com/user-attachments/assets/52357e3f-a7e6-42a8-88b4-852bc628d2c6">
+
+Collisions and physics are handled through the jBullet plugin. The player and all objects in the scene are affected by collisions. If an object has the `canBePickedUp` tag (green object in demo), the player can "pick up" the object if they are in a defined range and are looking at the object. The object will float at the center of the screen until it is dropped. Physics on the object are disabled after pickup. Only ONE object can be picked up at a time. The bind for picking up an object is currently set to left mouse click.
+<img width="500" alt="Interaction 2" src="https://github.com/user-attachments/assets/a7375043-1504-4d51-bc33-58924b748257">
+
+By left clicking again, the held object is dropped at the vector originating from the camera position and going to where the player is looking, but dropped at the same range (magnitude) as the pickup range. Physics are re-enabled on the object after dropping.
+<img width="500" alt="Interaction 3" src="https://github.com/user-attachments/assets/01349b36-33aa-43af-99ee-89dd544758cb">
+
+### Set Modeling
+The ship hull that acts as the main room for the game was created in Blender. It was modeled by hand using a cylinder base mesh and gradually adding the walls and ceiling to achieve the current look. It has a grate at the top that will be used to let in light, and features portholes (circular windows) as well as larger, rectangular windows that will allow the player to look out and observe the ocean/world in a future update. Inside the room is a table, chest, candle, and grandfather clock, all sourced from Poly Pizza and credits linked below. The table is used to play the card game. The chest and grandfather clock will have puzzle functionality attached to them, but is not present at this time. All of the items were attached to nodes, and then the nodes attached to the rootnode using helper methods for each object. 
+
+Right now, the candle acts as the sole lighting for the scene, but sets the atmosphere as a dark, dimly lit hold that a prisoner would be held in. The candle doesn't light up the entirety of the scene which is by design, as in the future we want the player to use the candle and/or a lantern to illuminate certain objects for the puzzles, and as mentioned previously makes the game feel more ominous and dark. The candle uses a point light with an orange color, which is attached to a node above the candle model. The reason for this choice is to allow the light to illuminate the candle itself, and cast light below itself more effectively. Setting the point light right at the flame part of the model results in the base of the candle and the flame itself to not be lit. We plan to add more lights through the form of lanterns, the sun/moon using directional light, and perhaps other items/cards.
+
+<img src="https://github.com/user-attachments/assets/eb9129af-0cfe-47dc-bdde-68bcadcdf11f" alt="Perspective sitting at table while playing" width="500"/>
+<img src="https://github.com/user-attachments/assets/52b5908c-a057-4f26-b9f9-24da4ff997b5" alt="Looking left at table" width="500"/>
+<img src="https://github.com/user-attachments/assets/a1ece375-5be6-461f-9ad0-747bb012d6e4" alt="Looking right at table" width="500"/>
+<img src="https://github.com/user-attachments/assets/d8b1f5ff-d4a2-4066-b69c-47627d2a6cb6" alt="Looking into room from windows" width="500"/>
+<img src="https://github.com/user-attachments/assets/59e83ea6-5923-46ae-8470-bcc263761bee" alt="Looking inside from doorway" width="500"/>
+<img src="https://github.com/user-attachments/assets/3d45f8ee-b7f3-41f5-94e1-bf20a0ac569d" alt="Hull Model in Blender" width="500"/>
+
+#### Model Attributions:
+- Candle: Candle by Nick Slough [CC-BY](https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/HFpLq6iqKu)
+- Table: Table by Darwin Yamamoto [CC-BY](https://creativecommons.org/licenses/by/3.0/) via Poly Pizza (https://poly.pizza/m/2UW71XCeyGh)
+- Grandfather Clock: Grandfathers Clock by CreativeTrio (https://poly.pizza/m/09YKIkFZnA)
+- Chest: Chest by Quaternius (https://poly.pizza/m/O72u4Drp8k)
+
+### Running Instructions
+Transition from the Card Game "scene" to the interaction demo "scene" using 'S' while sitting.
+Transition from the interaction demo "scene" to the model demo "scene" using 'P'.
+
+
+  
