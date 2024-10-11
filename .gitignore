@@ -12,6 +12,7 @@ nbdist/
 
 # Pulled from a gradle template
 /.gradle/
+*/.gradle/
 /.idea/
 /.nb-gradle/
 /build/
