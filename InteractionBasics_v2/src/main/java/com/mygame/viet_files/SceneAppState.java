@@ -10,15 +10,13 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
-import com.jme3.renderer.Camera;
+import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
@@ -33,11 +31,14 @@ public class SceneAppState extends AbstractAppState {
     private Node rootNode;
     private AssetManager assetManager;
     private SimpleApplication app;
+    private ViewPort viewPort;
     
     private final static Trigger TRIGGER_P= new KeyTrigger(KeyInput.KEY_P);
     private final static String MAPPING_SCENE = "Next Scene";
     private boolean nextScene = false;
     private Node room_node;
+
+    private GameShadows shadows;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -45,18 +46,22 @@ public class SceneAppState extends AbstractAppState {
         this.app = (SimpleApplication) app;
         this.rootNode = this.app.getRootNode();
         this.assetManager = this.app.getAssetManager();
-        
+	this.viewPort = this.app.getViewPort();
         
         InputManager inputManager = this.app.getInputManager();
         inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
         inputManager.addListener(actionListener, MAPPING_SCENE);
 
+	shadows = new GameShadows(rootNode, assetManager, viewPort);
+	GameLighting lighting = new GameLighting(rootNode, assetManager, shadows);
+        CardGameState state = new CardGameState();
+
+	shadows.setupShadowHandlers();
+
 	setupScene();
 
-	GameLighting lighting = new GameLighting(rootNode, assetManager);
 	lighting.setupLighting();
 
-        CardGameState state = new CardGameState();
         stateManager.attach(state);
     }
     
@@ -68,16 +73,14 @@ public class SceneAppState extends AbstractAppState {
                     if (name.equals(MAPPING_SCENE)) {
                         app.getFlyByCamera().setEnabled(true);
                     }
-                    }
-                }
+	    	}
+	    }
     };
     
     public boolean getNextScene() {
         return nextScene;
     }
             
-            
-
     // Spawns models in and places them
     public void setupScene() {
 	// Main node for the room
@@ -109,23 +112,18 @@ public class SceneAppState extends AbstractAppState {
 	chest.setLocalRotation(rotateY90);
 	room_node.attachChild(chest);
 
+	// block to test shadows
+	Geometry block = Util.insertBlock(assetManager, new Vector3f(0,2,0), 1);
+	shadows.attachShadowCastAndReceive(block);
+	room_node.attachChild(block);
+
+	
 	// Just sets room node to the origin
         Vector3f origin = new Vector3f(0f, 0f, 0f);
         room_node.setLocalTranslation(origin);
 
 
 	rootNode.attachChild(room_node);
-    }
-
-    // Creates a simple blue box for testing and whatnot
-    private Geometry insertBlock() {
-	Box b = new Box(0.1f, 0.1f, 0.1f); // create cube shape
-        Geometry geom = new Geometry("Box", b);  // create cube geometry from the shape
-        Material mat = new Material(assetManager,
-          "Common/MatDefs/Misc/Unshaded.j3md");  // create a simple material
-        mat.setColor("Color", ColorRGBA.Blue);   // set color of material to blue
-        geom.setMaterial(mat);  // set the cube's material
-	return geom;
     }
 
     // Inserts a candle and returns the spatial
@@ -145,13 +143,16 @@ public class SceneAppState extends AbstractAppState {
 	Spatial candle = assetManager.loadModel("Models/mdl_candle_main_v2/mdl_candle_main_v2.j3o");
 	candle_node.attachChild(candle);
 
+	// Add shadows
+	shadows.attachShadowCastAndReceive(candle);
+
 	// Invisible flame node, specifies where light spawns from
 	Node flame_node = new Node("Flame node for Candle");
 	flame_node.move(0f, 0.8f, 0f); // Add a little offset to make light spawn from actual flame
 	candle_node.attachChild(flame_node);
 	
 	// Used to find out where to set light origin
-	// Geometry geom = insertBlock();
+	// Geometry geom = Util.insertBlock();
         // flame_node.attachChild(geom);
 
 	// Pointlight from candle
@@ -169,6 +170,7 @@ public class SceneAppState extends AbstractAppState {
 	// al.setColor(ColorRGBA.Red.mult(1.3f));
 	// flame_node.addLight(al);
 
+
         return candle_node;
     }
 
@@ -181,6 +183,9 @@ public class SceneAppState extends AbstractAppState {
 	// Load actual model and attach it to candle node
 	Spatial chest = assetManager.loadModel("Models/mdl_chest_closed_v2/mdl_chest_closed_v2.j3o");
 	chest_node.attachChild(chest);
+
+	// Add shadows
+	shadows.attachShadowCastAndReceive(chest);
 
 	return chest_node;
     }
@@ -195,6 +200,9 @@ public class SceneAppState extends AbstractAppState {
 	Spatial clock = assetManager.loadModel("Models/mdl_grandfatherclock_main_v2_fixorigin/mdl_grandfatherclock_main_v2_fixorigin.j3o");
 	clock_node.attachChild(clock);
 
+	// Add shadows
+	shadows.attachShadowCastAndReceive(clock);
+
 	return clock_node;
     }
 
@@ -206,6 +214,9 @@ public class SceneAppState extends AbstractAppState {
 	// Load actual model and attach it to table node
 	Spatial table = assetManager.loadModel("Models/mdl_table_main_v2/mdl_table_main_v2.j3o");
 	table_node.attachChild(table);
+
+	// Add shadows
+	shadows.attachShadowCastAndReceive(table);
 
 	return table_node;
     }
