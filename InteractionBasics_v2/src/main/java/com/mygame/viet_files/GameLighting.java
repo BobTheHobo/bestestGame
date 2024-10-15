@@ -40,7 +40,7 @@ public class GameLighting {
     public void insertMoonlight() {
 	DirectionalLight moonlight = new DirectionalLight();
 	// Soft bluish color for moonlight
-	moonlight.setColor(fromRGBA255(6,13,35,255));  
+	moonlight.setColor(fromRGBA255(6,13,35,255).mult(0.2f));  
 
 	// Direction for long shadows
 	moonlight.setDirection(new Vector3f(-0.5f, -1.0f, -0.5f).normalizeLocal());  

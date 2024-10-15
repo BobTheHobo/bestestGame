@@ -131,7 +131,7 @@ public class SceneAppState extends AbstractAppState {
     }
 
     private Spatial insertRoom() {
-	Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v3/mdl_room_main_v3.j3o");
+	Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v4/mdl_room_main_v4.j3o");
 
 	// Add lighting material
     	Material roomMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
