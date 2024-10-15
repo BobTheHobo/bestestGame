@@ -47,6 +47,9 @@ public class GameShadows {
     // Defines how shadows are filtered
     EdgeFilteringMode edgeFiltering = EdgeFilteringMode.PCFPOISSON;
 
+    // Shadow edges thickness. default is 10, setting it to lower values can help to reduce the jagged effect of the shadow edges (units in tenths of a pixel)
+    int shadowEdgeThickness = 10;
+
     // Specifies whether software or hardware shadows are used
     boolean useHWShadows = true; 
 
@@ -75,7 +78,7 @@ public class GameShadows {
 
 	setupDirectionalLightHandlers();
 	setupPointLightHandlers();
-	//setupSpotLightHandlers();
+	setupSpotLightHandlers();
 	
         toggleShadows(shadowsOn);
     }
@@ -169,6 +172,20 @@ public class GameShadows {
         slsf.setShadowIntensity(shadowIntensity);
     }
 
+    public int getShadowEdgeThickness() {
+        return this.shadowEdgeThickness;
+    }
+
+    public void setShadowEdgeThickness(int thickness) {
+	this.shadowEdgeThickness = thickness;
+	dlsr.setEdgesThickness(this.shadowEdgeThickness);
+	dlsf.setEdgesThickness(this.shadowEdgeThickness);
+	slsr.setEdgesThickness(this.shadowEdgeThickness);
+	slsf.setEdgesThickness(this.shadowEdgeThickness);
+	plsr.setEdgesThickness(this.shadowEdgeThickness);
+	plsf.setEdgesThickness(this.shadowEdgeThickness);
+    }
+
     public void setShadowCompareMode(boolean useHW) {
 	this.useHWShadows = useHW;	
 	CompareMode cm = this.useHWShadows ? CompareMode.Hardware : CompareMode.Software;
@@ -181,13 +198,13 @@ public class GameShadows {
     }
 
     private void addRenderProcessors() {
-	//viewPort.addProcessor(slsr);
+	viewPort.addProcessor(slsr);
 	viewPort.addProcessor(plsr);
 	viewPort.addProcessor(dlsr);
     }
 
     private void removeRenderProcessors() {
-	//viewPort.removeProcessor(slsr);
+	viewPort.removeProcessor(slsr);
 	viewPort.removeProcessor(plsr);
 	viewPort.removeProcessor(dlsr);
     }

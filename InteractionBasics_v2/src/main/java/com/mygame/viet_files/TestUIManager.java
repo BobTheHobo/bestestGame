@@ -48,14 +48,14 @@ import com.jme3.shadow.EdgeFilteringMode;
 
 /**
  *
- * @author Nehon
+ * @author Nehon, Viet
  */
 public class TestUIManager implements ActionListener {
 
-    final private BitmapText shadowTypeText;
-    final private BitmapText shadowCompareText;
-    final private BitmapText shadowFilterText;
-    final private BitmapText shadowIntensityText;
+    public BitmapText shadowTypeText;
+    public BitmapText shadowCompareText;
+    public BitmapText shadowFilterText;
+    public BitmapText shadowIntensityText;
     private final static String TYPE_TEXT = "(Space) Shadow type : ";
     private final static String COMPARE_TEXT = "(enter) Shadow compare ";
     private final static String FILTERING_TEXT = "(f) Edge filtering : ";
@@ -65,14 +65,47 @@ public class TestUIManager implements ActionListener {
     private int filteringIndex = 0;
     private int renderModeIndex = 0;
     GameShadows shadows;
+    private final InputManager inputManager;
+    private final AssetManager assetManager;
+    private final Node guiNode;
     
 
     public TestUIManager(AssetManager assetManager, GameShadows shadows, 
             Node guiNode, InputManager inputManager, ViewPort viewPort) {
+	this.assetManager = assetManager;
 	this.shadows = shadows;
-
+	this.guiNode = guiNode;
+	this.inputManager = inputManager;
         this.viewPort = viewPort;
+
+	initUI();
+
+	addMappings();
+    }
+    
+    private void addMappings() {
+        inputManager.addMapping("toggle", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("changeFiltering", new KeyTrigger(KeyInput.KEY_F));
+        inputManager.addMapping("ShadowUp", new KeyTrigger(KeyInput.KEY_T));
+        inputManager.addMapping("ShadowDown", new KeyTrigger(KeyInput.KEY_G));
+        inputManager.addMapping("ThicknessUp", new KeyTrigger(KeyInput.KEY_Y));
+        inputManager.addMapping("ThicknessDown", new KeyTrigger(KeyInput.KEY_H));
+        inputManager.addMapping("toggleHW", new KeyTrigger(KeyInput.KEY_RETURN));
+
+        inputManager.addListener(this, "toggleHW", "toggle", "ShadowUp", "ShadowDown", "ThicknessUp", "ThicknessDown", "changeFiltering");
+    }
+
+    public void updateUI() {
+        shadowTypeText.setText(TYPE_TEXT + "Processor");
+        shadowCompareText.setText(COMPARE_TEXT + (hardwareShadows ? "Hardware" : "Software"));
+        shadowFilterText.setText(FILTERING_TEXT + shadows.getEdgeFilteringMode());
+        shadowIntensityText.setText(INTENSITY_TEXT + shadows.getShadowIntensity());
+    }
+
+    private void initUI() {
+	// set up font
         BitmapFont guiFont = assetManager.loadFont("Interface/Fonts/LucidaCalligraphy.fnt");
+
         shadowTypeText = createText(guiFont);
         shadowCompareText = createText(guiFont);
         shadowFilterText = createText(guiFont);
@@ -92,20 +125,7 @@ public class TestUIManager implements ActionListener {
         guiNode.attachChild(shadowCompareText);
         guiNode.attachChild(shadowFilterText);
         guiNode.attachChild(shadowIntensityText);
-
-        inputManager.addMapping("toggle", new KeyTrigger(KeyInput.KEY_SPACE));
-        inputManager.addMapping("changeFiltering", new KeyTrigger(KeyInput.KEY_F));
-        inputManager.addMapping("ShadowUp", new KeyTrigger(KeyInput.KEY_T));
-        inputManager.addMapping("ShadowDown", new KeyTrigger(KeyInput.KEY_G));
-        inputManager.addMapping("ThicknessUp", new KeyTrigger(KeyInput.KEY_Y));
-        inputManager.addMapping("ThicknessDown", new KeyTrigger(KeyInput.KEY_H));
-        inputManager.addMapping("toggleHW", new KeyTrigger(KeyInput.KEY_RETURN));
-
-
-        inputManager.addListener(this, "toggleHW", "toggle", "ShadowUp", "ShadowDown", "ThicknessUp", "ThicknessDown", "changeFiltering");
-
     }
-
 
     @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
@@ -130,8 +150,6 @@ public class TestUIManager implements ActionListener {
                     break;
             }
 
-
-
         } else if (name.equals("toggleHW") && keyPressed) {
             hardwareShadows = !hardwareShadows;
 	    shadows.setShadowCompareMode(hardwareShadows);
@@ -144,26 +162,17 @@ public class TestUIManager implements ActionListener {
             shadowFilterText.setText(FILTERING_TEXT + shadows.getEdgeFilteringMode().toString());
         }
 
-        if (name.equals("ShadowUp") && keyPressed) {
-	    shadows.setShadowIntensity(shadows.getShadowIntensity() + 0.1f);
 
-            shadowIntensityText.setText(INTENSITY_TEXT + shadows.getShadowIntensity());
+        if (name.equals("ThicknessUp") && keyPressed) {
+	    int thickness = shadows.getShadowEdgeThickness();
+	    shadows.setShadowEdgeThickness(thickness + 1);
+            System.out.println("Shadow thickness : " + shadows.getShadowEdgeThickness());
         }
-        if (name.equals("ShadowDown") && keyPressed) {
-	    shadows.setShadowIntensity(shadows.getShadowIntensity() - 0.1f);
-
-            shadowIntensityText.setText(INTENSITY_TEXT + shadows.getShadowIntensity());
+        if (name.equals("ThicknessDown") && keyPressed) {
+	    int thickness = shadows.getShadowEdgeThickness();
+	    shadows.setShadowEdgeThickness(thickness - 1);
+            System.out.println("Shadow thickness : " + shadows.getShadowEdgeThickness());
         }
-        //if (name.equals("ThicknessUp") && keyPressed) {
-            //dlsr.setEdgesThickness(dlsr.getEdgesThickness() + 1);
-            //dlsf.setEdgesThickness(dlsf.getEdgesThickness() + 1);
-            //System.out.println("Shadow thickness : " + dlsr.getEdgesThickness());
-        //}
-        //if (name.equals("ThicknessDown") && keyPressed) {
-            //dlsr.setEdgesThickness(dlsr.getEdgesThickness() - 1);
-            //dlsf.setEdgesThickness(dlsf.getEdgesThickness() - 1);
-            //System.out.println("Shadow thickness : " + dlsr.getEdgesThickness());
-        //}
 
     }
 

@@ -84,6 +84,9 @@ public class InputHandler implements ActionListener {
     private ViewPort viewPort;
 
     private BitmapFont guiFont;
+
+    private TestUIManager ui;
+
    
     
     public InputHandler(Application app, InputManager inputManager, GameShadows shadows) {
@@ -105,11 +108,13 @@ public class InputHandler implements ActionListener {
 
         guiFont = assetManager.loadFont("Interface/Fonts/LucidaCalligraphy.fnt");
 
+        ui = new TestUIManager(assetManager, shadows, guiNode, inputManager, viewPort);
+
 	initInputs();
     }
 
-    private void initInputs() {
-        //Initialize inputs
+    private void addMappings() {
+	// Game inputs
         inputManager.addMapping(MAPPING_FORWARD, TRIGGER_W);
         inputManager.addMapping(MAPPING_LEFT, TRIGGER_A);
         inputManager.addMapping(MAPPING_BACK, TRIGGER_S);
@@ -118,34 +123,20 @@ public class InputHandler implements ActionListener {
         inputManager.addMapping(MAPPING_RESET, TRIGGER_Q);
         
 
+	// Shadow testing inputs
         inputManager.addMapping("lambdaUp", new KeyTrigger(KeyInput.KEY_U));
         inputManager.addMapping("lambdaDown", new KeyTrigger(KeyInput.KEY_J));
 
-        inputManager.addMapping("switchGroundMat", new KeyTrigger(KeyInput.KEY_M));
         inputManager.addMapping("debug", new KeyTrigger(KeyInput.KEY_X));
         inputManager.addMapping("stabilize", new KeyTrigger(KeyInput.KEY_B));
         inputManager.addMapping("distance", new KeyTrigger(KeyInput.KEY_N));
 
-
-        inputManager.addMapping("up", new KeyTrigger(KeyInput.KEY_NUMPAD8));
-        inputManager.addMapping("down", new KeyTrigger(KeyInput.KEY_NUMPAD2));
-        inputManager.addMapping("right", new KeyTrigger(KeyInput.KEY_NUMPAD6));
-        inputManager.addMapping("left", new KeyTrigger(KeyInput.KEY_NUMPAD4));
-        inputManager.addMapping("fwd", new KeyTrigger(KeyInput.KEY_PGUP));
-        inputManager.addMapping("back", new KeyTrigger(KeyInput.KEY_PGDN));
-        inputManager.addMapping("pp", new KeyTrigger(KeyInput.KEY_P));
         inputManager.addMapping("backShadows", new KeyTrigger(KeyInput.KEY_K));
+    }
 
+    private void addUIText() {
 
-        inputManager.addListener(this, "lambdaUp", "lambdaDown",
-                "switchGroundMat", "debug", "up", "down", "right", "left", "fwd", "back", "pp", "stabilize", "distance", "ShadowUp", "ShadowDown", "backShadows");
-
-        TestUIManager uiMan = new TestUIManager(assetManager, shadows, guiNode, inputManager, viewPort);
-
-        inputManager.addListener(this, "Size+", "Size-");
-        inputManager.addMapping("Size+", new KeyTrigger(KeyInput.KEY_W));
-        inputManager.addMapping("Size-", new KeyTrigger(KeyInput.KEY_S));
-
+	// Display shadow stabilization instructions
         shadowStabilizationText = new BitmapText(guiFont);
         shadowStabilizationText.setSize(guiFont.getCharSet().getRenderedSize() * 0.75f);
         shadowStabilizationText.setText("(b:on/off) Shadow stabilization : " + dlsr.isEnabledStabilization());
@@ -153,28 +144,36 @@ public class InputHandler implements ActionListener {
         guiNode.attachChild(shadowStabilizationText);
 
 
+	// Display shadow extend + fading instructions
         shadowZfarText = new BitmapText(guiFont);
         shadowZfarText.setSize(guiFont.getCharSet().getRenderedSize() * 0.75f);
         shadowZfarText.setText("(n:on/off) Shadow extend to 500 and fade to 50 : " + (dlsr.getShadowZExtend() > 0));
         shadowZfarText.setLocalTranslation(10, viewPort.getCamera().getHeight() - 120, 0);
         guiNode.attachChild(shadowZfarText);
     }
+
+    private void initInputs() {
+        //Initialize inputs
+
+	addMappings();
+
+	addUIText();
+
+        inputManager.addListener(this, 
+		"lambdaUp", 
+		"lambdaDown",
+                "debug",
+		"stabilize",
+		"distance",
+		"ShadowUp",
+		"ShadowDown",
+		"backShadows"
+	);
+    }
     
 
     @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
-
-
-        //if (name.equals("pp") && keyPressed) {
-            //if (cam.isParallelProjection()) {
-                //cam.setFrustumPerspective(45, (float) cam.getWidth() / cam.getHeight(), 1, 1000);
-            //} else {
-                //cam.setParallelProjection(true);
-                //float aspect = (float) cam.getWidth() / cam.getHeight();
-                //cam.setFrustum(-1000, 1000, -aspect * frustumSize, aspect * frustumSize, frustumSize, -frustumSize);
-
-            //}
-        //}
 
         if (name.equals("lambdaUp") && keyPressed) {
             dlsr.setLambda(dlsr.getLambda() + 0.01f);
@@ -187,12 +186,13 @@ public class InputHandler implements ActionListener {
         }
 
 
-	if (name.equals("ShadowUp") && keyPressed) {
-	    shadows.setShadowIntensity(shadows.getShadowIntensity() + 0.5f);
-	}
-
-	if (name.equals("ShadowDown") && keyPressed) {
-	    shadows.setShadowIntensity(shadows.getShadowIntensity() - 0.5f);
+        if (name.equals("ShadowUp") && keyPressed) {
+	    shadows.setShadowIntensity(shadows.getShadowIntensity() + 0.05f);
+	    ui.updateUI();
+        }
+        if (name.equals("ShadowDown") && keyPressed) {
+	    shadows.setShadowIntensity(shadows.getShadowIntensity() - 0.05f);
+	    ui.updateUI();
 	}
 
         if (name.equals("debug") && keyPressed) {
