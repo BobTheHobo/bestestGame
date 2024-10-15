@@ -33,6 +33,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import com.mygame.jeremiah_files.Board;
+import com.mygame.viet_files.SceneAppState;
 import java.util.Random;
 
 /**
@@ -104,13 +105,11 @@ public class CardGameState extends AbstractAppState {
         flyCam.setEnabled(false);
         
         Node gameNode = new Node("Game node");
-        Node tableNode = new Node("table");
+        Node tableNode = (Node)rootNode.getChild("Table node");
         
-        Spatial table = assetManager.loadModel("Models/3D Models/Non-Interactable Environmental/Tables/mdl_longSideTable_main_v1.glb");
         Quaternion rotate90 = new Quaternion();
         rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
-        table.rotate(rotate90);
-        tableNode.attachChild(table);
+        //tableNode.rotate(rotate90);
                
         tableNode.scale(2f);
         tableNode.center();
@@ -275,5 +274,4 @@ public class CardGameState extends AbstractAppState {
         //e.g. remove all spatials from rootNode
         //this is called on the OpenGL thread after the AppState has been detached
     }
-    
 }

@@ -1,9 +1,11 @@
 package com.mygame.viet_files;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.math.ColorRGBA;
+import static com.jme3.math.ColorRGBA.fromRGBA255;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
@@ -22,27 +24,51 @@ public class GameLighting {
     }
 
     public void setupLighting() {
-	// Directional light (basically sun) points in one direction from infinitely far away
+	//insertDL(new Vector3f(-0.5f, -0.3f, -1.5f), 1.0f);
+	//insertPL(new Vestor3f(0.0f, 7f, 0f));
+	insertMoonlight();
+    }
+
+    public void insertAL (float mult) {
+	// AmbientLight doesn't work because we don't have any materials yet
+	AmbientLight al = new AmbientLight();
+	al.setColor(ColorRGBA.White.mult(mult));
+
+	rootNode.addLight(al);
+    }
+
+    public void insertMoonlight() {
+	DirectionalLight moonlight = new DirectionalLight();
+	// Soft bluish color for moonlight
+	moonlight.setColor(fromRGBA255(6,13,35,255));  
+
+	// Direction for long shadows
+	moonlight.setDirection(new Vector3f(-0.5f, -1.0f, -0.5f).normalizeLocal());  
+
+	shadows.attachDirectionalLight(moonlight);
+
+	rootNode.addLight(moonlight);
+    }
+
+    // Directional light (basically sun) points in one direction from infinitely far away
+    public void insertDL(Vector3f dir, float mult) {
 	DirectionalLight sun = new DirectionalLight();
-	sun.setDirection((new Vector3f(-0.5f, -0.3f, -1.5f)));
-	sun.setColor(ColorRGBA.White.mult(0.0f));
-	rootNode.addLight(sun);
+	sun.setDirection(dir);
+	sun.setColor(ColorRGBA.White.mult(mult));
 	shadows.attachDirectionalLight(sun);
 
-	// Small pointlight just arbitrarily to light up scene
+	rootNode.addLight(sun);
+    }
+
+    // Small pointlight just arbitrarily to light up scene
+    public void insertPL(Vector3f vec) {
 	PointLight pl = new PointLight();
 	pl.setColor(ColorRGBA.White.mult(0.4f)); //Adjust mult value to increase/decrease brightness
 	pl.setRadius(18f);
-	Vector3f pl_vec = new Vector3f(0.0f, 7f, 0f);
-	pl.setPosition(pl_vec);
+	pl.setPosition(vec);
 	rootNode.addLight(pl);
 	shadows.attachPointLight(pl);
 
-	rootNode.attachChild(Util.insertBlock(this.assetManager, pl_vec));
-
-	// AmbientLight doesn't work because we don't have any materials yet
-	// AmbientLight al = new AmbientLight();
-	// al.setColor(ColorRGBA.White.mult(1.3f));
-	// rootNode.addLight(al);
+	rootNode.attachChild(Util.insertBlock(this.assetManager, vec));
     }
 }

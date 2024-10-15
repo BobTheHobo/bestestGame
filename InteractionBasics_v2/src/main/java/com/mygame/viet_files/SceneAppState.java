@@ -95,8 +95,12 @@ public class SceneAppState extends AbstractAppState {
 	// room_node.attachChild(room_model);
 	
 	// Ship hull (with roof)
-	Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v3/mdl_room_main_v3.j3o");
+	Spatial room_model = insertRoom();
 	room_node.attachChild(room_model);
+
+	// Main game table
+	Spatial table = insertTable(new Vector3f(0f,0f,0f));
+	room_node.attachChild(table);
 
 	// Grandfather clock
 	Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
@@ -113,9 +117,9 @@ public class SceneAppState extends AbstractAppState {
 	room_node.attachChild(chest);
 
 	// block to test shadows
-	Geometry block = Util.insertBlock(assetManager, new Vector3f(0,2,0), 1);
-	shadows.attachShadowCastAndReceive(block);
-	room_node.attachChild(block);
+	//Geometry block = Util.insertBlock(assetManager, new Vector3f(0,2,0), 1);
+	//shadows.attachShadowCastAndReceive(block);
+	//room_node.attachChild(block);
 
 	
 	// Just sets room node to the origin
@@ -124,6 +128,19 @@ public class SceneAppState extends AbstractAppState {
 
 
 	rootNode.attachChild(room_node);
+    }
+
+    private Spatial insertRoom() {
+	Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v3/mdl_room_main_v3.j3o");
+
+	// Add lighting material
+    	Material roomMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+	room_model.setMaterial(roomMat);
+
+	// Add shadows
+	shadows.attachShadowCastAndReceive(room_model);
+
+	return room_model;
     }
 
     // Inserts a candle and returns the spatial
@@ -143,7 +160,7 @@ public class SceneAppState extends AbstractAppState {
 	Spatial candle = assetManager.loadModel("Models/mdl_candle_main_v2/mdl_candle_main_v2.j3o");
 	candle_node.attachChild(candle);
 
-	// Add shadows
+	// Allow model to cast and receive shadows
 	shadows.attachShadowCastAndReceive(candle);
 
 	// Invisible flame node, specifies where light spawns from
@@ -159,6 +176,7 @@ public class SceneAppState extends AbstractAppState {
 	PointLight candle_light = new PointLight();
 	candle_light.setColor(ColorRGBA.Orange);
 	candle_light.setRadius(8f);
+	shadows.attachPointLight(candle_light); // Allow this pointlight to cast shadows
 	rootNode.addLight(candle_light);
 
 	// Makes light source follow the flame node, Will be useful if candle is moved
@@ -185,7 +203,7 @@ public class SceneAppState extends AbstractAppState {
 	chest_node.attachChild(chest);
 
 	// Add shadows
-	shadows.attachShadowCastAndReceive(chest);
+	shadows.attachShadowReceive(chest);
 
 	return chest_node;
     }
@@ -201,7 +219,7 @@ public class SceneAppState extends AbstractAppState {
 	clock_node.attachChild(clock);
 
 	// Add shadows
-	shadows.attachShadowCastAndReceive(clock);
+	shadows.attachShadowReceive(clock);
 
 	return clock_node;
     }
@@ -212,8 +230,19 @@ public class SceneAppState extends AbstractAppState {
 	table_node.setLocalTranslation(loc);
 
 	// Load actual model and attach it to table node
-	Spatial table = assetManager.loadModel("Models/mdl_table_main_v2/mdl_table_main_v2.j3o");
+	//Spatial table = assetManager.loadModel("Models/mdl_table_main_v2/mdl_table_main_v2.j3o");
+        Spatial table = assetManager.loadModel("Models/3D Models/Non-Interactable Environmental/Tables/mdl_longSideTable_main_v1.glb");
 	table_node.attachChild(table);
+
+	// Rotate 90
+        Quaternion rotate90 = new Quaternion();
+        rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
+        table.rotate(rotate90);
+
+	// Add lighting material
+    	Material tableMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+	table.setMaterial(tableMat);
+	System.out.println("Material Definition: " + tableMat.getMaterialDef().getName());
 
 	// Add shadows
 	shadows.attachShadowCastAndReceive(table);

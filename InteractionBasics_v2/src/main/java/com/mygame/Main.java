@@ -28,28 +28,30 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
         // Attach the InteractiveDemoAppState
-        cardAppState = new CardGameState();
-        stateManager.attach(cardAppState);
+        //cardAppState = new CardGameState();
+        //stateManager.attach(cardAppState);
         
+        sceneState = new SceneAppState();
+        stateManager.attach(sceneState);
         
         
     }
     
     @Override
     public void simpleUpdate(float tpf) {
-        if (scene == 0 && cardAppState.getPositiion() == -1) {
-            System.out.println("Next scene");
-            stateManager.detach(cardAppState);
-            interactiveDemoAppState = new InteractiveDemoAppState();
-            stateManager.attach(interactiveDemoAppState);
-            scene = 1;
-        }
-        if (scene == 1 && interactiveDemoAppState.getNextScene()) {
-            System.out.println("Next scene");
-            stateManager.detach(interactiveDemoAppState);
-            sceneState = new SceneAppState();
-            stateManager.attach(sceneState);
-            scene = 2;
-        }
+        //if (scene == 0 && cardAppState.getPositiion() == -1) {
+        //    System.out.println("Next scene");
+        //    stateManager.detach(cardAppState);
+        //    interactiveDemoAppState = new InteractiveDemoAppState();
+        //    stateManager.attach(interactiveDemoAppState);
+        //    scene = 1;
+        //}
+        //if (scene == 1 && interactiveDemoAppState.getNextScene()) {
+        //    System.out.println("Next scene");
+        //    stateManager.detach(interactiveDemoAppState);
+        //    sceneState = new SceneAppState();
+        //    stateManager.attach(sceneState);
+        //    scene = 2;
+        //}
     }
 }
