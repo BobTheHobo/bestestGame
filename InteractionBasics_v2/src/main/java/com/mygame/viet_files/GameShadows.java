@@ -9,6 +9,7 @@ import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
+import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.shadow.EdgeFilteringMode;
@@ -26,19 +27,28 @@ public class GameShadows {
     private final AssetManager assetManager;
     private final ViewPort viewPort;
 
+    // Whether or not shadows are on
+    boolean shadowsOn = true;
+
     // If filtering is used for shadow simulation (rendering will be used else)
     // Rendering is more precise but more intensive, filtering is less accurate but faster
     boolean useFilter = false;
 
     // Size of rendered shadow maps, in pixels per side (512, 1024, 2048, etc)
-    int shadowmap_size = 1024;
+    int shadowmap_size = 2048;
 
     // The number of shadow maps rendered(more shadow maps = better quality, but slower).
     // Only affects shadow renderers, not filters
     int shadowmaps = 3;
 
+    // Shadow intensity (1 = black, 0 = invis)
+    float shadowIntensity = 0.6f;
+
     // Defines how shadows are filtered
     EdgeFilteringMode edgeFiltering = EdgeFilteringMode.PCFPOISSON;
+
+    // Specifies whether software or hardware shadows are used
+    boolean useHWShadows = true; 
 
     FilterPostProcessor fpp;
 
@@ -55,6 +65,8 @@ public class GameShadows {
 	this.rootNode = rootNode;
 	this.assetManager = assetManager;
 	this.viewPort = viewPort;
+
+	rootNode.setShadowMode(RenderQueue.ShadowMode.Off);
     }
 
     public void setupShadowHandlers() {
@@ -64,18 +76,19 @@ public class GameShadows {
 	setupDirectionalLightHandlers();
 	setupPointLightHandlers();
 	//setupSpotLightHandlers();
-
-	switchShadowSimMethod(useFilter);
+	
+        toggleShadows(shadowsOn);
     }
-
 
     // Handlers for directional light shadows
     private void setupDirectionalLightHandlers() {
 	dlsr = new DirectionalLightShadowRenderer(assetManager, shadowmap_size, shadowmaps);
         dlsr.setEdgeFilteringMode(edgeFiltering);
+        dlsr.setShadowIntensity(shadowIntensity);
 
 	dlsf = new DirectionalLightShadowFilter(assetManager, shadowmap_size, shadowmaps);
         dlsf.setEdgeFilteringMode(edgeFiltering);
+        dlsf.setShadowIntensity(shadowIntensity);
     	dlsf.setEnabled(true); // Always true, handle filtering through adding/removing fpp
 	fpp.addFilter(dlsf);
     }
@@ -84,9 +97,11 @@ public class GameShadows {
     private void setupPointLightHandlers() {
 	plsr = new PointLightShadowRenderer(assetManager, shadowmap_size);
         plsr.setEdgeFilteringMode(edgeFiltering);
+        plsr.setShadowIntensity(shadowIntensity);
 
 	plsf = new PointLightShadowFilter(assetManager, shadowmap_size);
         plsf.setEdgeFilteringMode(edgeFiltering);
+        plsf.setShadowIntensity(shadowIntensity);
     	plsf.setEnabled(true); // Always true, handle filtering through adding/removing fpp
 	fpp.addFilter(plsf);
     }
@@ -95,9 +110,11 @@ public class GameShadows {
     private void setupSpotLightHandlers() {
         slsr = new SpotLightShadowRenderer(assetManager, shadowmap_size);
         slsr.setEdgeFilteringMode(edgeFiltering);
+        slsr.setShadowIntensity(shadowIntensity);
 
         slsf = new SpotLightShadowFilter(assetManager, shadowmap_size);
         slsf.setEdgeFilteringMode(edgeFiltering);
+        slsf.setShadowIntensity(shadowIntensity);
     	slsf.setEnabled(true); // Always true, handle filtering through adding/removing fpp
 	fpp.addFilter(slsf);
     }
@@ -108,15 +125,7 @@ public class GameShadows {
 
     // Toggles between filtering and rendering
     public void switchShadowSimMethod() {
-	if (useFilter) {
-		useFilter = false;
-		addRenderProcessors();
-		viewPort.removeProcessor(fpp);
-	} else {
-		useFilter = true;
-		removeRenderProcessors();
-		viewPort.addProcessor(fpp);
-	}
+	switchShadowSimMethod(!useFilter);
     }
 
     // Overloaded method to allow you to specify whether or not filtering is used
@@ -129,6 +138,46 @@ public class GameShadows {
 		removeRenderProcessors();
 		viewPort.addProcessor(fpp);
 	}
+	System.out.println("Processors: " + viewPort.getProcessors());
+    }
+
+    // Toggles shadows
+    public void toggleShadows() {
+	toggleShadows(!shadowsOn);
+    }
+
+    // Overloaded method to specify shadows on or off
+    public void toggleShadows(boolean on) {
+	viewPort.clearProcessors();
+	if (on) {
+		// Use whatever shadow sim method is enabled
+		switchShadowSimMethod(useFilter);
+	}
+    }
+
+    public float getShadowIntensity() {
+	    return this.shadowIntensity;
+    }
+
+    public void setShadowIntensity(float intensity) {
+	this.shadowIntensity = intensity;
+        dlsr.setShadowIntensity(shadowIntensity);
+        dlsf.setShadowIntensity(shadowIntensity);
+        plsr.setShadowIntensity(shadowIntensity);
+        plsf.setShadowIntensity(shadowIntensity);
+        slsr.setShadowIntensity(shadowIntensity);
+        slsf.setShadowIntensity(shadowIntensity);
+    }
+
+    public void setShadowCompareMode(boolean useHW) {
+	this.useHWShadows = useHW;	
+	CompareMode cm = this.useHWShadows ? CompareMode.Hardware : CompareMode.Software;
+	dlsr.setShadowCompareMode(cm);
+	dlsf.setShadowCompareMode(cm);
+	slsr.setShadowCompareMode(cm);
+	slsf.setShadowCompareMode(cm);
+	plsr.setShadowCompareMode(cm);
+	plsf.setShadowCompareMode(cm);
     }
 
     private void addRenderProcessors() {
@@ -153,6 +202,26 @@ public class GameShadows {
     public void changeShadowmaps(int num) {
 	shadowmaps = num;
 	//TODO: do i need to reupdate shadow renderers?	
+    }
+
+    public EdgeFilteringMode getEdgeFilteringMode() {
+	return this.edgeFiltering;
+    }
+
+    public void setEdgeFilteringMode(int index) {
+	this.edgeFiltering = EdgeFilteringMode.values()[index];
+	dlsr.setEdgeFilteringMode(this.edgeFiltering);
+	dlsf.setEdgeFilteringMode(this.edgeFiltering);
+	slsr.setEdgeFilteringMode(this.edgeFiltering);
+	slsf.setEdgeFilteringMode(this.edgeFiltering);
+	plsr.setEdgeFilteringMode(this.edgeFiltering);
+	plsf.setEdgeFilteringMode(this.edgeFiltering);
+    }
+
+    public void nextEdgeFilteringMode() {
+        int filteringIndex = this.edgeFiltering.ordinal();
+        filteringIndex = (filteringIndex + 1) % EdgeFilteringMode.values().length;
+	setEdgeFilteringMode(filteringIndex);
     }
 
     // Use when you want an object to both cast shadows and display shadows casted on it
@@ -191,5 +260,13 @@ public class GameShadows {
     public void attachSpotLight(SpotLight light) {
 	    slsr.setLight(light);
 	    slsf.setLight(light);
+    }
+
+    public DirectionalLightShadowRenderer getDLSR() {
+	return this.dlsr;
+    }
+
+    public DirectionalLightShadowFilter getDLSF() {
+	return this.dlsf;
     }
 }

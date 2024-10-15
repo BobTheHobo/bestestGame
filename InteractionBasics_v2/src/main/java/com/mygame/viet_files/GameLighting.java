@@ -27,14 +27,15 @@ public class GameLighting {
 	//insertDL(new Vector3f(-0.5f, -0.3f, -1.5f), 1.0f);
 	//insertPL(new Vestor3f(0.0f, 7f, 0f));
 	insertMoonlight();
+	//insertAL(0.1f);
     }
 
     public void insertAL (float mult) {
-	// AmbientLight doesn't work because we don't have any materials yet
-	AmbientLight al = new AmbientLight();
-	al.setColor(ColorRGBA.White.mult(mult));
+	AmbientLight ambient = new AmbientLight();
 
-	rootNode.addLight(al);
+	// Dark bluish ambient light
+	ambient.setColor(fromRGBA255(6,13,35,255).mult(mult));  
+	rootNode.addLight(ambient);
     }
 
     public void insertMoonlight() {
