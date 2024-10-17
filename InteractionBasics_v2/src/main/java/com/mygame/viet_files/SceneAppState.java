@@ -37,7 +37,9 @@ public class SceneAppState extends AbstractAppState {
     private Node room_node;
     private Node guiNode;
 
+    private GameLighting lighting;
     private GameShadows shadows;
+    private GameEnvironment environment;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -52,14 +54,17 @@ public class SceneAppState extends AbstractAppState {
         inputManager.addListener(actionListener, MAPPING_SCENE);
 
 	shadows = new GameShadows(rootNode, assetManager, viewPort);
-	GameLighting lighting = new GameLighting(rootNode, assetManager, shadows);
+	lighting = new GameLighting(rootNode, assetManager, shadows);
+	environment = new GameEnvironment(rootNode, assetManager, viewPort, shadows);
+
         CardGameState state = new CardGameState();
 
 	shadows.setupShadowHandlers();
+	lighting.setupLighting();
+	//environment.setupSkybox();
+	environment.addOcean();
 
 	setupScene();
-
-	lighting.setupLighting();
 
         stateManager.attach(state);
 
@@ -247,6 +252,8 @@ public class SceneAppState extends AbstractAppState {
     @Override
     public void update(float tpf) {
         //TODO: implement behavior during runtime
+	super.update(tpf);
+	environment.addWaves(tpf);
     }
     
     @Override

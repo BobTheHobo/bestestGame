@@ -396,4 +396,8 @@ public class GameShadows {
 	dlsr.setEnabledStabilization(stabilizationOn);
 	dlsf.setEnabledStabilization(stabilizationOn);
     }
+
+    public FilterPostProcessor getFPP() {
+	    return fpp;
+    }
 }
