@@ -42,24 +42,30 @@ import com.jme3.scene.Node;
  *
  * @author Nehon, Viet
  */
-public class TestUIManager {
+public class UIManager {
 
     public BitmapText shadowTypeText;
     public BitmapText shadowCompareText;
+    public BitmapText ssaoText;
     public BitmapText shadowFilterText;
     public BitmapText shadowIntensityText;
+    public BitmapText shadowStabilizationText;
+    public BitmapText shadowZfarText;
 
     private final static String TYPE_TEXT = "(Space) Shadow type : ";
     private final static String COMPARE_TEXT = "(enter) Shadow compare ";
+    private final static String SSAO_TEXT = "(o) Toggle Ambient Occlusion : ";
     private final static String FILTERING_TEXT = "(f) Edge filtering : ";
     private final static String INTENSITY_TEXT = "(t:up, g:down) Shadow intensity : ";
+    private final static String STABILIZATION_TEXT = "(b:on/off) Shadow stabilization : ";
+    private final static String EXTEND_TEXT = "(n:on/off) Shadow extend to 500 and fade to 50 : ";
 
     private final AssetManager assetManager;
     private final GameShadows shadows;
     private final Node guiNode;
     final private ViewPort viewPort;
 
-    public TestUIManager(AssetManager assetManager, GameShadows shadows, 
+    public UIManager(AssetManager assetManager, GameShadows shadows, 
             Node guiNode, ViewPort viewPort) {
 	this.assetManager = assetManager;
 	this.shadows = shadows;
@@ -70,14 +76,25 @@ public class TestUIManager {
     }
 
     public void updateUI() {
-        shadowTypeText.setText(TYPE_TEXT + 
-		(shadows.getUseFilter() ? "Filter" : "Processor"));
         shadowCompareText.setText(COMPARE_TEXT + 
 		(shadows.getUseHWShadows() ? "Hardware" : "Software"));
         shadowFilterText.setText(FILTERING_TEXT + 
 		shadows.getEdgeFilteringMode());
+	if (!shadows.getUseFilter()) {
+		ssaoText.setText(SSAO_TEXT + "Cannot use SSAO with render processing");
+	} else {
+		ssaoText.setText(SSAO_TEXT + shadows.getSSAO());
+	}
         shadowIntensityText.setText(INTENSITY_TEXT + 
 		shadows.getShadowIntensity());
+	shadowStabilizationText.setText(STABILIZATION_TEXT +
+		shadows.getShadowStabilization());
+	shadowZfarText.setText(EXTEND_TEXT +
+		(shadows.getDLSR().getShadowZExtend() > 0));
+    }
+
+    public void updateTypeText(String mode) {
+	    shadowTypeText.setText(TYPE_TEXT + mode);
     }
 
     private void initUI() {
@@ -86,20 +103,30 @@ public class TestUIManager {
 
         shadowTypeText = createText(guiFont);
         shadowCompareText = createText(guiFont);
+	ssaoText = createText(guiFont);
         shadowFilterText = createText(guiFont);
         shadowIntensityText = createText(guiFont);
+	shadowStabilizationText = createText(guiFont);
+	shadowZfarText = createText(guiFont);
+
+	BitmapText[] texts = {shadowTypeText, shadowCompareText, ssaoText, shadowFilterText, shadowIntensityText, shadowStabilizationText, shadowZfarText};
 
 	updateUI();
+	updateTypeText("rendering");
 
-        shadowTypeText.setLocalTranslation(10, viewPort.getCamera().getHeight() - 20, 0);
-        shadowCompareText.setLocalTranslation(10, viewPort.getCamera().getHeight() - 40, 0);
-        shadowFilterText.setLocalTranslation(10, viewPort.getCamera().getHeight() - 60, 0);
-        shadowIntensityText.setLocalTranslation(10, viewPort.getCamera().getHeight() - 80, 0);
+	// Layout text vertically
+	layoutTexts(texts);
+    }
 
-        guiNode.attachChild(shadowTypeText);
-        guiNode.attachChild(shadowCompareText);
-        guiNode.attachChild(shadowFilterText);
-        guiNode.attachChild(shadowIntensityText);
+    private void layoutTexts(BitmapText[] texts) {
+	int offset = 20;
+	int cameraHeight = viewPort.getCamera().getHeight();
+	// Shift each next text by 20 down
+	for (BitmapText text : texts) {
+	    text.setLocalTranslation(10, cameraHeight - offset, 0);
+	    guiNode.attachChild(text);
+	    offset += 20;
+    	}
     }
 
     private BitmapText createText(BitmapFont guiFont) {

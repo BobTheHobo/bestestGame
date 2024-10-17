@@ -35,6 +35,7 @@ public class SceneAppState extends AbstractAppState {
     private final static String MAPPING_SCENE = "Next Scene";
     private boolean nextScene = false;
     private Node room_node;
+    private Node guiNode;
 
     private GameShadows shadows;
 
@@ -62,7 +63,9 @@ public class SceneAppState extends AbstractAppState {
 
         stateManager.attach(state);
 
-	InputHandler inputHandler = new InputHandler(this.app, inputManager, shadows);
+	UIManager ui = new UIManager(this.assetManager, this.shadows, this.app.getGuiNode(), this.viewPort);
+
+	InputHandler inputHandler = new InputHandler(this.app, shadows, ui);
     }
     
     private ActionListener actionListener = new ActionListener() {

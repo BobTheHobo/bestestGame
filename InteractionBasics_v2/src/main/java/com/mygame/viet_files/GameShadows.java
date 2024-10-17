@@ -55,7 +55,11 @@ public class GameShadows {
     private boolean useHWShadows = true; 
 
     // Specifies whether or not screen space ambient occlusion is on
-    private boolean ssaoOn = true;
+    // Looks weird with render processing, so for now only enable with filter or none
+    private boolean ssaoOn = false;
+
+    // Only applies to directional light
+    private boolean stabilizationOn = true;
 
     FilterPostProcessor fpp;
 
@@ -75,21 +79,23 @@ public class GameShadows {
 	this.assetManager = assetManager;
 	this.viewPort = viewPort;
 
+	// By default objects added to rootnode should have shadows off
 	rootNode.setShadowMode(RenderQueue.ShadowMode.Off);
     }
 
     public void setupShadowHandlers() {
 	// Keep this on top because other handlers rely on it
 	setupFilterPostProcessor();
+	viewPort.addProcessor(fpp);
 
 	setupDirectionalLightHandlers();
 	setupPointLightHandlers();
 	setupSpotLightHandlers();
-
-	setupSSAO();
 	
         toggleShadows(shadowsOn);
-	toggleSSAO(ssaoOn);
+
+	setupSSAO();
+	setSSAO(ssaoOn);
     }
 
     // Handlers for directional light shadows
@@ -101,8 +107,7 @@ public class GameShadows {
 	dlsf = new DirectionalLightShadowFilter(assetManager, shadowmap_size, shadowmaps);
         dlsf.setEdgeFilteringMode(edgeFiltering);
         dlsf.setShadowIntensity(shadowIntensity);
-    	dlsf.setEnabled(useFilter);
-	fpp.addFilter(dlsf);
+    	dlsf.setEnabled(true);
     }
 
     // Handlers for point light shadows
@@ -114,8 +119,7 @@ public class GameShadows {
 	plsf = new PointLightShadowFilter(assetManager, shadowmap_size);
         plsf.setEdgeFilteringMode(edgeFiltering);
         plsf.setShadowIntensity(shadowIntensity);
-    	plsf.setEnabled(useFilter);
-	fpp.addFilter(plsf);
+    	plsf.setEnabled(true);
     }
 
     // Handlers for spot light shadows
@@ -127,25 +131,37 @@ public class GameShadows {
         slsf = new SpotLightShadowFilter(assetManager, shadowmap_size);
         slsf.setEdgeFilteringMode(edgeFiltering);
         slsf.setShadowIntensity(shadowIntensity);
-    	slsf.setEnabled(useFilter);
-	fpp.addFilter(slsf);
+    	slsf.setEnabled(true);
     }
 
     // Ambient occlusion
     private void setupSSAO() {
 	ssaof = new SSAOFilter(12.94f, 43.92f, 0.33f, 0.61f);
-	ssaof.setEnabled(ssaoOn);
-	fpp.addFilter(ssaof);
+	ssaof.setEnabled(true);
     }
 
     private void setupFilterPostProcessor() {
 	this.fpp = new FilterPostProcessor(assetManager);
     }
 
-    private void setShadowFilterEnabled(boolean enabled) {
-	dlsf.setEnabled(enabled);
-	slsf.setEnabled(enabled);
-	plsf.setEnabled(enabled);
+    private void addFilterProcessors() {
+	// If processor hasn't been added yet then add it
+	if(!fpp.getFilterList().contains(slsf))
+		fpp.addFilter(slsf);
+	if(!fpp.getFilterList().contains(plsf))
+		fpp.addFilter(plsf);
+	if(!fpp.getFilterList().contains(dlsf))
+		fpp.addFilter(dlsf);
+    }
+
+    private void removeFilterProcessors() {
+	// If processor has been added remove it
+	if(fpp.getFilterList().contains(slsf))
+		fpp.removeFilter(slsf);
+	if(fpp.getFilterList().contains(plsf))
+		fpp.removeFilter(plsf);
+	if(fpp.getFilterList().contains(dlsf))
+		fpp.removeFilter(dlsf);
     }
 
     // Toggles between filtering and rendering
@@ -160,14 +176,14 @@ public class GameShadows {
 	// Handle turning on and off render processors
 	if (!useFilter) {
 		addRenderProcessors();
+		removeFilterProcessors();
 	} else {
 		removeRenderProcessors();
+		addFilterProcessors();
 	}
-
-	// Handle turning on/off filter processors
-	setShadowFilterEnabled(useFilter);
 	
 	System.out.println("Processors: " + viewPort.getProcessors());
+	System.out.println("Filter enabled: " + fpp.getFilterList());
     }
 
     // Toggles shadows
@@ -185,21 +201,37 @@ public class GameShadows {
 	} else {
 		// Remove render processors and turn off shadow filters
 		removeRenderProcessors();
-		setShadowFilterEnabled(false);
+		removeFilterProcessors();
 	}
     }
 
     // Toggles ambient occlusion
     public void toggleSSAO() {
-	toggleSSAO(!ssaoOn);
+	setSSAO(!ssaoOn);
     }
 
-    // Overloaded method to specify ambient occlusion on or off
-    public void toggleSSAO(boolean on) {
-	ssaoOn = on;
-	if (ssaoOn) {
-		ssaof.setEnabled(ssaoOn);
+    // Method to specify ambient occlusion on or off
+    public void setSSAO(boolean on) {
+	if (!useFilter) {
+		System.out.println("Cannot use SSAO with filtering");
+		return;
 	}
+
+	ssaoOn = on;
+	if(ssaoOn) {
+		if(!fpp.getFilterList().contains(ssaof)) {
+			fpp.addFilter(ssaof);
+		}
+	} else {
+		if(fpp.getFilterList().contains(ssaof)) {
+			fpp.removeFilter(ssaof);
+		}
+	}
+	System.out.println("SSAO set to: " + fpp.getFilterList().contains(ssaof));
+    }
+
+    public boolean getSSAO() {
+	return ssaoOn;
     }
 
     public float getShadowIntensity() {
@@ -246,15 +278,23 @@ public class GameShadows {
     }
 
     private void addRenderProcessors() {
-	viewPort.addProcessor(slsr);
-	viewPort.addProcessor(plsr);
-	viewPort.addProcessor(dlsr);
+	// If processor hasn't been added yet then add it
+	if(!viewPort.getProcessors().contains(slsr))
+		viewPort.addProcessor(slsr);
+	if(!viewPort.getProcessors().contains(plsr))
+		viewPort.addProcessor(plsr);
+	if(!viewPort.getProcessors().contains(dlsr))
+		viewPort.addProcessor(dlsr);
     }
 
     private void removeRenderProcessors() {
-	viewPort.removeProcessor(slsr);
-	viewPort.removeProcessor(plsr);
-	viewPort.removeProcessor(dlsr);
+	// If processor exists then remove
+	if(viewPort.getProcessors().contains(slsr))
+		viewPort.removeProcessor(slsr);
+	if(viewPort.getProcessors().contains(plsr))
+		viewPort.removeProcessor(plsr);
+	if(viewPort.getProcessors().contains(dlsr))
+		viewPort.removeProcessor(dlsr);
     }
 
     // Change shadowmap size
@@ -341,5 +381,19 @@ public class GameShadows {
 
     public boolean getUseFilter() {
 	return this.useFilter;
+    }
+
+    public boolean getShadowStabilization() {
+    	return stabilizationOn;
+    }
+
+    public void toggleShadowStabilization() {
+	setShadowStabilization(!stabilizationOn);
+    }
+    
+    public void setShadowStabilization(boolean on) {
+	stabilizationOn = on;
+	dlsr.setEnabledStabilization(stabilizationOn);
+	dlsf.setEnabledStabilization(stabilizationOn);
     }
 }
