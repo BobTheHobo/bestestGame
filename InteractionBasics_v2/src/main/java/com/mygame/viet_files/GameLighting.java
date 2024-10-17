@@ -30,7 +30,7 @@ public class GameLighting {
 	//insertPL(new Vestor3f(0.0f, 7f, 0f));
 
 	// Test spotlight, 
-	insertSL(new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, -1f, 0f));
+	insertSL(new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, 1f, 0f));
 	insertMoonlight();
 	//insertAL(0.1f);
     }
@@ -85,7 +85,7 @@ public class GameLighting {
 	sl.setSpotRange(100f);                           // distance
 	sl.setSpotInnerAngle(15f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
 	sl.setSpotOuterAngle(35f * FastMath.DEG_TO_RAD); // outer light cone (edge of the light)
-	sl.setColor(ColorRGBA.White.mult(1.3f));         // light color
+	sl.setColor(ColorRGBA.White.mult(0f));         // light color
 	sl.setPosition(loc);               		     // location
 	sl.setDirection(dir);                	     // shine direction
 	rootNode.addLight(sl);
@@ -93,6 +93,6 @@ public class GameLighting {
 	shadows.attachSpotLight(sl);
 
 	// Insert block to visualize where SL is 
-	rootNode.attachChild(Util.insertBlock(this.assetManager, loc));
+	// rootNode.attachChild(Util.insertBlock(this.assetManager, loc));
     }
 }

@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JME3 Classes/AppState.java to edit this template
  */
-package com.mygame.viet_files;
+package com.mygame.viet_files.InputHandlers;
 
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -32,13 +32,15 @@ import com.jme3.scene.shape.Box;
 import com.jme3.shadow.DirectionalLightShadowFilter;
 import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.mygame.jeremiah_files.Board;
+import com.mygame.viet_files.GameShadows;
+import com.mygame.viet_files.TestUIManager;
 import java.util.Random;
 
 /**
  *
  * @author jerem, viet
  */
-public class InputHandler implements ActionListener {
+public class gameInputHandler implements ActionListener {
     
     private SimpleApplication app;
     private  Camera cam;
@@ -89,7 +91,7 @@ public class InputHandler implements ActionListener {
 
    
     
-    public InputHandler(Application app, InputManager inputManager, GameShadows shadows) {
+    public gameInputHandler(Application app, InputManager inputManager, GameShadows shadows) {
 	this.inputManager = inputManager;
 	this.shadows = shadows;
 	this.dlsr = this.shadows.getDLSR();
@@ -132,24 +134,18 @@ public class InputHandler implements ActionListener {
         inputManager.addMapping("distance", new KeyTrigger(KeyInput.KEY_N));
 
         inputManager.addMapping("backShadows", new KeyTrigger(KeyInput.KEY_K));
-    }
 
-    private void addUIText() {
+        inputManager.addMapping("toggle", new KeyTrigger(KeyInput.KEY_SPACE));
+        inputManager.addMapping("changeFiltering", new KeyTrigger(KeyInput.KEY_F));
 
-	// Display shadow stabilization instructions
-        shadowStabilizationText = new BitmapText(guiFont);
-        shadowStabilizationText.setSize(guiFont.getCharSet().getRenderedSize() * 0.75f);
-        shadowStabilizationText.setText("(b:on/off) Shadow stabilization : " + dlsr.isEnabledStabilization());
-        shadowStabilizationText.setLocalTranslation(10, viewPort.getCamera().getHeight() - 100, 0);
-        guiNode.attachChild(shadowStabilizationText);
+        inputManager.addMapping("ShadowUp", new KeyTrigger(KeyInput.KEY_T));
+        inputManager.addMapping("ShadowDown", new KeyTrigger(KeyInput.KEY_G));
 
+        inputManager.addMapping("ThicknessUp", new KeyTrigger(KeyInput.KEY_Y));
+        inputManager.addMapping("ThicknessDown", new KeyTrigger(KeyInput.KEY_H));
 
-	// Display shadow extend + fading instructions
-        shadowZfarText = new BitmapText(guiFont);
-        shadowZfarText.setSize(guiFont.getCharSet().getRenderedSize() * 0.75f);
-        shadowZfarText.setText("(n:on/off) Shadow extend to 500 and fade to 50 : " + (dlsr.getShadowZExtend() > 0));
-        shadowZfarText.setLocalTranslation(10, viewPort.getCamera().getHeight() - 120, 0);
-        guiNode.attachChild(shadowZfarText);
+        inputManager.addMapping("toggleHW", new KeyTrigger(KeyInput.KEY_RETURN));
+	inputManager.addMapping("toggleSSAO", new KeyTrigger(KeyInput.KEY_V));
     }
 
     private void initInputs() {
@@ -169,61 +165,11 @@ public class InputHandler implements ActionListener {
 		"ShadowDown",
 		"backShadows"
 	);
+        inputManager.addListener(this, "toggleHW", "toggle", "ShadowUp", "ShadowDown", "ThicknessUp", "ThicknessDown", "changeFiltering", "toggleSSAO");
     }
     
 
     @Override
     public void onAction(String name, boolean keyPressed, float tpf) {
-
-        if (name.equals("lambdaUp") && keyPressed) {
-            dlsr.setLambda(dlsr.getLambda() + 0.01f);
-            dlsf.setLambda(dlsr.getLambda() + 0.01f);
-            System.out.println("Lambda : " + dlsr.getLambda());
-        } else if (name.equals("lambdaDown") && keyPressed) {
-            dlsr.setLambda(dlsr.getLambda() - 0.01f);
-            dlsf.setLambda(dlsr.getLambda() - 0.01f);
-            System.out.println("Lambda : " + dlsr.getLambda());
-        }
-
-
-        if (name.equals("ShadowUp") && keyPressed) {
-	    shadows.setShadowIntensity(shadows.getShadowIntensity() + 0.05f);
-	    ui.updateUI();
-        }
-        if (name.equals("ShadowDown") && keyPressed) {
-	    shadows.setShadowIntensity(shadows.getShadowIntensity() - 0.05f);
-	    ui.updateUI();
-	}
-
-        if (name.equals("debug") && keyPressed) {
-            dlsr.displayFrustum();
-        }
-
-        if (name.equals("backShadows") && keyPressed) {
-            dlsr.setRenderBackFacesShadows(!dlsr.isRenderBackFacesShadows());
-            dlsf.setRenderBackFacesShadows(!dlsf.isRenderBackFacesShadows());
-        }
-
-        if (name.equals("stabilize") && keyPressed) {
-            dlsr.setEnabledStabilization(!dlsr.isEnabledStabilization());
-            dlsf.setEnabledStabilization(!dlsf.isEnabledStabilization());
-            shadowStabilizationText.setText("(b:on/off) Shadow stabilization : " + dlsr.isEnabledStabilization());
-        }
-        if (name.equals("distance") && keyPressed) {
-            if (dlsr.getShadowZExtend() > 0) {
-                dlsr.setShadowZExtend(0);
-                dlsr.setShadowZFadeLength(0);
-                dlsf.setShadowZExtend(0);
-                dlsf.setShadowZFadeLength(0);
-
-            } else {
-                dlsr.setShadowZExtend(500);
-                dlsr.setShadowZFadeLength(50);
-                dlsf.setShadowZExtend(500);
-                dlsf.setShadowZFadeLength(50);
-            }
-            shadowZfarText.setText("(n:on/off) Shadow extend to 500 and fade to 50 : " + (dlsr.getShadowZExtend() > 0));
-
-        }
     }
 }

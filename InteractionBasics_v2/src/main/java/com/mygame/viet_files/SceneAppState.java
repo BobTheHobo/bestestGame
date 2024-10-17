@@ -1,5 +1,6 @@
 package com.mygame.viet_files;
 
+import com.mygame.viet_files.InputHandlers.InputHandler;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
