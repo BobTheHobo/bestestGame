@@ -8,6 +8,9 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 
+/*
+* author: shawn
+*/
 public class InputHandler {
 
     private InputManager inputManager;

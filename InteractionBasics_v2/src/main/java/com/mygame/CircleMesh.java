@@ -4,6 +4,9 @@ import com.jme3.scene.Mesh;
 import com.jme3.scene.VertexBuffer;
 import com.jme3.math.FastMath;
 
+/*
+* author: shawn
+*/
 public class CircleMesh extends Mesh {
 
     public CircleMesh(int samples, float radius) {

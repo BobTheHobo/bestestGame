@@ -4,6 +4,10 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 
+/*
+* author: shawn
+*/
+
 public class CameraManager {
 
     private FlyByCamera flyCam;

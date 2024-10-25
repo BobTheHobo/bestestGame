@@ -12,6 +12,9 @@ import com.jme3.system.AppSettings;
 import com.jme3.ui.Picture;
 import com.jme3.scene.Node;
 
+/*
+* author: shawn
+*/
 public class CrosshairManager {
 
     private final Geometry crosshairGeometry;

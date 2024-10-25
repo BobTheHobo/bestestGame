@@ -9,6 +9,9 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 
+/*
+* author: shawn
+*/
 public class PlayerManager {
 
     private CharacterControl player;     // Player control

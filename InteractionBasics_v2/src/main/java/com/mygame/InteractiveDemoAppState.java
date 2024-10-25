@@ -13,6 +13,9 @@ import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
 
+/*
+* author: shawn
+*/
 public class InteractiveDemoAppState extends AbstractAppState {
 
     private SimpleApplication app;

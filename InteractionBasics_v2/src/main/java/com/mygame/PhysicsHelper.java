@@ -5,6 +5,9 @@ import com.jme3.bullet.control.RigidBodyControl;
 //import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 
+/*
+* author: shawn
+*/
 public class PhysicsHelper {
 
     // Adds physics to the given geometry based on whether it's dynamic or static

@@ -5,6 +5,9 @@ import com.jme3.system.AppSettings;
 import com.mygame.jeremiah_files.CardGameState;
 import com.mygame.viet_files.SceneAppState;
 
+/*
+* author: shawn
+*/
 public class Main extends SimpleApplication {
 
     CardGameState cardAppState;

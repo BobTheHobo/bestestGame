@@ -16,6 +16,9 @@ import com.jme3.bullet.PhysicsSpace;
 import com.jme3.collision.CollisionResult;
 import com.jme3.scene.Spatial.CullHint;
 
+/*
+* author: shawn
+*/
 public class PlayerInteractionManager {
 
     private final InputManager inputManager;
