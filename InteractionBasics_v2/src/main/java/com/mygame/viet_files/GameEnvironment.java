@@ -55,6 +55,6 @@ public class GameEnvironment {
 	time += tpf;
 	waterHeight = (float) Math.cos(((time * 0.6f) % FastMath.TWO_PI)) * 3.5f;
 	water.setWaterHeight(initialWaterHeight + waterHeight);
-	System.out.println("Wave height: " + waterHeight);
+	//System.out.println("Wave height: " + waterHeight);
     }
 }

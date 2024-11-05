@@ -21,7 +21,7 @@ import com.mygame.viet_files.UIManager;
 
 /**
  *
- * @author jerem, viet
+ * @author viet
  */
 public class ShadowUIInputHandler implements ActionListener {
     

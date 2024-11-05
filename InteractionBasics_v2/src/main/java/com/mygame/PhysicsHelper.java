@@ -2,6 +2,7 @@ package com.mygame;
 
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.scene.Geometry;
 //import com.jme3.scene.Geometry;
 import com.jme3.scene.Spatial;
 

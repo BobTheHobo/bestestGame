@@ -18,22 +18,17 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
-import com.jme3.light.AmbientLight;
-import com.jme3.light.DirectionalLight;
-import com.jme3.material.Material;
-import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.mygame.PlayerManager;
 import com.mygame.jeremiah_files.Board;
-import com.mygame.viet_files.SceneAppState;
 import java.util.Random;
 
 /**
@@ -74,6 +69,12 @@ public class CardGameState extends AbstractAppState {
     private Vector3f boardPos;
     private final Quaternion boardAng = new Quaternion(-5.3E-4f, 0.8f, -.6f, -0.0038974239f);
     private Spatial selected = null;
+    private PlayerManager playerManager;
+
+    public CardGameState(PlayerManager playerManager) {
+	super();
+	this.playerManager = playerManager;
+    }
    
     
     @Override
@@ -95,7 +96,6 @@ public class CardGameState extends AbstractAppState {
         rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
         //tableNode.rotate(rotate90);
                
-        tableNode.scale(2f);
         tableNode.center();
         
         board = new Board(tableNode, assetManager); //Populates table with game mat
@@ -143,6 +143,7 @@ public class CardGameState extends AbstractAppState {
                         case MAPPING_BACK:
                             if (position == 0) {//Sitting in chair
                                 flyCam.setEnabled(true);
+				playerManager.setWalkingEnabled(true);
                                 position = -1;
                                 look = 0;
                                 board.hidePlayerHand();
@@ -223,6 +224,7 @@ public class CardGameState extends AbstractAppState {
                                 cam.setLocation(seatedPos);
                                 cam.setRotation(seatedAng);
                                 flyCam.setEnabled(false);
+				playerManager.setWalkingEnabled(false);
                                 position = 0;
                                 look = 0;
                                 board.showPlayerHand();

@@ -48,16 +48,17 @@ public class InteractiveDemoAppState extends AbstractAppState {
         stateManager.attach(bulletAppState);
 
         // Initialize the camera manager
-        cameraManager = new CameraManager(this.app);
+        //cameraManager = new CameraManager(this.app, playerManager, interactionManager, inputHandler);
 
         // Initialize player and scene managers
-        playerManager = new PlayerManager(
-            bulletAppState,
-            this.app.getRootNode(),
-            this.app.getCamera(),
-            this.app.getInputManager(),
-            this.app.getContext().getSettings()
-        );
+        //playerManager = new PlayerManager(
+        //    bulletAppState,
+         //   this.app.getRootNode(),
+          //  this.app.getCamera(),
+	//	this.inputHandler,
+	//	this.interactionManager,
+         //   this.app.getContext().getSettings()
+        //);
 
         sceneManager = new SceneManager(
             bulletAppState,
