@@ -5,6 +5,7 @@
 package com.mygame.jeremiah_files;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
@@ -72,7 +73,7 @@ public class Galley {
         }
         
         
-        int pull = rand.nextInt(open.size());//Choose randomly from available slots        
+        int pull = rand.nextInt(open.size());//Choose randomly from available slots    
         open.get(pull).setCard(card);//Put card in slot
         
     }
@@ -102,7 +103,7 @@ public class Galley {
     }
     
     public Galley opposite() {
-        return parent.getOppositeGalley(index);
+        return parent.getOppositeGalley(this);
     }
     
     public Slot getSlot(int slot) {

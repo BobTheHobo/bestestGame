@@ -115,7 +115,7 @@ public class CardGameState extends AbstractAppState {
         tableNode.scale(2f);
         tableNode.center();
         
-        board = new Board(tableNode, assetManager); //Populates table with game mat
+        board = new Board(tableNode, assetManager, stateManager); //Populates table with game mat
         gameNode.attachChild(tableNode);
 	gameNode.move(new Vector3f(0f,1f,0f));
 
@@ -123,7 +123,7 @@ public class CardGameState extends AbstractAppState {
         seatedPos = gameNode.getLocalTranslation().add(new Vector3f(0,1.73f,3.8f));
         boardPos = gameNode.getLocalTranslation().add(new Vector3f(0,3.4f,1.9f));
 
-        System.out.println(gameNode.getLocalTranslation());
+        //System.out.println(gameNode.getLocalTranslation());
 
         rootNode.attachChild(gameNode); 
         
@@ -258,6 +258,7 @@ public class CardGameState extends AbstractAppState {
                                 board.nextRound();
                             }
                             break;
+                            
                     }
                 }
             }

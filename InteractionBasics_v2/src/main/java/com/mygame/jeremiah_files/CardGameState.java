@@ -33,6 +33,9 @@ import com.jme3.scene.shape.Box;
 import java.util.Random;
 
 import com.jme3.bullet.BulletAppState;
+import com.jme3.cinematic.Cinematic;
+import com.jme3.cinematic.MotionPath;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.light.LightList;
 
 /**
@@ -73,6 +76,7 @@ public class CardGameState extends AbstractAppState {
     private final Vector3f boardPos = new Vector3f(0.02f, 5f, 2.8f);
     private final Quaternion boardAng = new Quaternion(-5.3E-4f, 0.8f, -.6f, -0.0038974239f);
     private Spatial selected = null;
+    private AppStateManager stateManager;
     
     // ADDITIONAL
     private BulletAppState bulletAppState;
@@ -85,6 +89,7 @@ public class CardGameState extends AbstractAppState {
         this.cam = this.app.getCamera();
         this.rootNode = this.app.getRootNode();
         this.assetManager = this.app.getAssetManager();
+        this.stateManager = stateManager;
         
         
         
@@ -127,7 +132,7 @@ public class CardGameState extends AbstractAppState {
         tableNode.scale(3f);
         tableNode.center();
         
-        board = new Board(tableNode, assetManager); //Populates table with game mat
+        board = new Board(tableNode, assetManager, stateManager); //Populates table with game mat
         rootNode.attachChild(tableNode); 
         
         /* Will use later
@@ -226,6 +231,7 @@ public class CardGameState extends AbstractAppState {
                                         selected != null) {// We have a card selected from our hand
 
                                         board.play(selected, clicked);
+                                        
                                         selected = null;
 
                                     } else if (clicked.toString().contains("Roger")) { //Currently nonfunctional
