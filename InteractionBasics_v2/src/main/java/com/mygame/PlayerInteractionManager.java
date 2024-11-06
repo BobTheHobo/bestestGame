@@ -14,7 +14,12 @@ import com.jme3.collision.CollisionResults;
 import com.jme3.renderer.Camera;
 import com.jme3.bullet.PhysicsSpace;
 import com.jme3.collision.CollisionResult;
-import com.jme3.scene.Spatial.CullHint;
+import com.jme3.input.KeyInput;
+import com.jme3.input.controls.KeyTrigger;
+import com.jme3.font.BitmapText;
+import com.jme3.math.ColorRGBA;
+import com.jme3.ui.Picture;
+import com.jme3.texture.Texture;
 
 /*
 * author: shawn
@@ -29,37 +34,169 @@ public class PlayerInteractionManager {
     private final float pickupRange = 5f; // Adjust as needed
     private Spatial heldItem = null;
     private RigidBodyControl heldItemControl = null;
+    
+    private Spatial note;
+    private Spatial candle;
+    private static final float NOTE_INTERACTION_RANGE = 5f;
+    private static final float CANDLE_NOTE_RANGE = 4f;
+    
+    private BitmapText rangeText;
+    private BitmapText closeText;
+    private float xOffsetAboveCrosshair = -70f;
+    private float yOffsetAboveCrosshair = 30f;
+    private final SimpleApplication app;
+    
+    private Picture noteImage;
+    private boolean isReadingNote = false;
 
     public PlayerInteractionManager(SimpleApplication app, PhysicsSpace physicsSpace) {
         this.inputManager = app.getInputManager();
         this.cam = app.getCamera();
         this.rootNode = app.getRootNode(); // Access rootNode directly
         this.physicsSpace = physicsSpace;
+        
+        this.app = app;
 
         // Create the hand node and attach it to the root node
         handNode = new Node("HandNode");
         app.getRootNode().attachChild(handNode);
+        
+        setupInput();
+        setupText();
+        setupCloseText();
+        setupNoteImage();
+    }
+    
+    private void setupCloseText() {
+	System.out.println("setup close text");
+        closeText = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
+        closeText.setText("Press 'Q' to close");
+        closeText.setColor(ColorRGBA.Black);
 
-//        setupInput();
+        closeText.setLocalTranslation(
+            app.getCamera().getWidth() * 0.10f, // Position near the top-right
+            app.getCamera().getHeight() * 0.8f,
+            0
+        );
+
+        closeText.setCullHint(Spatial.CullHint.Always); // Start hidden
+        app.getGuiNode().attachChild(closeText);
+    }
+    
+    private void setupNoteImage() {
+        noteImage = new Picture("Note Image");
+        try {
+            noteImage.setImage(app.getAssetManager(), "Textures/NotePlaceholder.png", true);
+            System.out.println("Image loaded successfully."); // Debug: confirms image is loaded
+        } catch (Exception e) {
+            System.out.println("Error loading image: " + e.getMessage());
+            return;
+        }
+
+        // Scale and position the image to cover most of the screen
+        noteImage.setWidth(app.getCamera().getWidth() * 0.8f);
+        noteImage.setHeight(app.getCamera().getHeight() * 0.12f);
+        noteImage.setPosition(
+            app.getCamera().getWidth() * 0.1f, // Offset from the left
+            app.getCamera().getHeight() * 0.8f  // Offset from the bottom
+        );
+
+        noteImage.setCullHint(Spatial.CullHint.Always); // Start hidden
+        app.getGuiNode().attachChild(noteImage);
+        System.out.println("Note image setup complete."); // Debug: confirm setup completion
     }
 
-//    private void setupInput() {
-//        inputManager.addMapping("Interact", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
-//        inputManager.addListener(actionListener, "Interact");
-//    }
+    private void setupText() {
+	System.out.println("setup text");
+        rangeText = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
+        rangeText.setColor(ColorRGBA.Black);
 
-//    private final ActionListener actionListener = new ActionListener() {
-//        @Override
-//        public void onAction(String name, boolean isPressed, float tpf) {
-//            if (name.equals("Interact") && isPressed) {
-//                if (heldItem == null) {
-//                    pickUpItem();
-//                } else {
-//                    dropItem();
-//                }
-//            }
-//        }
-//    };
+        rangeText.setLocalTranslation(
+            xOffsetAboveCrosshair + app.getCamera().getWidth() / 2 - rangeText.getLineWidth() / 2,
+            yOffsetAboveCrosshair + app.getCamera().getHeight() / 2 + rangeText.getLineHeight() / 2,
+            0
+        );
+
+        rangeText.setCullHint(Spatial.CullHint.Always); // Hide initially
+        app.getGuiNode().attachChild(rangeText);
+    }
+
+
+
+    public void setNote(Spatial note) {
+        this.note = note;
+    }
+    
+    public void setCandle(Spatial candle) {
+        this.candle = candle;
+    }
+    
+    public void setupInput() {
+        inputManager.addMapping("InteractWithNote", new KeyTrigger(KeyInput.KEY_F));
+        inputManager.addMapping("ExitReadingNote", new KeyTrigger(KeyInput.KEY_Q));
+        inputManager.addListener(actionListener, "InteractWithNote", "ExitReadingNote");
+    }
+    
+    private final ActionListener actionListener = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (name.equals("InteractWithNote") && isPressed) {
+                interactWithNote();
+            } else if (name.equals("ExitReadingNote") && isPressed && isReadingNote) {
+                exitReadingNote();
+            }
+        }
+    };
+    
+    private void interactWithNote() {
+        if (note != null && candle != null) {
+            float distanceToNote = cam.getLocation().distance(note.getWorldTranslation());
+            float candleToNoteDistance = candle.getWorldTranslation().distance(note.getWorldTranslation());
+
+            if (distanceToNote <= NOTE_INTERACTION_RANGE && candleToNoteDistance <= CANDLE_NOTE_RANGE) {
+                showNoteImage();
+            }
+        }
+    }
+    
+    private void showNoteImage() {
+        isReadingNote = true;
+        noteImage.setCullHint(Spatial.CullHint.Never); // Show the note image
+        rangeText.setCullHint(Spatial.CullHint.Always); // Hide the range text while reading
+        closeText.setCullHint(Spatial.CullHint.Never); // Show the close text
+        System.out.println("Showing note image."); // Debug
+    }
+
+    private void exitReadingNote() {
+        isReadingNote = false;
+        noteImage.setCullHint(Spatial.CullHint.Always); // Hide the note image
+        closeText.setCullHint(Spatial.CullHint.Always); // Hide the close text
+        updateRangeText(); // Restore range text if within interaction range
+        System.out.println("Hiding note image."); // Debug
+    }
+    
+    private void updateRangeText() {
+        if (note == null || candle == null) return;
+
+        // Check distance between the note and the player
+        float playerToNoteDistance = cam.getLocation().distance(note.getWorldTranslation());
+	System.out.println(playerToNoteDistance);
+        
+        // Check distance between the candle and the note
+        float candleToNoteDistance = candle.getWorldTranslation().distance(note.getWorldTranslation());
+
+        // Update rangeText based on distances
+        if (playerToNoteDistance <= NOTE_INTERACTION_RANGE) {
+            if (candleToNoteDistance <= CANDLE_NOTE_RANGE) {
+                rangeText.setText("Press 'F' to read note");
+            } else {
+                rangeText.setText("Too dark to read");
+            }
+            rangeText.setCullHint(Spatial.CullHint.Never); // Show text
+        } else {
+            rangeText.setCullHint(Spatial.CullHint.Always); // Hide text
+        }
+    }
 
     private void pickUpItem() {
         // Cast a ray from the camera to detect items under the crosshair
@@ -72,15 +209,19 @@ public class PlayerInteractionManager {
 
         if (results.size() > 0) {
             for (int i = 0; i < results.size(); i++) {
-                //Spatial target = results.getCollision(i).getGeometry();
-                Spatial target = results.getCollision(i).getGeometry();
+		Spatial target = null;
+		Spatial res = results.getCollision(i).getGeometry();
+		if (res.getUserData("puzzle") != null) {
+			target = res;	
+		} else {
+			target = res.getParent().getParent().getParent();
+		}
                 float distance = results.getCollision(i).getDistance();
 
                 // Check if the item is within pickup range
                 if (distance <= pickupRange) {
                     // Retrieve the canBePickedUp flag from the item's user data
                     Boolean canBePickedUp = (Boolean) target.getUserData("canBePickedUp");
-			    System.out.println(target.getName() + " can be picked up: " + canBePickedUp);
                     if (Boolean.TRUE.equals(canBePickedUp)) {
                         // Pick up the item
                         heldItem = target;
@@ -177,5 +318,9 @@ public class PlayerInteractionManager {
         // Update the hand node's position and rotation to match the camera
         handNode.setLocalTranslation(cam.getLocation().add(cam.getDirection().mult(2f)));
         handNode.setLocalRotation(cam.getRotation());
+        
+        if (!isReadingNote) {
+           updateRangeText(); 
+        }  
     }
-}
+} 

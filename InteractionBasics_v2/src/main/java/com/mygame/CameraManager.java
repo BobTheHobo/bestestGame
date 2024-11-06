@@ -31,7 +31,7 @@ public class CameraManager {
         setupCamera();
     }
 
-    private void setupCamera() {
+    public void setupCamera() {
         // Enable FlyCam and customize it
         flyCam.setEnabled(true);
         flyCam.setMoveSpeed(0);          // Disable movement

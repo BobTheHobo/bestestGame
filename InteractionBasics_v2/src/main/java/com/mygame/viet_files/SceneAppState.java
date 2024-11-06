@@ -85,7 +85,7 @@ public class SceneAppState extends AbstractAppState {
 	//environment.setupSkybox();
 	environment.addOcean();
 
-	SceneCreator sceneCreator = new SceneCreator(rootNode, assetManager, viewPort, bulletAppState, shadows);
+	SceneCreator sceneCreator = new SceneCreator(rootNode, assetManager, viewPort, bulletAppState, shadows, interactionManager);
 	sceneCreator.setupScene();
 
 	UIManager ui = new UIManager(this.assetManager, this.shadows, this.app.getGuiNode(), this.viewPort);

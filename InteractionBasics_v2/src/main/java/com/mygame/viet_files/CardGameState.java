@@ -96,7 +96,6 @@ public class CardGameState extends AbstractAppState {
         rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
         //tableNode.rotate(rotate90);
                
-        tableNode.center();
         
         board = new Board(tableNode, assetManager); //Populates table with game mat
         gameNode.attachChild(tableNode);

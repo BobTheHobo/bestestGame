@@ -58,6 +58,7 @@ public class PlayerManager {
 	walkingEnabled = enabled;
 	if (walkingEnabled) {
 		movePlayerToCamera();
+		cameraManager.setupCamera();
 	} 
     }
 

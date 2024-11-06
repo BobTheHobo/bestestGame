@@ -18,6 +18,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
 import com.mygame.PhysicsHelper;
+import com.mygame.PlayerInteractionManager;
 
 /**
  * @author viet
@@ -30,6 +31,7 @@ public class SceneCreator extends AbstractAppState {
     private ViewPort viewPort;
     private BulletAppState bulletAppState;
     private GameShadows shadows;
+    private PlayerInteractionManager playerInteractionManager;
     
     private final static Trigger TRIGGER_P= new KeyTrigger(KeyInput.KEY_P);
     private final static String MAPPING_SCENE = "Next Scene";
@@ -41,12 +43,13 @@ public class SceneCreator extends AbstractAppState {
     private GameLighting lighting;
     private GameEnvironment environment;
     
-    public SceneCreator(Node rootNode, AssetManager assetManager, ViewPort viewPort, BulletAppState bulletAppState, GameShadows shadows) {
+    public SceneCreator(Node rootNode, AssetManager assetManager, ViewPort viewPort, BulletAppState bulletAppState, GameShadows shadows, PlayerInteractionManager playerInteractionManager) {
 	this.rootNode = rootNode;
 	this.assetManager = assetManager;
 	this.viewPort = viewPort;
 	this.bulletAppState = bulletAppState;
 	this.shadows = shadows;
+	this.playerInteractionManager = playerInteractionManager;
     }
             
     // Spawns models in and places them
@@ -84,6 +87,19 @@ public class SceneCreator extends AbstractAppState {
 
 	Spatial chest = insertChest(new Vector3f(-5f, 1f, 0.2f));
 	room_node.attachChild(chest);
+
+	Note note = new Note("NoteRectangle", new Vector3f(-4.5f, 0f, 8f), new Vector3f(0.4f, 0.01f, 0.2f), ColorRGBA.White, assetManager, rootNode, bulletAppState);
+	Geometry notegeo = note.getGeometry();
+	notegeo.setUserData("puzzle", true);
+	rootNode.attachChild(note.getGeometry());
+	playerInteractionManager.setNote(note.getGeometry());
+
+	Candle candle2 = new Candle("CandleBox", new Vector3f(0, 2.5f, 0), new Vector3f(0.2f, 0.2f, 0.2f), ColorRGBA.Yellow, true, assetManager, rootNode, bulletAppState);
+	Geometry candle2geo = candle2.getGeometry();
+	candle2geo.setUserData("puzzle", true);
+
+	rootNode.attachChild(candle2.getGeometry());
+	playerInteractionManager.setCandle(candle2.getGeometry());
 
 	// block to test shadows
 	//Geometry block = Util.insertBlock(assetManager, new Vector3f(0,2,0), 1);
@@ -126,8 +142,18 @@ public class SceneCreator extends AbstractAppState {
 	    
 	// Load actual model and attach it to candle node
 	Spatial candle = assetManager.loadModel("Models/mdl_candle_main_v2/mdl_candle_main_v2.j3o");
+	candle.setName("candle");
 	candle_node.attachChild(candle);
-	Geometry geo = (Geometry) candle_node.getChild(candle_node.getChildIndex(candle));
+
+	Node geo = (Node)candle_node.getChild("candle");
+
+	for(Spatial s : geo.getChildren()) {
+		System.out.println(" First Child is: " + s.getName());
+		for(Spatial sp : ((Node)s).getChildren()) {
+			System.out.println("Child is: " + sp.getName());
+		}
+	}
+	//System.out.println(geo.getName());
 
 	// Allow model to cast and receive shadows
 	shadows.attachShadowCastAndReceive(candle);
@@ -158,10 +184,10 @@ public class SceneCreator extends AbstractAppState {
 	// flame_node.addLight(al);
 
         // Set the canBePickedUp flag as user data
-        geo.setUserData("canBePickedUp", true);
+        candle_node.setUserData("canBePickedUp", true);
 
 	// Add physics
-	PhysicsHelper.addPhysics(geo, true, bulletAppState);	
+	PhysicsHelper.addPhysics(candle_node, true, bulletAppState);	
 
         return candle_node;
     }
@@ -221,13 +247,16 @@ public class SceneCreator extends AbstractAppState {
         table.rotate(rotate90);
 
 	// Scale
-        table_node.scale(2f);
+	table_node.scale(2f);
+
+	// Set to origin
+        table_node.center();
 
 	// Add shadows
 	shadows.attachShadowCastAndReceive(table);
 	
 	// Add collisions
-	PhysicsHelper.addPhysics(table_node, false, bulletAppState);	
+	PhysicsHelper.addPhysics(table_node, false, bulletAppState);
 
 	return table_node;
     }
