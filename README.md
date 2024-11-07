@@ -108,5 +108,21 @@ Right now, the candle acts as the sole lighting for the scene, but sets the atmo
 Transition from the Card Game "scene" to the interaction demo "scene" using 'S' while sitting.
 Transition from the interaction demo "scene" to the model demo "scene" using 'P'.
 
+## Second Deliverable 
+Our work for this deliverable consists of three main components:
+- Additional Card Game Function 
+- TODO
+- TODO
+
+### Card Game Additions
+The card game has two new card types, one that effects the enemy board and one that draws cards.  Enemy cards are now visible across the table in the opponent's "hand", and both player and enemy cards visually move to their slots instead of teleporting.  Additionally, whenever the player triggers a next turn event, after galleys "sink" each other, the galleys visibly slide down to allow further turns to be played out.  The game is able to tell when one side has won and prints a victory or defeat message to the system.
+
+<a href="https://imgur.com/cieKkHJ"><img src="https://i.imgur.com/cieKkHJ.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/OOvOHqN"><img src="https://i.imgur.com/OOvOHqN.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/jKNl9lh"><img src="https://i.imgur.com/jKNl9lh.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/fx8bFTf"><img src="https://i.imgur.com/fx8bFTf.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/hkc6nKj"><img src="https://i.imgur.com/hkc6nKj.png" title="source: imgur.com" width="500" /></a>
+
+
 
   
