@@ -112,10 +112,14 @@ The card game has two new card types, one that effects the enemy board and one t
 <a href="https://imgur.com/hkc6nKj"><img src="https://i.imgur.com/hkc6nKj.png" title="source: imgur.com" width="500" /></a>
 
 ### Puzzle Fuctionality
-The ability to utilize objects within the scene to solve puzzles is implemented through a proximity system.  This system shows a message on the GUI node alerting the user that they are unable to progress with an aspect of the puzzle until the correct item is brought close enough to the puzzle aspect to allow interaction.  When the two parts are close enough, the message instead prompts the user to press a button to interact and progresses the puzzle.  Currently our implementation incorporates a letter that is unreadable until you bring a candle close enough.
+The ability to utilize objects within the scene to solve puzzles is implemented through a proximity system.  This system shows a message on the GUI node alerting the user that they are unable to progress with an aspect of the puzzle until the correct item is brought close enough to the puzzle aspect to allow interaction. 
 
-### Physics Merging
-The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models.  The player is now able to move around and collide with the various objects in the hold.  Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, the clock within the hold can be interacted with to reveal a compartment.  Additionally, shadows have been updated in the hold scene and waves are visible outside its windows.
+Currently our implementation incorporates a letter that is unreadable until you bring a candle close enough. The letter's contents are required to progress the game since it contains a secret code required to solve the next "puzzle". The note object measures distance to both the player and the candle every frame, so that 1. when the player is close but a candle isn't, the GUI text says the note is too dark to read and is uninteractable and 2. when the player and candle are both close, the GUI text says "Press 'F' to read". 
+
+If 'F' is pressed when prompted, a GUI image of the note is opened and can be closed with another shown key bind on the screen.
+
+### Physics Merging and Misc.
+The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models. The player is now able to move around and collide with the various objects in the hold. Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, the clock within the hold can be interacted with to reveal a compartment.  Additionally, shadows have been updated in the hold scene and waves are visible outside its windows.
 
 
 
