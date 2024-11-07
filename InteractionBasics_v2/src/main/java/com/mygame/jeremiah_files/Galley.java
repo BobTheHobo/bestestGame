@@ -5,6 +5,7 @@
 package com.mygame.jeremiah_files;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.scene.Geometry;
@@ -65,14 +66,14 @@ public class Galley {
     //Plays the card on a random available slot
     public void playRandom(Card card) {
         ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are valid
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             if(!slots.get(i).getFilled()) {//Slot does not have a card
                 open.add(slots.get(i));
             }
         }
         
         
-        int pull = rand.nextInt(open.size());//Choose randomly from available slots        
+        int pull = rand.nextInt(open.size());//Choose randomly from available slots    
         open.get(pull).setCard(card);//Put card in slot
         
     }
@@ -102,7 +103,7 @@ public class Galley {
     }
     
     public Galley opposite() {
-        return parent.getOppositeGalley(index);
+        return parent.getOppositeGalley(this);
     }
     
     public Slot getSlot(int slot) {
@@ -139,7 +140,7 @@ public class Galley {
     //Sums power of each slot
     public int getPower() {
         int toReturn = 0;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             if(slots.get(i).getFilled()) {//Slot has a card
                 toReturn += slots.get(i).getCard().getPower();
             }
@@ -166,4 +167,5 @@ public class Galley {
     public void setSunk(boolean sunk) {
         this.sunk = sunk;
     }
+    
 }

@@ -68,10 +68,9 @@ public class PlayerInteractionManager {
     }
     
     private void setupCloseText() {
-	System.out.println("setup close text");
         closeText = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
         closeText.setText("Press 'Q' to close");
-        closeText.setColor(ColorRGBA.Black);
+        closeText.setColor(ColorRGBA.White);
 
         closeText.setLocalTranslation(
             app.getCamera().getWidth() * 0.10f, // Position near the top-right
@@ -107,9 +106,8 @@ public class PlayerInteractionManager {
     }
 
     private void setupText() {
-	System.out.println("setup text");
         rangeText = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
-        rangeText.setColor(ColorRGBA.Black);
+        rangeText.setColor(ColorRGBA.White);
 
         rangeText.setLocalTranslation(
             xOffsetAboveCrosshair + app.getCamera().getWidth() / 2 - rangeText.getLineWidth() / 2,
@@ -180,7 +178,6 @@ public class PlayerInteractionManager {
 
         // Check distance between the note and the player
         float playerToNoteDistance = cam.getLocation().distance(note.getWorldTranslation());
-	System.out.println(playerToNoteDistance);
         
         // Check distance between the candle and the note
         float candleToNoteDistance = candle.getWorldTranslation().distance(note.getWorldTranslation());

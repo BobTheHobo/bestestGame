@@ -53,7 +53,7 @@ public class GameEnvironment {
 
     public void addWaves(float tpf) {
 	time += tpf;
-	waterHeight = (float) Math.cos(((time * 0.6f) % FastMath.TWO_PI)) * 3.5f;
+	waterHeight = (float) Math.cos(((time * 0.8f) % FastMath.TWO_PI)) * 3.5f;
 	water.setWaterHeight(initialWaterHeight + waterHeight);
 	//System.out.println("Wave height: " + waterHeight);
     }

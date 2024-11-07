@@ -8,15 +8,18 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.light.PointLight;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
+import com.jme3.util.TangentBinormalGenerator;
 import com.mygame.PhysicsHelper;
 import com.mygame.PlayerInteractionManager;
 
@@ -70,8 +73,16 @@ public class SceneCreator extends AbstractAppState {
 	room_node.attachChild(room_model);
 
 	// Main game table
-	Spatial table = insertTable(new Vector3f(0f,0f,0f));
+	Node table = new Table("Main Table", new Vector3f(0,0,0), false, assetManager, bulletAppState, shadows).getNode();
+	//table.center();
 	room_node.attachChild(table);
+
+	// Side table
+	//Table table2 = new Table("Side Table", new Vector3f(3,0,0), false, assetManager, bulletAppState, shadows);
+	//System.out.println("loc: " + table2.getLocation());
+	//table2.translate(new Vector3f(0,1,0));
+	//System.out.println("loc: " + table2.getLocation());
+	//room_node.attachChild(table2);
 
 	// Grandfather clock
 	Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
@@ -82,6 +93,7 @@ public class SceneCreator extends AbstractAppState {
 	
 	Spatial table_candle = insertCandle(new Vector3f(0.6f, 2.1f, -1f));
 	//Spatial table_candle = insertCandle(new Vector3f(0.6f, 3f, -1f));
+	playerInteractionManager.setCandle(table_candle);
 	System.out.println(table_candle.getName());
 	room_node.attachChild(table_candle);
 
@@ -94,12 +106,6 @@ public class SceneCreator extends AbstractAppState {
 	rootNode.attachChild(note.getGeometry());
 	playerInteractionManager.setNote(note.getGeometry());
 
-	Candle candle2 = new Candle("CandleBox", new Vector3f(0, 2.5f, 0), new Vector3f(0.2f, 0.2f, 0.2f), ColorRGBA.Yellow, true, assetManager, rootNode, bulletAppState);
-	Geometry candle2geo = candle2.getGeometry();
-	candle2geo.setUserData("puzzle", true);
-
-	rootNode.attachChild(candle2.getGeometry());
-	playerInteractionManager.setCandle(candle2.getGeometry());
 
 	// block to test shadows
 	//Geometry block = Util.insertBlock(assetManager, new Vector3f(0,2,0), 1);
@@ -117,6 +123,26 @@ public class SceneCreator extends AbstractAppState {
 
     private Spatial insertRoom() {
 	Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v4/mdl_room_main_v4.j3o");
+	Spatial geo;
+
+	for(Spatial s : ((Node)room_model).getChildren()) {
+		System.out.println("Child is: " + s.getName());
+		geo = s;
+		int i = 0;
+	}
+	geo = ((Node)room_model).getChild(0);
+
+	Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+	mat.setBoolean("UseMaterialColors", true);  // Set some parameters, e.g. blue.
+	mat.setColor("Ambient", ColorRGBA.Brown);   // ... color of this object
+	mat.setColor("Diffuse", ColorRGBA.White);   // ... color of light being reflected
+	mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_DIFF.jpg"));
+
+	TangentBinormalGenerator.generate(geo);
+	mat.setTexture("NormalMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg"));
+
+	geo.setMaterial(mat);
+    	//geo.scaleTextureCoordinates(new Vector2f(0.5f, 0.5f));
 
 	// Add collisions
 	PhysicsHelper.addPhysics(room_model, false, bulletAppState);
@@ -142,17 +168,42 @@ public class SceneCreator extends AbstractAppState {
 	    
 	// Load actual model and attach it to candle node
 	Spatial candle = assetManager.loadModel("Models/mdl_candle_main_v2/mdl_candle_main_v2.j3o");
+
 	candle.setName("candle");
 	candle_node.attachChild(candle);
 
 	Node geo = (Node)candle_node.getChild("candle");
 
+	Spatial flame;
+	Spatial something;
+	Spatial candleBody;
+	Spatial holder;
+
 	for(Spatial s : geo.getChildren()) {
 		System.out.println(" First Child is: " + s.getName());
+		int i = 0;
 		for(Spatial sp : ((Node)s).getChildren()) {
+			if (i == 0) {
+				candleBody = sp;
+				Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+				TangentBinormalGenerator.generate(candleBody);
+				mat.setTexture("NormalMap", assetManager.loadTexture("Textures/candle-wax-bump-map.jpg"));
+
+			}
+			if (i == 2) {
+				holder = sp;
+				Material mat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+				mat.setFloat("Shininess", 10f);
+				mat.setBoolean("UseMaterialColors", true);  // Set some parameters, e.g. blue.
+				mat.setColor("Specular", ColorRGBA.Orange);   // ... color of this object
+				mat.setColor("Diffuse", ColorRGBA.Orange);   // ... color of light being reflected
+				holder.setMaterial(mat);
+			}
 			System.out.println("Child is: " + sp.getName());
+			i++;
 		}
 	}
+
 	//System.out.println(geo.getName());
 
 	// Allow model to cast and receive shadows
@@ -169,7 +220,7 @@ public class SceneCreator extends AbstractAppState {
 
 	// Pointlight from candle
 	PointLight candle_light = new PointLight();
-	candle_light.setColor(ColorRGBA.Orange);
+	candle_light.setColor(ColorRGBA.Orange.mult(1.2f));
 	candle_light.setRadius(8f);
 	shadows.attachPointLight(candle_light); // Allow this pointlight to cast shadows
 	rootNode.addLight(candle_light);
@@ -231,33 +282,4 @@ public class SceneCreator extends AbstractAppState {
 	return clock_node;
     }
 
-    private Spatial insertTable(Vector3f loc) {
-	// Invisible table node everything is attached to
-	Node table_node = new Node("Table node");
-	table_node.setLocalTranslation(loc);
-
-	// Load actual model and attach it to table node
-	//Spatial table = assetManager.loadModel("Models/mdl_table_main_v2/mdl_table_main_v2.j3o");
-        Spatial table = assetManager.loadModel("Models/3D Models/Non-Interactable Environmental/Tables/mdl_longSideTable_main_v1.glb");
-	table_node.attachChild(table);
-
-	// Rotate 90
-        Quaternion rotate90 = new Quaternion();
-        rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
-        table.rotate(rotate90);
-
-	// Scale
-	table_node.scale(2f);
-
-	// Set to origin
-        table_node.center();
-
-	// Add shadows
-	shadows.attachShadowCastAndReceive(table);
-	
-	// Add collisions
-	PhysicsHelper.addPhysics(table_node, false, bulletAppState);
-
-	return table_node;
-    }
 }

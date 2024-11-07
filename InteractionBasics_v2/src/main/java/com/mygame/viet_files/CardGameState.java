@@ -45,6 +45,7 @@ public class CardGameState extends AbstractAppState {
     private static Box card = new Box(1f, 1f, 1f);
     private FlyByCamera flyCam;
     private InputManager inputManager;
+    private AppStateManager stateManager;
     private final static Trigger TRIGGER_W = new KeyTrigger(KeyInput.KEY_W);
     private final static Trigger TRIGGER_A = new KeyTrigger(KeyInput.KEY_A);
     private final static Trigger TRIGGER_S = new KeyTrigger(KeyInput.KEY_S);
@@ -84,22 +85,24 @@ public class CardGameState extends AbstractAppState {
         this.cam = this.app.getCamera();
         this.rootNode = this.app.getRootNode();
         this.assetManager = this.app.getAssetManager();
+	this.stateManager = stateManager;
         
         //We don't give free move while sitting
         flyCam = this.app.getFlyByCamera();     
         flyCam.setEnabled(false);
         
         Node gameNode = new Node("Game node");
-        Node tableNode = (Node)rootNode.getChild("Table node");
+        Node tableNode = (Node)rootNode.getChild("Main Table");
         
         Quaternion rotate90 = new Quaternion();
         rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
         //tableNode.rotate(rotate90);
                
+        tableNode.center();
         
-        board = new Board(tableNode, assetManager); //Populates table with game mat
-        gameNode.attachChild(tableNode);
+        board = new Board(tableNode, assetManager, stateManager); //Populates table with game mat
 	gameNode.move(new Vector3f(0f,1f,0f));
+        gameNode.attachChild(tableNode);
 
         // Set seated and board camera position with respect to table
         seatedPos = gameNode.getLocalTranslation().add(new Vector3f(0,1.73f,3.8f));

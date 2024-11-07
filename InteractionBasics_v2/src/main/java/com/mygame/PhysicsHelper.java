@@ -12,7 +12,7 @@ import com.jme3.scene.Spatial;
 public class PhysicsHelper {
 
     // Adds physics to the given geometry based on whether it's dynamic or static
-    public static void addPhysics(Spatial spa, boolean isDynamic, BulletAppState bulletAppState) {
+    public static RigidBodyControl addPhysics(Spatial spa, boolean isDynamic, BulletAppState bulletAppState) {
         // Static objects (e.g., floor, walls) have mass = 0, dynamic objects (pickable items) have mass > 0
         float mass = isDynamic ? 1.0f : 0.0f;
 
@@ -22,5 +22,7 @@ public class PhysicsHelper {
 
         // Add to the physics space
         bulletAppState.getPhysicsSpace().add(physicsControl);
+
+	return physicsControl;
     }
 }

@@ -5,12 +5,19 @@
 package com.mygame.jeremiah_files;
 
 import com.jme3.asset.AssetManager;
+import com.jme3.cinematic.Cinematic;
+import com.jme3.cinematic.MotionPath;
+import com.jme3.cinematic.MotionPathListener;
+import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Spline;
+import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import java.util.ArrayList;
 
 /**
  *
@@ -56,24 +63,33 @@ public class Slot {
         filled = true;
         card.setParent(this);
         
-                                        
-        //Moves played card to center of played galley
-        card.getSelf().getParent().center();
-        card.getSelf().getParent().setLocalTranslation(self.getParent().getParent().getLocalTranslation());
         card.getSelf().getParent().setLocalRotation(self.getParent().getParent().getLocalRotation());
-        card.getSelf().getParent().move(0, 0.012f, 0);
-        
+
+        Vector3f destination = self.getParent().getParent().getLocalTranslation();
+        //System.out.print(destination.toString());
+
         if (index % 2 == 0) { //Moves played card to correct column
-        card.getSelf().getParent().move(-0.15f / 4, 0, 0);
+            destination = destination.add(-0.15f / 4, 0, 0);
         } else {
-            card.getSelf().getParent().move(0.15f / 4, 0, 0);
+            destination = destination.add(0.15f / 4, 0, 0);
         }
         
         if (index / 2 == 0) { //Moves played card to correct row
-            card.getSelf().getParent().move(0.0f, 0, -0.5f / 4);
+            destination = destination.add(0.0f, 0, -0.5f / 4);
         } else if (index / 2 == 2) {
-            card.getSelf().getParent().move(0.0f, 0, 0.5f / 4);
-        }
+            destination = destination.add(0.0f, 0, 0.5f / 4);
+        } 
+        destination = destination.add(0, 0.012f, 0);
+        
+        MotionPath path =  new MotionPath();
+        path.addWayPoint(card.getSelf().getParent().getLocalTranslation());
+        path.addWayPoint(destination);
+        path.setPathSplineType(Spline.SplineType.CatmullRom);
+  
+        MotionEvent motion = new MotionEvent(card.getSelf().getParent(), path);
+        motion.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        motion.setSpeed(8f);
+        motion.play();
         
     
         //Trigger any card effects
@@ -84,6 +100,15 @@ public class Slot {
                 break;
             case "Gunner":
                 parent.opposite().buffRandom(-3);
+                break;
+            case "Cannoneer":
+                parent.opposite().buffAll(-1);
+                break;
+            case "Lookout":
+                parent.getParent().draw(1, parent.getIndex() >= 3);
+                break;
+            case "Anchorman":
+                ArrayList<Card> hand = parent.getIndex() >= 3 ? parent.getParent().getPlayerHand() : parent.getParent().getEnemyHand();
                 break;
         }
     }
