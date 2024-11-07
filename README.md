@@ -114,12 +114,41 @@ The card game has two new card types, one that effects the enemy board and one t
 ### Puzzle Fuctionality
 The ability to utilize objects within the scene to solve puzzles is implemented through a proximity system.  This system shows a message on the GUI node alerting the user that they are unable to progress with an aspect of the puzzle until the correct item is brought close enough to the puzzle aspect to allow interaction. 
 
-Currently our implementation incorporates a letter that is unreadable until you bring a candle close enough. The letter's contents are required to progress the game since it contains a secret code required to solve the next "puzzle". The note object measures distance to both the player and the candle every frame, so that 1. when the player is close but a candle isn't, the GUI text says the note is too dark to read and is uninteractable and 2. when the player and candle are both close, the GUI text says "Press 'F' to read". 
+<img src="https://github.com/user-attachments/assets/8ccf8220-ddc6-476e-be03-5bc4115e3df5" alt="Too dark to read note" width="500"/>
+
+Currently our implementation incorporates a letter that is unreadable until you bring a candle close enough. The letter's contents are required to progress the game since it contains a secret code required to solve the next "puzzle". The note object measures distance to both the player and the candle every frame, so that 1. when the player is close but a candle isn't, the GUI text says the note is too dark to read and is uninteractable and 2. when the player and candle are both close, the GUI text says "Press 'F' to read". Right now 
+
+<img src="https://github.com/user-attachments/assets/e2bf5d21-e38d-4236-9420-d2e08db61bd4" alt="Bringing our candle close to the note" width="500"/>
 
 If 'F' is pressed when prompted, a GUI image of the note is opened and can be closed with another shown key bind on the screen.
 
+<img src="https://github.com/user-attachments/assets/0522fb60-fbf6-4524-b3f4-a2cca15368f5" alt="Opening the note" width="500"/>
+
 ### Physics Merging and Misc.
-The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models. The player is now able to move around and collide with the various objects in the hold. Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, the clock within the hold can be interacted with to reveal a compartment.  Additionally, shadows have been updated in the hold scene and waves are visible outside its windows.
+The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models. The player is now able to move around and collide with the various objects in the hold. Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, the clock within the hold can be interacted with to reveal a compartment.
+
+<img src="https://github.com/user-attachments/assets/3c0fd838-d49d-4e6e-9ec6-49c108a9cc29" alt="Picking up the candle" width="500"/>
+
+### Textures, Lighting, Waves, and Shadows
+Additionally, a wood texture has been applied to the hull. However, we are having issues scaling the textures right now. Waves have also been added that reflect the moonlight, as seen below:
+
+<img src="https://github.com/user-attachments/assets/814ef6ff-6250-458d-b830-3eb00c008939" alt="Bringing our candle close to the note" width="500"/>
+
+We have also begun experimentation with shadow settings using the shadow renderer, shadow filter, ambient occlusion, and other settings. We also made a testing UI that displays the current settings used and keybinds to change the settings:
+
+No shadows:
+<img src="https://github.com/user-attachments/assets/d23d11cb-59e6-49a2-a550-0110889cccde" alt="Shadows using the filtering method" width="300"/>
+Shadows using filtering method:
+<img src="https://github.com/user-attachments/assets/4c5a354e-c1ca-4c0b-8cec-8be114bf7e38" alt="Shadows using the filtering method" width="300"/>
+
+Shadow Testing UI:
+
+<img src="https://github.com/user-attachments/assets/efa437e6-ffd2-4582-9cfc-d54bdd64bfd8" alt="Shadows using the filtering method" width="300"/>
+
+
+
+
+
 
 
 
