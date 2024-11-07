@@ -63,18 +63,6 @@ The card game scene is implemented in an appState that creates and moves a table
 <a href="https://imgur.com/TuBu68c"><img src="https://i.imgur.com/TuBu68c.png" title="source: imgur.com" width="250" /></a>
 <a href="https://imgur.com/PSoMY0Y"><img src="https://i.imgur.com/PSoMY0Y.png" title="source: imgur.com" width="250" /></a>
 
-### Set Modeling
-### Basic Card Game Function
-The card game scene is implemented in an appState that creates and moves a table spatial as well as many placeholder boxes to create a playmat, grouped card slots(galleys), individual card slots, and cards.  The card spatials are translated through space to indicate selection and place the selected card on a card slots.  This is handled using triggers, mappings, and an ActionListener.  The ActionListener is also used to implement alternate means of looking around and at the game board as the mouse cursor is used to select and play cards while seated.  Game logic including drawing cards, cards affecting the board state, the opponent drawing and playing cards, progression of turns is handled in a set of java files(Board, Galley, Slot, Card).  These files modify the 3d space by moving cards or changing the text on cards to represent effects while maintaining an internal representation of the game state.
-
-<a href="https://imgur.com/n3Il7YC"><img src="https://i.imgur.com/n3Il7YC.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/NjMkFVE"><img src="https://i.imgur.com/NjMkFVE.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/rRM0AeK"><img src="https://i.imgur.com/rRM0AeK.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/Veo45n2"><img src="https://i.imgur.com/Veo45n2.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/304klXU"><img src="https://i.imgur.com/304klXU.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/TuBu68c"><img src="https://i.imgur.com/TuBu68c.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/PSoMY0Y"><img src="https://i.imgur.com/PSoMY0Y.png" title="source: imgur.com" width="250" /></a>
-
 ### First Person Movement and World Interaction
 Movement and free look are controlled through WASD and cursor tracking, respectively, and are implemented through a modified version of JME's built in flyCam. There is also a small crosshair that is on the GUINode.
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/pAj2WXc"  ><a href="//imgur.com/a/pAj2WXc">Movement/Free Look</a></blockquote>
@@ -124,7 +112,7 @@ The card game has two new card types, one that effects the enemy board and one t
 <a href="https://imgur.com/hkc6nKj"><img src="https://i.imgur.com/hkc6nKj.png" title="source: imgur.com" width="500" /></a>
 
 ### Puzzle Fuctionality
-The ability to utilize objects within the scene to solve puzzles is implemented through a proximity system.  This system shows a message on the GUI node alerting the user that they are unable to progress with an aspect of the puzzle until the correct item is brought close enough to the puzzle aspect to allow interaction.  When the two parts are close enough, the message instead prompts the user to press a button to interact and progresses the puzzle.  Currently our implementaion incorporates a letter that is unreadable until you bring a candle close enough.
+The ability to utilize objects within the scene to solve puzzles is implemented through a proximity system.  This system shows a message on the GUI node alerting the user that they are unable to progress with an aspect of the puzzle until the correct item is brought close enough to the puzzle aspect to allow interaction.  When the two parts are close enough, the message instead prompts the user to press a button to interact and progresses the puzzle.  Currently our implementation incorporates a letter that is unreadable until you bring a candle close enough.
 
 ### Physics Merging
 The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models.  The player is now able to move around and collide with the various objects in the hold.  Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, the clock within the hold can be interacted with to reveal a compartment.  Additionally, shadows have been updated in the hold scene and waves are visible outside its windows.
