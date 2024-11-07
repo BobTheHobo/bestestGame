@@ -125,12 +125,14 @@ If 'F' is pressed when prompted, a GUI image of the note is opened and can be cl
 <img src="https://github.com/user-attachments/assets/0522fb60-fbf6-4524-b3f4-a2cca15368f5" alt="Opening the note" width="500"/>
 
 ### Physics Merging and Misc.
-The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models. The player is now able to move around and collide with the various objects in the hold. Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, the clock within the hold can be interacted with to reveal a compartment.
+The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models. The player is now able to move around and collide with the various objects in the hold. Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, we plan to make the clock interactable to reveal a compartment. However we have had a lot of difficulty importing animations so it currently doesn't function. Below is an image of holding and carrying the candle.
 
 <img src="https://github.com/user-attachments/assets/3c0fd838-d49d-4e6e-9ec6-49c108a9cc29" alt="Picking up the candle" width="500"/>
 
 ### Textures, Lighting, Waves, and Shadows
-Additionally, a wood texture has been applied to the hull. However, we are having issues scaling the textures right now. Waves have also been added that reflect the moonlight, as seen below:
+Additionally, a wood texture has been applied to the hull. The textures are sourced from here: http://www.architwister.com/portfolio/wood-texture-01/
+
+However, we are having issues scaling the textures right now. Waves have also been added that reflect the moonlight, as seen below:
 
 <img src="https://github.com/user-attachments/assets/814ef6ff-6250-458d-b830-3eb00c008939" alt="Bringing our candle close to the note" width="500"/>
 
