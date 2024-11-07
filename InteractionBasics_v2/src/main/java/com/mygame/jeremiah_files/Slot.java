@@ -90,9 +90,6 @@ public class Slot {
         motion.setSpeed(8f);
         motion.play();
         
-        
-       
-        
     
         //Trigger any card effects
         String cardName = card.getName();
@@ -102,6 +99,12 @@ public class Slot {
                 break;
             case "Gunner":
                 parent.opposite().buffRandom(-3);
+                break;
+            case "Cannoneer":
+                parent.opposite().buffAll(-1);
+                break;
+            case "Lookout":
+                parent.getParent().draw(1, parent.getIndex() >= 3);
                 break;
         }
     }

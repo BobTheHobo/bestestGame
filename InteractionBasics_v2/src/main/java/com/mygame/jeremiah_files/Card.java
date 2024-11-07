@@ -63,8 +63,23 @@ public class Card {
                 mat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Green);
+                break;   
+            case "Cannoneer":
+                power = 3;
+                mat = new Material(assetManager,
+        "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Brown);
+                break;         
+            case "Lookout":
+                power = 1;
+                mat = new Material(assetManager,
+        "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Yellow);
                 break;
+            default:
+                break;                    
         }
+       
         
         //We only want to print the power and what card type it is
         topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
@@ -96,7 +111,7 @@ public class Card {
     public Spatial getSelf() {
         return self;
     }
-    
+            
     public Node getSelfNode() {
         return selfNode;
     }

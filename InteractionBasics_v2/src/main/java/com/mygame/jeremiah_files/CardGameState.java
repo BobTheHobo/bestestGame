@@ -241,7 +241,7 @@ public class CardGameState extends AbstractAppState {
                             } else if (position == 0) {// Looking at hand
                                  if (results.size() > 0) { //We clicked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
-                                    if (clicked.toString().contains("Card")) { //Raise clicked :)
+                                    if (clicked.toString().contains("Card") && (board.getCard(clicked, board.getPlayerHand()) != null)) { //Raise clicked :)
                                         if (selected != null) {//Lower previously selected card
                                             selected.getParent().move(0, -0.05f, 0);                                           
                                         }

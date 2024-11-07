@@ -81,16 +81,20 @@ public class Board {
     }
     
     //Draws 'count' cards to a hand; player's hand if 'player' is true, enemy if else 
-    private void draw(int count, boolean player) {
+    public void draw(int count, boolean player) {
         ArrayList<Card> hand = player ? playerHand : enemyHand;
         for (int i = 0; i < count; i++) {
             int pull = rand.nextInt(101);
-            if (pull <= 49) {
+            if (pull <= 19) {
                 hand.add(new Card(assetManager, "Swashbuckler", cards++));
-            } else if (pull <= 74) {
+            } else if (pull <= 39) {
                 hand.add(new Card(assetManager, "Cook", cards++));
-            } else {
+            } else if (pull <= 59) {
                 hand.add(new Card(assetManager, "Gunner", cards++));
+            } else if (pull <= 79) {
+                hand.add(new Card(assetManager, "Cannoneer", cards++));
+            } else {
+                hand.add(new Card(assetManager, "Lookout", cards++));
             }
         }
     }
@@ -250,14 +254,24 @@ public class Board {
             motion.play();
         }
         
-        for (int i = 0; i < sunkEnemies.size(); i++) {//Remove sunk enemy galleys from scene and array
-            enemyGalleys.get(sunkEnemies.get(i)).getSelfNode().removeFromParent();
-            enemyGalleys.remove(enemyGalleys.get(sunkEnemies.get(i)));
+        ArrayList<Galley> toSink = new ArrayList<>();
+        
+        for (int i = 0; i < sunkEnemies.size(); i++) {//From index add galley objects to be sunk
+            toSink.add(enemyGalleys.get(sunkEnemies.get(i)));
         }
         
-        for (int i = 0; i < sunkPlayers.size(); i++) {//Remove sunke player galleys from scene and array
-            playerGalleys.get(sunkPlayers.get(i)).getSelfNode().removeFromParent();
-            playerGalleys.remove(playerGalleys.get(sunkPlayers.get(i)));
+        for (int i = 0; i < sunkPlayers.size(); i++) {//From index add galley objects to be sunk
+            toSink.add(playerGalleys.get(sunkPlayers.get(i)));
+        }
+        
+        while (!toSink.isEmpty()) {//Sink relevant galleys
+            if (toSink.get(0).getIndex() < 3) {
+                enemyGalleys.remove(toSink.get(0));
+            } else {
+                playerGalleys.remove(toSink.get(0));
+            }
+            toSink.get(0).getSelfNode().removeFromParent();
+            toSink.remove(0);
         }
         
         
@@ -266,6 +280,7 @@ public class Board {
         draw(2, false);
         showPlayerHand();
         showEnemyHand();
+        
         if (enemyGalleys.isEmpty()) {
             System.out.println("You Win!");
         } else if (playerGalleys.isEmpty()) {
@@ -304,7 +319,7 @@ public class Board {
     }
     
     //Gets the Card object that corresponds to the 'card' spatial
-    private Card getCard(Spatial card, ArrayList<Card> hand) {
+    public Card getCard(Spatial card, ArrayList<Card> hand) {
         for (int i = 0; i < hand.size(); i++) {
             if (hand.get(i).getSelf() == card) {
                 return hand.get(i);
@@ -351,5 +366,9 @@ public class Board {
     
     public AppStateManager getStateManager() {
         return stateManager;
+    }
+    
+    public ArrayList<Card> getPlayerHand() {
+        return playerHand;
     }
 }

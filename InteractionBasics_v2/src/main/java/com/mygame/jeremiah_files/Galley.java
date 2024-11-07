@@ -66,7 +66,7 @@ public class Galley {
     //Plays the card on a random available slot
     public void playRandom(Card card) {
         ArrayList<Slot> open = new ArrayList<>();//To collect all slots that are valid
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             if(!slots.get(i).getFilled()) {//Slot does not have a card
                 open.add(slots.get(i));
             }
@@ -140,7 +140,7 @@ public class Galley {
     //Sums power of each slot
     public int getPower() {
         int toReturn = 0;
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 6; i++) {
             if(slots.get(i).getFilled()) {//Slot has a card
                 toReturn += slots.get(i).getCard().getPower();
             }
