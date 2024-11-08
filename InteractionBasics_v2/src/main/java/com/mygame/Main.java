@@ -40,28 +40,11 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-        inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
-        inputManager.addListener(actionListener, MAPPING_SCENE);
-
-        // Attach the InteractiveDemoAppState
-        cardAppState = new CardGameState();
-        stateManager.attach(cardAppState);
-        
-        //sceneState = new SceneAppState();
-        //stateManager.attach(sceneState);
+       	enableSceneSwitching(false); 
     }
     
     @Override
     public void simpleUpdate(float tpf) {
-	    //if (scene == 0 && cardAppState.getPositiion() == -1) {
-	   // 
-	//	    lockout = true;
-	//	    scene = 1;
-	//	    System.out.println("Next scene 1");
-	//	    stateManager.detach(cardAppState);
-	//	    sceneState = new SceneAppState();
-	//	    stateManager.attach(sceneState);
-	 //   } 
     }
     
     private ActionListener actionListener = new ActionListener() {
@@ -80,4 +63,23 @@ public class Main extends SimpleApplication {
 		}
     	}
     };
+
+    private void enableSceneSwitching(boolean enabled) {
+	    if (enabled) {
+		    inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
+		    inputManager.addListener(actionListener, MAPPING_SCENE);
+		    
+		    // Attach the InteractiveDemoAppState
+		    cardAppState = new CardGameState();
+		    stateManager.attach(cardAppState);
+		    
+		    // Attach the merged scene
+		    sceneState = new SceneAppState();
+		    stateManager.attach(sceneState);
+	    } else {
+		    // Attach just the merged scene
+		    sceneState = new SceneAppState();
+		    stateManager.attach(sceneState);
+	    }
+    }
 }

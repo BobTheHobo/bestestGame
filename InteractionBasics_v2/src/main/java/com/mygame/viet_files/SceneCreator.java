@@ -89,8 +89,9 @@ public class SceneCreator extends AbstractAppState {
 	//room_node.attachChild(table2);
 
 	// Grandfather clock
-	Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
-	room_node.attachChild(clock);
+	//Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
+	Clock clock = new Clock("Clock Node", new Vector3f(-3.8f, 0f, -7f), false, assetManager, bulletAppState, shadows);
+	room_node.attachChild(clock.getNode());
 
 	// Note when referring to blender positions, x is the same, y and z are swapped
 	// Also, flip signs between the y coords
@@ -123,6 +124,8 @@ public class SceneCreator extends AbstractAppState {
 
 
 	rootNode.attachChild(room_node);
+
+	Util.printChildren(rootNode);
     }
 
     public Table getMainTable() {
@@ -149,10 +152,10 @@ public class SceneCreator extends AbstractAppState {
 	diff.setWrap(Texture.WrapMode.Repeat);
 	mat.setTexture("DiffuseMap", diff);
 
-	TangentBinormalGenerator.generate(geo);
-	Texture norm = assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg");
-	norm.setWrap(Texture.WrapMode.Repeat);
-	mat.setTexture("NormalMap", norm);
+	//TangentBinormalGenerator.generate(geo);
+	//Texture norm = assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg");
+	//norm.setWrap(Texture.WrapMode.Repeat);
+	///mat.setTexture("NormalMap", norm);
 
 	geo.setMaterial(mat);
 	//setTextureScale(geo, new Vector2f(0.8f, 0.8f));
