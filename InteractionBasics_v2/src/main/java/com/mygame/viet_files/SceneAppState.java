@@ -59,7 +59,7 @@ public class SceneAppState extends AbstractAppState {
         inputManager.addListener(actionListener, MAPPING_SCENE);
 
 	bulletAppState = new BulletAppState();
-	bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
+	//bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
 	stateManager.attach(bulletAppState);
 
 

@@ -19,6 +19,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.control.LightControl;
+import com.jme3.texture.Texture;
 import com.jme3.util.TangentBinormalGenerator;
 import com.mygame.PhysicsHelper;
 import com.mygame.PlayerInteractionManager;
@@ -143,13 +144,19 @@ public class SceneCreator extends AbstractAppState {
 	mat.setBoolean("UseMaterialColors", true);  // Set some parameters, e.g. blue.
 	mat.setColor("Ambient", ColorRGBA.Brown);   // ... color of this object
 	mat.setColor("Diffuse", ColorRGBA.White);   // ... color of light being reflected
-	mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_DIFF.jpg"));
 
-	//TangentBinormalGenerator.generate(geo);
-	mat.setTexture("NormalMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg"));
+	Texture diff = assetManager.loadTexture("Textures/Wood/AT_Wood_01_DIFF.jpg");
+	diff.setWrap(Texture.WrapMode.Repeat);
+	mat.setTexture("DiffuseMap", diff);
+
+	TangentBinormalGenerator.generate(geo);
+	Texture norm = assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg");
+	norm.setWrap(Texture.WrapMode.Repeat);
+	mat.setTexture("NormalMap", norm);
 
 	geo.setMaterial(mat);
-    	//geo.scaleTextureCoordinates(new Vector2f(0.5f, 0.5f));
+	//setTextureScale(geo, new Vector2f(0.8f, 0.8f));
+	setTextureScale(geo, new Vector2f(30, 30));
 
 	// Add collisions
 	PhysicsHelper.addPhysics(room_model, false, false, bulletAppState);
@@ -288,5 +295,27 @@ public class SceneCreator extends AbstractAppState {
 
 	return clock_node;
     }
+
+	public void setTextureScale(Spatial spatial, Vector2f vector) {
+
+		if (spatial instanceof Node) {
+
+			Node findingnode = (Node) spatial;
+
+			for (int i = 0; i < findingnode.getQuantity(); i++) {
+
+				Spatial child = findingnode.getChild(i);
+
+				setTextureScale(child, vector);
+
+			}
+
+		} else if (spatial instanceof Geometry) {
+
+			((Geometry) spatial).getMesh().scaleTextureCoordinates(vector);
+
+		}
+
+	}
 
 }
