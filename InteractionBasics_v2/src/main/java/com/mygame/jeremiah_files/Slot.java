@@ -17,6 +17,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import java.util.ArrayList;
 
 /**
  *
@@ -105,6 +106,9 @@ public class Slot {
                 break;
             case "Lookout":
                 parent.getParent().draw(1, parent.getIndex() >= 3);
+                break;
+            case "Anchorman":
+                ArrayList<Card> hand = parent.getIndex() >= 3 ? parent.getParent().getPlayerHand() : parent.getParent().getEnemyHand();
                 break;
         }
     }

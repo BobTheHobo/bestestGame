@@ -93,6 +93,8 @@ public class Board {
                 hand.add(new Card(assetManager, "Gunner", cards++));
             } else if (pull <= 79) {
                 hand.add(new Card(assetManager, "Cannoneer", cards++));
+            } else if (pull <= 99) {
+                hand.add(new Card(assetManager, "Lookout", cards++));
             } else {
                 hand.add(new Card(assetManager, "Lookout", cards++));
             }
@@ -371,4 +373,9 @@ public class Board {
     public ArrayList<Card> getPlayerHand() {
         return playerHand;
     }
+    
+    public ArrayList<Card> getEnemyHand() {
+        return enemyHand;
+    }
+    
 }

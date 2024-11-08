@@ -76,6 +76,12 @@ public class Card {
         "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.Yellow);
                 break;
+            case "Anchorman":
+                power = 3;
+                mat = new Material(assetManager,
+        "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.LightGray);
+                break;
             default:
                 break;                    
         }

@@ -134,26 +134,7 @@ public class CardGameState extends AbstractAppState {
         
         board = new Board(tableNode, assetManager, stateManager); //Populates table with game mat
         rootNode.attachChild(tableNode); 
-        
-        /* Will use later
-        Spatial galley1 = rootNode.getChild("Galley1");
-        Spatial galley4 = rootNode.getChild("Galley4");
-        Vector3f location1 = galley1.getWorldTranslation();
-        Vector3f location2 = galley4.getWorldTranslation();
-        
-        Geometry button = new Geometry("JollyRoger", card);
-        Material buttonMat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        buttonMat.setColor("Color", ColorRGBA.Black);
-        button.setMaterial(buttonMat);
-        button.center();
-        button.move(0f, .43f, .55f);
-        button.scale(.035f, .001f, .035f);
-        tableNode.attachChild(button);
-        */
-        
-        
-        
+             
         //Sets our camera to the position at the chair
         cam.setLocation(seatedPos);
         cam.setRotation(seatedAng);

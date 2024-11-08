@@ -167,4 +167,5 @@ public class Galley {
     public void setSunk(boolean sunk) {
         this.sunk = sunk;
     }
+    
 }
