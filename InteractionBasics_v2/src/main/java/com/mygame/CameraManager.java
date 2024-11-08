@@ -19,7 +19,7 @@ public class CameraManager {
     private PlayerManager playerManager;
     private PlayerInteractionManager interactionManager;
 
-    private boolean flyCamEnabled;
+    private boolean walkingEnabled;
 
     public CameraManager(SimpleApplication app, PlayerManager playerManager, PlayerInteractionManager interactionManager, InputHandler inputHandler) {
 	this.app = app;
@@ -30,14 +30,14 @@ public class CameraManager {
 	this.interactionManager = interactionManager;
 	this.inputHandler = inputHandler;
 
-	this.flyCamEnabled = this.flyCam.isEnabled();
+	this.walkingEnabled = false;
 
         setupCamera();
     }
 
     public void setupCamera() {
         // Enable FlyCam and customize it
-	toggleFlycam(true);
+	toggleCameraWalking(true);
         flyCam.setMoveSpeed(0);          // Disable movement
         flyCam.setRotationSpeed(2.0f);   // Adjust rotation speed as needed
         flyCam.setDragToRotate(false);   // Ensure mouse movement rotates the camera
@@ -48,6 +48,7 @@ public class CameraManager {
     }
 
     public void playerMovementCameraUpdate(float tpf, Vector3f position) {
+	    if (walkingEnabled) {
 		// Synchronize the camera position with the player
 		float playerHeight = 1f;  // Adjust based on your player's height
 		Vector3f playerPosition = position;
@@ -57,16 +58,30 @@ public class CameraManager {
 		} else {
 		    System.out.println("Player position is null");
 		}
+	    }
     }
 
-    public void toggleFlycam() {
-	flyCamEnabled = !flyCamEnabled;
-	flyCam.setEnabled(flyCamEnabled);
+    public void toggleCameraWalking() {
+	walkingEnabled = !walkingEnabled;
+	toggleCameraWalking(walkingEnabled);
     }
 
     // Overloaded method allowing you to specify flycam on or off
-    public void toggleFlycam(boolean enabled) {
-	flyCamEnabled = enabled;
-	flyCam.setEnabled(enabled);
+    public void toggleCameraWalking(boolean enabled) {
+	walkingEnabled = enabled;
+	flyCam.setEnabled(true); // Requires flycam on to function
+
+	if (walkingEnabled) {
+		System.out.println("Walking on");
+		flyCam.setMoveSpeed(0);          // Disable movement
+		//flyCam.setRotationSpeed(2.0f);   // Adjust rotation speed as needed
+		flyCam.setDragToRotate(false);   // Ensure mouse movement rotates the camera
+		flyCam.setZoomSpeed(0);          // Disable zoom
+	} else {
+		System.out.println("Walking off");
+		flyCam.setMoveSpeed(2);          
+		//flyCam.setRotationSpeed(2.0f);   // Adjust rotation speed as needed
+		//flyCam.setDragToRotate(true);  
+	}
     }
 }

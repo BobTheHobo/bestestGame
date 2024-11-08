@@ -46,7 +46,7 @@ public class GameInputHandler {
     private final static Trigger TRIGGER_Q = new KeyTrigger(KeyInput.KEY_Q);
     private final static Trigger TRIGGER_C = new KeyTrigger(KeyInput.KEY_C);
     private final static Trigger TRIGGER_O = new KeyTrigger(KeyInput.KEY_O);
-    private final static Trigger TRIGGER_F = new KeyTrigger(KeyInput.KEY_F);
+    private final static Trigger TRIGGER_V = new KeyTrigger(KeyInput.KEY_V);
     private final static Trigger TRIGGER_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
 
     private final static String MAPPING_FORWARD = "Move Forward";
@@ -56,7 +56,7 @@ public class GameInputHandler {
     private final static String MAPPING_LEFT_CLICK = "Interact";
     private final static String MAPPING_RESET = "Reset";
     private final static String MAPPING_CROSSHAIR = "Toggle Crosshair";
-    private final static String MAPPING_TOGGLE_FLYCAM = "Toggle Flycam";
+    private final static String MAPPING_TOGGLE_WALKING = "Toggle Walking";
 
     // Movement flags
     private boolean left = false, right = false, forward = false, backward = false;
@@ -77,7 +77,7 @@ public class GameInputHandler {
     }
 
     private void addMappings() {
-	String[] mappings = {MAPPING_FORWARD, MAPPING_LEFT, MAPPING_BACK, MAPPING_RIGHT, MAPPING_LEFT_CLICK, MAPPING_RESET, MAPPING_CROSSHAIR, MAPPING_TOGGLE_FLYCAM};
+	String[] mappings = {MAPPING_FORWARD, MAPPING_LEFT, MAPPING_BACK, MAPPING_RIGHT, MAPPING_LEFT_CLICK, MAPPING_RESET, MAPPING_CROSSHAIR, MAPPING_TOGGLE_WALKING};
 
 	// Game inputs
         inputManager.addMapping(MAPPING_FORWARD, TRIGGER_W);
@@ -93,7 +93,7 @@ public class GameInputHandler {
         inputManager.addMapping(MAPPING_LEFT_CLICK, TRIGGER_LEFT_CLICK);
 
 	// Toggle Flycam
-        inputManager.addMapping(MAPPING_TOGGLE_FLYCAM, TRIGGER_F);
+        inputManager.addMapping(MAPPING_TOGGLE_WALKING, TRIGGER_V);
 
 
 	inputManager.addListener(walkingActionListener, mappings);
@@ -109,10 +109,10 @@ public class GameInputHandler {
         @Override
         public void onAction(String name, boolean isPressed, float tpf) {
             switch (name) {
-                case MAPPING_TOGGLE_FLYCAM:
+                case MAPPING_TOGGLE_WALKING:
                     if (isPressed) {
                         // Delegate interaction to the PlayerInteractionManager
-			cameraManager.toggleFlycam();
+			cameraManager.toggleCameraWalking();
                     }
                     break;
             }

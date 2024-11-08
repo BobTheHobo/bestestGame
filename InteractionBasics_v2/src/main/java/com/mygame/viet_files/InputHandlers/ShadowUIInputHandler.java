@@ -79,17 +79,15 @@ public class ShadowUIInputHandler implements ActionListener {
         inputManager.addMapping("distance", new KeyTrigger(KeyInput.KEY_N));
 
 	// Not displayed
-        inputManager.addMapping("lambdaUp", new KeyTrigger(KeyInput.KEY_U));
-        inputManager.addMapping("lambdaDown", new KeyTrigger(KeyInput.KEY_J));
+        //inputManager.addMapping("lambdaUp", new KeyTrigger(KeyInput.KEY_U));
+        //inputManager.addMapping("lambdaDown", new KeyTrigger(KeyInput.KEY_J));
 
-        inputManager.addMapping("debug", new KeyTrigger(KeyInput.KEY_X));
+        //inputManager.addMapping("debug", new KeyTrigger(KeyInput.KEY_X));
 
-        inputManager.addMapping("backShadows", new KeyTrigger(KeyInput.KEY_K));
+        //inputManager.addMapping("backShadows", new KeyTrigger(KeyInput.KEY_K));
 
-        inputManager.addMapping("ThicknessUp", new KeyTrigger(KeyInput.KEY_Y));
-        inputManager.addMapping("ThicknessDown", new KeyTrigger(KeyInput.KEY_H));
-
-	inputManager.addMapping("toggleSSAO", new KeyTrigger(KeyInput.KEY_V));
+        //inputManager.addMapping("ThicknessUp", new KeyTrigger(KeyInput.KEY_Y));
+        //inputManager.addMapping("ThicknessDown", new KeyTrigger(KeyInput.KEY_H));
     }
 
     private void initInputs() {
