@@ -23,3 +23,4 @@ nbdist/
 /*.dylib
 /*.so
 .DS_Store
+*.zip
