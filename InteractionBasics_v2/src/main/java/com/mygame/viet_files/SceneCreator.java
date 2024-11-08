@@ -152,7 +152,7 @@ public class SceneCreator extends AbstractAppState {
     	//geo.scaleTextureCoordinates(new Vector2f(0.5f, 0.5f));
 
 	// Add collisions
-	PhysicsHelper.addPhysics(room_model, false, bulletAppState);
+	PhysicsHelper.addPhysics(room_model, false, false, bulletAppState);
 
 	// Add shadows
 	shadows.attachShadowCastAndReceive(room_model);
@@ -245,7 +245,7 @@ public class SceneCreator extends AbstractAppState {
         candle_node.setUserData("canBePickedUp", true);
 
 	// Add physics
-	PhysicsHelper.addPhysics(candle_node, true, bulletAppState);	
+	PhysicsHelper.addPhysics(candle_node, true, true, bulletAppState);	
 
         return candle_node;
     }
@@ -265,7 +265,7 @@ public class SceneCreator extends AbstractAppState {
 	shadows.attachShadowReceive(chest);
 
 	// Add collisions
-	PhysicsHelper.addPhysics(chest_node, false, bulletAppState);	
+	PhysicsHelper.addPhysics(chest_node, false, false, bulletAppState);	
 
 	return chest_node;
     }
@@ -284,7 +284,7 @@ public class SceneCreator extends AbstractAppState {
 	shadows.attachShadowReceive(clock);
 
 	// Add collisions
-	PhysicsHelper.addPhysics(clock_node, false, bulletAppState);	
+	PhysicsHelper.addPhysics(clock_node, false, false, bulletAppState);	
 
 	return clock_node;
     }

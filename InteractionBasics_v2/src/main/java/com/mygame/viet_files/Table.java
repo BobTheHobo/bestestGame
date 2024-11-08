@@ -47,7 +47,7 @@ public class Table extends Node {
 	    	shadows.attachShadowCastAndReceive(table);
 
 	    	// Add collisions
-		control = PhysicsHelper.addPhysics(table_node, false, bulletAppState);
+		control = PhysicsHelper.addPhysics(table_node, false, false, bulletAppState);
         }
 
 	public Node getNode() {

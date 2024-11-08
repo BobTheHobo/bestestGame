@@ -1,6 +1,7 @@
 package com.mygame;
 
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.control.CharacterControl;
 import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
 import com.jme3.math.Vector3f;
@@ -40,6 +41,12 @@ public class PlayerManager {
         player = new CharacterControl(capsuleShape, 0.05f);  // Add physics control
 
         player.getCollisionShape().setMargin(0.01f);  // Reduce collision margin for more precise collision detection
+
+	// Set player to collision group 2
+	player.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+	// Allow player to collide with environment (default is collision group 1)
+	player.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
+    	System.out.println("Player collision group: " + player.getCollisionGroup());
 
         playerNode = new Node("Player");
         playerNode.addControl(player);

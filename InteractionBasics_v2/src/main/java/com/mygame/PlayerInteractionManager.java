@@ -3,9 +3,7 @@ package com.mygame;
 import com.jme3.app.SimpleApplication;
 import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.InputManager;
-import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
-import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.math.Ray;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Spatial;
@@ -13,13 +11,15 @@ import com.jme3.scene.Node;
 import com.jme3.collision.CollisionResults;
 import com.jme3.renderer.Camera;
 import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.collision.PhysicsCollisionGroupListener;
+import com.jme3.bullet.collision.PhysicsCollisionObject;
+import com.jme3.bullet.collision.shapes.CollisionShape;
 import com.jme3.collision.CollisionResult;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.font.BitmapText;
 import com.jme3.math.ColorRGBA;
 import com.jme3.ui.Picture;
-import com.jme3.texture.Texture;
 
 /*
 * author: shawn
@@ -45,6 +45,8 @@ public class PlayerInteractionManager {
     private float xOffsetAboveCrosshair = -70f;
     private float yOffsetAboveCrosshair = 30f;
     private final SimpleApplication app;
+
+    private float collisionMargin = 0f; // Specifies default margin between geometry and collision shape
     
     private Picture noteImage;
     private boolean isReadingNote = false;
@@ -57,9 +59,13 @@ public class PlayerInteractionManager {
         
         this.app = app;
 
+	CollisionShape.setDefaultMargin(collisionMargin);
+
         // Create the hand node and attach it to the root node
         handNode = new Node("HandNode");
         app.getRootNode().attachChild(handNode);
+
+	// 
         
         setupInput();
         setupText();
@@ -225,8 +231,15 @@ public class PlayerInteractionManager {
                         heldItemControl = heldItem.getControl(RigidBodyControl.class);
 
                         if (heldItemControl != null) {
+			    // Remove collision with player (group 2)
+			    heldItemControl.removeCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+
                             // Set the physics control to kinematic mode
                             heldItemControl.setKinematic(true);
+
+			    // Turn off collision shape
+			    heldItemControl.setEnabled(false);
+
                             // Optional: Set the gravity to zero, IDK IF I SHOULD DO THIS
 //                            heldItemControl.setGravity(Vector3f.ZERO);
                         }
@@ -237,6 +250,7 @@ public class PlayerInteractionManager {
                         }
                         heldItem.setLocalTranslation(Vector3f.ZERO);
                         handNode.attachChild(heldItem);
+			System.out.println("node " + heldItemControl.getSpatial().getName());
 
                         break; // Item picked up, exit loop
                     }
@@ -271,11 +285,13 @@ public class PlayerInteractionManager {
             // Perform collision detection with the scene
             rootNode.collideWith(ray, results);
 
-            if (results.size() > 0) {
-                // Drop at the collision point, slightly offset to prevent overlap
-                CollisionResult closest = results.getClosestCollision();
-                dropPosition = closest.getContactPoint().subtract(direction.mult(0.1f));
-                System.out.println("Dropping at collision point: " + dropPosition);
+	    // Get closest collision, if any
+            CollisionResult closest = results.getClosestCollision();
+
+            if (closest != null && closest.getDistance() <= pickupRange) {
+		// Drop at the collision point, slightly offset to prevent overlap
+		dropPosition = closest.getContactPoint().subtract(direction.mult(0.1f));
+		System.out.println("Dropping at collision point: " + dropPosition);
             } else {
                 // No collision within range; drop at maximum pickup range
                 dropPosition = origin.add(direction.mult(pickupRange));
@@ -287,6 +303,12 @@ public class PlayerInteractionManager {
 
             // Set the physics control back to dynamic mode
             heldItemControl.setKinematic(false);
+
+	    // Turn on physics control again
+	    heldItemControl.setEnabled(true);
+
+	    // Re-add collision with player (group 2)
+	    heldItemControl.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
 
             // Update the physics control's location to match the spatial
             heldItemControl.setPhysicsLocation(dropPosition);

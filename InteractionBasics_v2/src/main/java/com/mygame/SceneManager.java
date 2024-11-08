@@ -53,7 +53,7 @@ public class SceneManager {
         geom.setUserData("canBePickedUp", canBePickedUp);
 
         // Add physics to the geometry
-        PhysicsHelper.addPhysics(geom, canBePickedUp, bulletAppState);
+        PhysicsHelper.addPhysics(geom, canBePickedUp, canBePickedUp, bulletAppState);
 
         // Attach geometry to the scene graph
         geomsNode.attachChild(geom);
