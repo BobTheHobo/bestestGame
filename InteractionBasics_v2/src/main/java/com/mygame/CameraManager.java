@@ -19,6 +19,8 @@ public class CameraManager {
     private PlayerManager playerManager;
     private PlayerInteractionManager interactionManager;
 
+    private boolean flyCamEnabled;
+
     public CameraManager(SimpleApplication app, PlayerManager playerManager, PlayerInteractionManager interactionManager, InputHandler inputHandler) {
 	this.app = app;
         this.flyCam = app.getFlyByCamera();
@@ -28,12 +30,14 @@ public class CameraManager {
 	this.interactionManager = interactionManager;
 	this.inputHandler = inputHandler;
 
+	this.flyCamEnabled = this.flyCam.isEnabled();
+
         setupCamera();
     }
 
     public void setupCamera() {
         // Enable FlyCam and customize it
-        flyCam.setEnabled(true);
+	toggleFlycam(true);
         flyCam.setMoveSpeed(0);          // Disable movement
         flyCam.setRotationSpeed(2.0f);   // Adjust rotation speed as needed
         flyCam.setDragToRotate(false);   // Ensure mouse movement rotates the camera
@@ -53,5 +57,16 @@ public class CameraManager {
 		} else {
 		    System.out.println("Player position is null");
 		}
+    }
+
+    public void toggleFlycam() {
+	flyCamEnabled = !flyCamEnabled;
+	flyCam.setEnabled(flyCamEnabled);
+    }
+
+    // Overloaded method allowing you to specify flycam on or off
+    public void toggleFlycam(boolean enabled) {
+	flyCamEnabled = enabled;
+	flyCam.setEnabled(enabled);
     }
 }

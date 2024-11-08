@@ -45,6 +45,8 @@ public class SceneCreator extends AbstractAppState {
 
     private GameLighting lighting;
     private GameEnvironment environment;
+
+    private Table mainTable;
     
     public SceneCreator(Node rootNode, AssetManager assetManager, ViewPort viewPort, BulletAppState bulletAppState, GameShadows shadows, PlayerInteractionManager playerInteractionManager) {
 	this.rootNode = rootNode;
@@ -73,9 +75,10 @@ public class SceneCreator extends AbstractAppState {
 	room_node.attachChild(room_model);
 
 	// Main game table
-	Node table = new Table("Main Table", new Vector3f(0,0,0), false, assetManager, bulletAppState, shadows).getNode();
-	//table.center();
-	room_node.attachChild(table);
+	Table table = new Table("Main Table", new Vector3f(0,0,0), false, assetManager, bulletAppState, shadows);
+	this.mainTable = table;
+	table.translate(new Vector3f(0,1.4f,0));
+	room_node.attachChild(table.getNode());
 
 	// Side table
 	//Table table2 = new Table("Side Table", new Vector3f(3,0,0), false, assetManager, bulletAppState, shadows);
@@ -91,8 +94,8 @@ public class SceneCreator extends AbstractAppState {
 	// Note when referring to blender positions, x is the same, y and z are swapped
 	// Also, flip signs between the y coords
 	
-	Spatial table_candle = insertCandle(new Vector3f(0.6f, 2.1f, -1f));
-	//Spatial table_candle = insertCandle(new Vector3f(0.6f, 3f, -1f));
+	//Spatial table_candle = insertCandle(new Vector3f(0.6f, 2.1f, -1f));
+	Spatial table_candle = insertCandle(new Vector3f(0.6f, 5f, -1f));
 	playerInteractionManager.setCandle(table_candle);
 	System.out.println(table_candle.getName());
 	room_node.attachChild(table_candle);
@@ -121,6 +124,10 @@ public class SceneCreator extends AbstractAppState {
 	rootNode.attachChild(room_node);
     }
 
+    public Table getMainTable() {
+	return this.mainTable;
+    }
+
     private Spatial insertRoom() {
 	Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v4/mdl_room_main_v4.j3o");
 	Spatial geo;
@@ -138,7 +145,7 @@ public class SceneCreator extends AbstractAppState {
 	mat.setColor("Diffuse", ColorRGBA.White);   // ... color of light being reflected
 	mat.setTexture("DiffuseMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_DIFF.jpg"));
 
-	TangentBinormalGenerator.generate(geo);
+	//TangentBinormalGenerator.generate(geo);
 	mat.setTexture("NormalMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg"));
 
 	geo.setMaterial(mat);

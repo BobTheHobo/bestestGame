@@ -90,10 +90,10 @@ public class SceneAppState extends AbstractAppState {
 
 	UIManager ui = new UIManager(this.assetManager, this.shadows, this.app.getGuiNode(), this.viewPort);
 
-	inputHandler = new InputHandler(this.app, crosshairManager, interactionManager, shadows, ui);
-
         // Initialize the camera manager
         cameraManager = new CameraManager(this.app, playerManager, interactionManager, inputHandler);
+
+	inputHandler = new InputHandler(this.app, crosshairManager, interactionManager, shadows, ui, cameraManager);
 
         // Initialize player and scene managers
         playerManager = new PlayerManager(
@@ -107,7 +107,7 @@ public class SceneAppState extends AbstractAppState {
         );
 	playerManager.setupPlayer();
 
-        CardGameState state = new CardGameState(playerManager);
+        CardGameState state = new CardGameState(playerManager, sceneCreator.getMainTable());
         stateManager.attach(state);
     }
     

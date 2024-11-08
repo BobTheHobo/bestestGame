@@ -71,10 +71,12 @@ public class CardGameState extends AbstractAppState {
     private final Quaternion boardAng = new Quaternion(-5.3E-4f, 0.8f, -.6f, -0.0038974239f);
     private Spatial selected = null;
     private PlayerManager playerManager;
+    private Table table;
 
-    public CardGameState(PlayerManager playerManager) {
+    public CardGameState(PlayerManager playerManager, Table table) {
 	super();
 	this.playerManager = playerManager;
+	this.table = table;
     }
    
     
@@ -91,26 +93,26 @@ public class CardGameState extends AbstractAppState {
         flyCam = this.app.getFlyByCamera();     
         flyCam.setEnabled(false);
         
-        Node gameNode = new Node("Game node");
-        Node tableNode = (Node)rootNode.getChild("Main Table");
+        //Node gameNode = new Node("Game node");
         
         Quaternion rotate90 = new Quaternion();
         rotate90.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0,1,0));
         //tableNode.rotate(rotate90);
                
-        tableNode.center();
+	Node tableNode = table.getNode();
         
+	//gameNode.move(new Vector3f(0f,1f,0f));
+        //gameNode.attachChild(tableNode);
+
         board = new Board(tableNode, assetManager, stateManager); //Populates table with game mat
-	gameNode.move(new Vector3f(0f,1f,0f));
-        gameNode.attachChild(tableNode);
 
         // Set seated and board camera position with respect to table
-        seatedPos = gameNode.getLocalTranslation().add(new Vector3f(0,1.73f,3.8f));
-        boardPos = gameNode.getLocalTranslation().add(new Vector3f(0,3.4f,1.9f));
+        //seatedPos = tableNode.getLocalTranslation().add(new Vector3f(0,1.73f,3.8f));
+        seatedPos = tableNode.getLocalTranslation().add(new Vector3f(0,1.47f,3.88f));
+        boardPos = tableNode.getLocalTranslation().add(new Vector3f(0,3.4f,1.9f));
 
-        System.out.println(gameNode.getLocalTranslation());
 
-        rootNode.attachChild(gameNode); 
+        //rootNode.attachChild(gameNode); 
         
         //Sets our camera to the position at the chair
         cam.setLocation(seatedPos);
