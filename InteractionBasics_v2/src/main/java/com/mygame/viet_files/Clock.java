@@ -23,7 +23,7 @@ public class Clock {
     	private RigidBodyControl control;
 
 	private AnimComposer animComposer;
-	private static final String ANI_MOVE_FACE = "move face";
+	private static final String ANI_MOVE_FACE = "ClockFaceSlide";
 
     	// Constructor that takes all parameters needed to create and add a clock to the world
 	public Clock(String name, Vector3f position, boolean canBePickedUp, AssetManager assetManager, BulletAppState bulletAppState, GameShadows shadows) {
@@ -40,16 +40,15 @@ public class Clock {
 		// Move
 		clock_node.setLocalTranslation(position);
 
-		// Set up animations
-		Util.printChildren(clock);
-		//this.animComposer = clock.getControl(AnimComposer.class);
-		//System.out.println("pp: " + animComposer.toString());
+		// Set up animation on correct geometry
+		//Util.printChildren(clock);
+		this.animComposer = ((Node)clock).getChild(1).getControl(AnimComposer.class);
 		
 		// Print out available animations
-		//Util.printAnimationNames(animComposer);
+		Util.printAnimationNames(animComposer);
 
 		// Add animation
-		//animComposer.setCurrentAction("move face");
+		animComposer.setCurrentAction(ANI_MOVE_FACE);
 		
 		// Add shadows
 		shadows.attachShadowReceive(clock);

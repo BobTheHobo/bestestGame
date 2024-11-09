@@ -46,9 +46,9 @@ public class Util {
     }
 
     public static void printAnimationNames(AnimComposer control) {
-	    //System.out.println("Animations for " + control.getSpatial().getName());
+	    System.out.println("Animations for " + control.getSpatial().getName() + ":");
 	    for (String anim : control.getAnimClipsNames()) {
-		    System.out.println("	   " + anim);
+		    System.out.println("   " + anim);
 	    }
     }
 
