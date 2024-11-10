@@ -55,10 +55,10 @@ public class Util {
     // Prints all children of a spatial
     public static void printChildren(Spatial s) {
 	    System.out.println("Children of:");
-	    recurseChildren(s);
+	    printRecurseChildren(s);
     }
 
-    private static void recurseChildren(Spatial s) {
+    private static void printRecurseChildren(Spatial s) {
 	    System.out.println("  " + s.getName());
 	    // If geometry (which has no children) or node w/ no children
 	    if (s instanceof Geometry || ((Node)s).getChildren().isEmpty()) {
@@ -67,7 +67,38 @@ public class Util {
 
 	    for (Spatial child : ((Node)s).getChildren()) {
 		    System.out.print("   Child of " + s.getName() + ":");
-		    recurseChildren(child);
+		    printRecurseChildren(child);
+	    }
+    }
+
+    public static void addAmbient(Spatial s, AssetManager assetManager) {
+	    recurseAddAmbient(s, assetManager);
+    }
+
+    private static void recurseAddAmbient(Spatial s, AssetManager assetManager) {
+	    if (s instanceof Geometry) {
+		    System.out.println("Changed mat");
+		    Geometry geo = (Geometry) s;
+		    Material mat = geo.getMaterial();
+		    ColorRGBA color = mat.getParamValue("Color");
+		    System.out.println("Color: " + color.toString());
+		    
+		    Material newMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
+		    newMat.setBoolean("UseMaterialColors", true);  // Set some parameters, e.g. blue.
+		    newMat.setColor("Ambient", ColorRGBA.White);   // ... color of this object
+		    newMat.setColor("Diffuse", ColorRGBA.White);   // ... color of light being reflected
+		    
+		    geo.setMaterial(newMat);
+		    return;
+	    }
+
+	    // If not geometry or node w/ no children
+	    if (((Node)s).getChildren().isEmpty()) {
+		return;
+	    }
+
+	    for (Spatial child : ((Node)s).getChildren()) {
+		    recurseAddAmbient(child, assetManager);
 	    }
     }
 }

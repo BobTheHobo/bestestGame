@@ -32,7 +32,7 @@ public class GameLighting {
 	// Test spotlight, 
 	insertSL(new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, 1f, 0f));
 	insertMoonlight();
-	//insertAL(0.1f);
+	insertAL(100f);
     }
 
     public void insertAL (float mult) {

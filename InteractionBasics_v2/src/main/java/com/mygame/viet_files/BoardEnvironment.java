@@ -70,6 +70,7 @@ public class BoardEnvironment {
 
 	private Spatial makeGalley() {
 		Spatial galley = assetManager.loadModel("Models/Ship/Ship.j3o");
+		Util.addAmbient(galley, assetManager);
 		galley.scale(0.1f);
 		return galley;
 	}
