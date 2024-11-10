@@ -103,6 +103,7 @@ public class CardGameState extends AbstractAppState {
 
         board = new Board(tableNode, assetManager, stateManager); //Populates table with game mat
 	boardEnv.attachOceanToBoard(board);
+	boardEnv.attachGalleys(board);
 
         // Set seated and board camera position with respect to table
         //seatedPos = tableNode.getLocalTranslation().add(new Vector3f(0,1.73f,3.8f));

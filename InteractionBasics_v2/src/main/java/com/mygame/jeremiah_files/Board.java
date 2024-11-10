@@ -375,5 +375,12 @@ public class Board {
     public ArrayList<Card> getEnemyHand() {
         return enemyHand;
     }
+
+    public ArrayList<Galley> getEnemyGalleys() {
+	return enemyGalleys;
+    }
     
+    public ArrayList<Galley> getPlayerGalleys() {
+	return playerGalleys;
+    }
 }

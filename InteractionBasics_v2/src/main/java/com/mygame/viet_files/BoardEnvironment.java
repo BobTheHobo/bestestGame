@@ -5,18 +5,17 @@
 package com.mygame.viet_files;
 
 import com.jme3.asset.AssetManager;
-import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
-import com.jme3.math.Plane;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
-import com.jme3.scene.shape.Box;
+import com.jme3.scene.Spatial;
 import com.jme3.water.SimpleWaterProcessor;
 import com.mygame.jeremiah_files.Board;
+import com.mygame.jeremiah_files.Galley;
 
 /**
  *
@@ -58,6 +57,41 @@ public class BoardEnvironment {
 
 	public Node getNode() {
 		return boardEnvNode;
+	}
+
+	public void attachGalleys(Board board) {
+		for(Galley g : board.getEnemyGalleys()) {
+			g.getSelfNode().attachChild(makeEnemyGalley());
+		}
+		for(Galley g : board.getPlayerGalleys()) {
+			g.getSelfNode().attachChild(makePlayerGalley());
+		}
+	}
+
+	private Spatial makeGalley() {
+		Spatial galley = assetManager.loadModel("Models/Ship/Ship.j3o");
+		galley.scale(0.1f);
+		return galley;
+	}
+
+	private Spatial makeEnemyGalley() {
+		Spatial enemyGalley = makeGalley();
+
+		Quaternion rotate = new Quaternion();
+		rotate.fromAngleAxis(FastMath.PI/2, new Vector3f(0, 1, 0));
+		enemyGalley.setLocalRotation(rotate);
+
+		return enemyGalley;
+	}
+
+	private Spatial makePlayerGalley() {
+		Spatial playerGalley = makeGalley();
+
+		Quaternion rotate = new Quaternion();
+		rotate.fromAngleAxis(-FastMath.PI/2, new Vector3f(0, 1, 0));
+		playerGalley.setLocalRotation(rotate);
+
+		return playerGalley;
 	}
 
 	private void makeBoardOcean(Geometry playMat) {
