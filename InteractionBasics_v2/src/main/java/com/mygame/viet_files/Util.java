@@ -9,6 +9,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.texture.Texture;
 
 /**
  * Contains general utility functions 
@@ -81,14 +82,15 @@ public class Util {
 		    Geometry geo = (Geometry) s;
 		    Material mat = geo.getMaterial();
 		    ColorRGBA color = mat.getParamValue("Color");
-		    System.out.println("Color: " + color.toString());
+
 		    
-		    Material newMat = new Material(assetManager, "Common/MatDefs/Light/Lighting.j3md");
-		    newMat.setBoolean("UseMaterialColors", true);  // Set some parameters, e.g. blue.
-		    newMat.setColor("Ambient", ColorRGBA.White);   // ... color of this object
-		    newMat.setColor("Diffuse", ColorRGBA.White);   // ... color of light being reflected
+		    //Texture tex = assetManager.loadTexture("Textures/Atlas_Pirate.png");
+		    //newMat.setTexture("ColorMap", tex);
+		    //mat.setBoolean("UseMaterialColors", true);  // Set some parameters, e.g. blue.
+		    //mat.setColor("Ambient", ColorRGBA.White);   // ... color of this object
+		    //mat.setColor("Diffuse", ColorRGBA.White);   // ... color of light being reflected
 		    
-		    geo.setMaterial(newMat);
+		    //geo.setMaterial(newMat);
 		    return;
 	    }
 

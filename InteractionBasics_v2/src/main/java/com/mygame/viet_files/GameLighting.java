@@ -1,15 +1,23 @@
 package com.mygame.viet_files;
 
+import com.jme3.app.Application;
+import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.environment.EnvironmentCamera;
+import com.jme3.environment.LightProbeFactory;
+import com.jme3.environment.generation.JobProgressAdapter;
 import com.jme3.light.AmbientLight;
 import com.jme3.light.DirectionalLight;
+import com.jme3.light.LightProbe;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.math.ColorRGBA;
 import static com.jme3.math.ColorRGBA.fromRGBA255;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
+import com.jme3.texture.Image;
 
 /**
  * @author viet
@@ -32,7 +40,29 @@ public class GameLighting {
 	// Test spotlight, 
 	insertSL(new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, 1f, 0f));
 	insertMoonlight();
-	insertAL(100f);
+	insertAL(10f);
+    }
+
+    public void insertLightProbe(Application app, AppStateManager stateManager) {
+	    System.out.println("bruh");
+	    Vector3f pos = new Vector3f(0,5,0);
+
+	    //Geometry geom = Util.insertBlock(assetManager, pos, 0.1f);
+	    //rootNode.attachChild(geom);
+
+	    EnvironmentCamera envCam = new EnvironmentCamera(256, pos, Image.Format.RGB8);
+	    stateManager.attach(envCam);
+	    envCam.initialize(stateManager, app);
+
+	    LightProbe probe = LightProbeFactory.makeProbe(envCam, rootNode, new JobProgressAdapter<LightProbe>() {
+		    @Override
+		    public void done(LightProbe result) {
+			    System.out.println("PBR Probe results in");
+		    }
+	    });
+	    probe.getArea().setRadius(50);
+	    probe.setPosition(pos);
+	    rootNode.addLight(probe);
     }
 
     public void insertAL (float mult) {

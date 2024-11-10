@@ -85,6 +85,7 @@ public class SceneAppState extends AbstractAppState {
 
 	shadows.setupShadowHandlers();
 	lighting.setupLighting();
+	lighting.insertLightProbe(stateManager.getApplication(), stateManager);
 	//environment.setupSkybox();
 	environment.addOcean();
 
