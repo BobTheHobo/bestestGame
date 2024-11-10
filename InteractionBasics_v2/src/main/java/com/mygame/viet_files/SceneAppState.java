@@ -42,6 +42,7 @@ public class SceneAppState extends AbstractAppState {
     private GameLighting lighting;
     private GameShadows shadows;
     private GameEnvironment environment;
+    private BoardEnvironment boardEnvironment;
     private CameraManager cameraManager; // Camera manager
     private PlayerManager playerManager;
     private InputHandler inputHandler;
@@ -79,6 +80,7 @@ public class SceneAppState extends AbstractAppState {
 	shadows = new GameShadows(rootNode, assetManager, viewPort);
 	lighting = new GameLighting(rootNode, assetManager, shadows);
 	environment = new GameEnvironment(rootNode, assetManager, viewPort, shadows);
+	boardEnvironment = new BoardEnvironment(rootNode, assetManager, viewPort);
 
 
 	shadows.setupShadowHandlers();
@@ -108,7 +110,7 @@ public class SceneAppState extends AbstractAppState {
         );
 	playerManager.setupPlayer();
 
-        CardGameState state = new CardGameState(playerManager, sceneCreator.getMainTable());
+        CardGameState state = new CardGameState(playerManager, sceneCreator.getMainTable(), boardEnvironment);
         stateManager.attach(state);
     }
     

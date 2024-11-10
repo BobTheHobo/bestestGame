@@ -4,13 +4,14 @@
  */
 package com.mygame.viet_files;
 
-import com.jme3.app.SimpleApplication;
 import com.jme3.asset.AssetManager;
+import com.jme3.material.Material;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import com.jme3.util.SkyFactory;
 import com.jme3.water.WaterFilter;
 
 /**
@@ -39,12 +40,15 @@ public class GameEnvironment {
     }
 
     public void setupSkybox() {
-	//rootNode.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/kloppenheim_02_puresky_4k.hdr", SkyFactory.EnvMapType.EquirectMap));
+	rootNode.attachChild(SkyFactory.createSky(assetManager, "Textures/Sky/kloppenheim_02_puresky_4k.hdr", SkyFactory.EnvMapType.EquirectMap));
     }
 
     public void addOcean() {
 	fpp = shadows.getFPP();
-	water = new WaterFilter(rootNode, lightDir);
+	Node empty = new Node("Empty Node");
+	rootNode.attachChild(empty);
+	// We pass an empty node to water because we don't need any reflections
+	water = new WaterFilter(empty, lightDir);
 	water.setWaterHeight(initialWaterHeight);
     	water.setUseRipples(false);
 	fpp.addFilter(water);
