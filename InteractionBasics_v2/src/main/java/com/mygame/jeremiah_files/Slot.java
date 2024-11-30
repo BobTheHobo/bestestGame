@@ -48,6 +48,7 @@ public class Slot {
         Material mat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
         mat.setColor("Color", ColorRGBA.White);
+        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_BUMP.jpg"));
         self.setMaterial(mat);
         self.center();
         self.move(-.15f + ((index % 2) * .3f), .001f, (-.5f + ((index / 2) * .5f)));

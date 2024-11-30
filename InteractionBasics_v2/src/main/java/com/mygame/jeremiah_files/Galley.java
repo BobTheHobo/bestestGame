@@ -44,6 +44,7 @@ public class Galley {
         Material tileMat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
         tileMat.setColor("Color", ColorRGBA.Brown);
+        tileMat.setTexture("ColorMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_BUMP.jpg"));
         self.setMaterial(tileMat);
         self.center();
         selfNode.attachChild(self);

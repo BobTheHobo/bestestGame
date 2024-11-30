@@ -9,7 +9,9 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.collision.CollisionResults;
+import com.jme3.font.BitmapText;
 import com.jme3.input.FlyByCamera;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -18,6 +20,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
+import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
 import com.jme3.math.Ray;
@@ -27,6 +30,7 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.system.NanoTimer;
 import com.mygame.PlayerManager;
 import com.mygame.jeremiah_files.Board;
 import java.util.Random;
@@ -65,6 +69,7 @@ public class CardGameState extends AbstractAppState {
     private Random random = new Random();
     private Board board;
     private Vector3f seatedPos;
+    private Vector3f enemyPos = new Vector3f(0, 3f,-3f);
     private final Quaternion seatedAng = new Quaternion(-2.6305395E-4f, 0.997723f, -0.06733209f, -0.0038974239f);
     // private final Vector3f boardPos = new Vector3f(0.02f, 5f, 2.8f);
     private Vector3f boardPos;
@@ -73,6 +78,10 @@ public class CardGameState extends AbstractAppState {
     private PlayerManager playerManager;
     private Table table;
     private BoardEnvironment boardEnv;
+    private float calledTime;
+    private float dialogueDuration = -1;
+    private BitmapText dialogue;
+    NanoTimer timer = new NanoTimer();
 
     public CardGameState(PlayerManager playerManager, Table table, BoardEnvironment boardEnv) {
 	super();
@@ -103,7 +112,7 @@ public class CardGameState extends AbstractAppState {
 
         board = new Board(tableNode, assetManager, stateManager); //Populates table with game mat
 	boardEnv.attachOceanToBoard(board);
-	boardEnv.attachGalleys(board);
+	//boardEnv.attachGalleys(board);
 
         // Set seated and board camera position with respect to table
         //seatedPos = tableNode.getLocalTranslation().add(new Vector3f(0,1.73f,3.8f));
@@ -115,12 +124,22 @@ public class CardGameState extends AbstractAppState {
         cam.setRotation(seatedAng);
         
 	this.inputManager = app.getInputManager();
+        
+        inputManager.addMapping(MAPPING_FORWARD, TRIGGER_W);
+        inputManager.addMapping(MAPPING_LEFT, TRIGGER_A);
+        inputManager.addMapping(MAPPING_BACK, TRIGGER_S);
+        inputManager.addMapping(MAPPING_RIGHT, TRIGGER_D);
+        inputManager.addMapping(MAPPING_LEFT_CLICK, TRIGGER_LEFT_CLICK);
+        inputManager.addMapping(MAPPING_RESET, TRIGGER_Q);
+        
         inputManager.addListener(actionListener, MAPPING_FORWARD);
         inputManager.addListener(actionListener, MAPPING_BACK);
         inputManager.addListener(actionListener, MAPPING_LEFT);
         inputManager.addListener(actionListener, MAPPING_RIGHT);
         inputManager.addListener(actionListener, MAPPING_LEFT_CLICK);
         inputManager.addListener(actionListener, MAPPING_RESET);
+        
+        dialogue = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
     }
 
     public Board getBoard() {
@@ -188,6 +207,7 @@ public class CardGameState extends AbstractAppState {
                                 subtractLocal(click3d);
                             ray = new Ray(click3d, dir);
                             rootNode.collideWith(ray, results);
+                            
                                 
                             if (position == 1) {// Looking at game state
                                 if (results.size() > 0) { //We clicked something
@@ -205,9 +225,10 @@ public class CardGameState extends AbstractAppState {
                                     }
                                 }
                             } else if (position == 0) {// Looking at hand
-                                 if (results.size() > 0) { //We clicked something
+                                 if (results.size() > 0) { //We cli cked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
-                                    if (clicked.toString().contains("Card")) { //Raise clicked :)
+                                    
+                                    if (clicked.toString().contains("Card") && (board.getCard(clicked, board.getPlayerHand()) != null)) { //Raise clicked :)
                                         if (selected != null) {//Lower previously selected card
                                             selected.getParent().move(0, -0.05f, 0);                                           
                                         }
@@ -224,6 +245,7 @@ public class CardGameState extends AbstractAppState {
                             }
                             break;
                         case MAPPING_RESET:
+                            /*
                             if (position == -1) {// Sits back in chair, currently mapped to 'q'
                                 cam.setLocation(seatedPos);
                                 cam.setRotation(seatedAng);
@@ -235,6 +257,8 @@ public class CardGameState extends AbstractAppState {
                             } else if (position == 1) {
                                 board.nextRound();
                             }
+                            */
+                            speak(1);
                             break;
                     }
                 }
@@ -242,7 +266,12 @@ public class CardGameState extends AbstractAppState {
        };
     @Override
     public void update(float tpf) {
-        //TODO: implement behavior during runtime
+        if (dialogueDuration != -1 && (timer.getTimeInSeconds() >= calledTime + dialogueDuration)) {
+            dialogue.removeFromParent();
+            flyCam.setEnabled(true);
+            playerManager.setWalkingEnabled(true);
+            dialogueDuration = -1;
+        }
     }
     
     @Override
@@ -251,5 +280,39 @@ public class CardGameState extends AbstractAppState {
         //TODO: clean up what you initialized in the initialize method,
         //e.g. remove all spatials from rootNode
         //this is called on the OpenGL thread after the AppState has been detached
+    }
+    
+    // Points the camera at the seated opponent and makes them speak
+    private void speak(int scene) {
+        calledTime = timer.getTimeInSeconds();
+        dialogueDuration = getDuration(scene);
+          
+        cam.lookAt(enemyPos, new Vector3f(0, 1, 0));
+        flyCam.setEnabled(false);
+        playerManager.setWalkingEnabled(false);
+        
+        dialogue.setText(getSceneText(scene));
+        dialogue.setSize(50);
+        dialogue.setColor(ColorRGBA.White);
+        dialogue.setLocalTranslation((app.getCamera().getWidth() - dialogue.getLineWidth()) / 2, app.getCamera().getHeight() / 4, 0); // position
+        
+        app.getGuiNode().attachChild(dialogue);
+
+        
+        AudioNode an = new AudioNode(assetManager, getSceneAudio(scene));
+        an.setPositional(false);    
+        an.play();      
+    }
+    
+    private String getSceneText(int scene) {
+        return "Ominous Text";
+    }
+    
+    private String getSceneAudio(int scene) {
+        return "Audio/FOGHORN.wav";
+    }
+    
+    private float getDuration(int scene) {
+        return 8;
     }
 }
