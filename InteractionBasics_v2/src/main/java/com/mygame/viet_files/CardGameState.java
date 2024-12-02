@@ -56,11 +56,13 @@ public class CardGameState extends AbstractAppState {
     private final static Trigger TRIGGER_D = new KeyTrigger(KeyInput.KEY_D);
     private final static Trigger TRIGGER_Q = new KeyTrigger(KeyInput.KEY_Q);
     private final static Trigger TRIGGER_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
+    private final static Trigger TRIGGER_RIGHT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_RIGHT);
     private final static String MAPPING_FORWARD = "Move Forward";
     private final static String MAPPING_BACK = "Move Backwards";
     private final static String MAPPING_LEFT = "Look Left";
     private final static String MAPPING_RIGHT = "Look Right";
     private final static String MAPPING_LEFT_CLICK = "Selected";
+    private final static String MAPPING_RIGHT_CLICK = "Alt Selected";
     private final static String MAPPING_RESET = "Reset";
     private int position = 0;
     private int look = 0;
@@ -130,6 +132,7 @@ public class CardGameState extends AbstractAppState {
         inputManager.addMapping(MAPPING_BACK, TRIGGER_S);
         inputManager.addMapping(MAPPING_RIGHT, TRIGGER_D);
         inputManager.addMapping(MAPPING_LEFT_CLICK, TRIGGER_LEFT_CLICK);
+        inputManager.addMapping(MAPPING_RIGHT_CLICK, TRIGGER_RIGHT_CLICK);
         inputManager.addMapping(MAPPING_RESET, TRIGGER_Q);
         
         inputManager.addListener(actionListener, MAPPING_FORWARD);
@@ -137,6 +140,7 @@ public class CardGameState extends AbstractAppState {
         inputManager.addListener(actionListener, MAPPING_LEFT);
         inputManager.addListener(actionListener, MAPPING_RIGHT);
         inputManager.addListener(actionListener, MAPPING_LEFT_CLICK);
+        inputManager.addListener(actionListener, MAPPING_RIGHT_CLICK);
         inputManager.addListener(actionListener, MAPPING_RESET);
         
         dialogue = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
@@ -244,8 +248,29 @@ public class CardGameState extends AbstractAppState {
                                 }
                             }
                             break;
+                        case MAPPING_RIGHT_CLICK:
+                            //Get what we clicked
+                            results = new CollisionResults();
+                            click2d = inputManager.getCursorPosition();
+                            click3d = cam.getWorldCoordinates(
+                                new Vector2f(click2d.getX(), click2d.getY()), 0f);
+                            dir = cam.getWorldCoordinates(
+                                new Vector2f(click2d.getX(), click2d.getY()), 1f).
+                                subtractLocal(click3d);
+                            ray = new Ray(click3d, dir);
+                            rootNode.collideWith(ray, results);
+                                   
+                            if (position == 1 || position == 0) {// Looking at hand
+                                 if (results.size() > 0) { //We clicked something
+                                    Spatial clicked = results.getClosestCollision().getGeometry();
+                                    if (clicked.toString().contains("Card") && board.getCard(clicked, board.getEnemyHand()) == null) { //Print card effects on screen
+                                       System.out.println(clicked.toString());
+                                    }
+                                }
+                            }
+                            break;
                         case MAPPING_RESET:
-                            /*
+                            
                             if (position == -1) {// Sits back in chair, currently mapped to 'q'
                                 cam.setLocation(seatedPos);
                                 cam.setRotation(seatedAng);
@@ -257,8 +282,8 @@ public class CardGameState extends AbstractAppState {
                             } else if (position == 1) {
                                 board.nextRound();
                             }
-                            */
-                            speak(1);
+                            
+                            //speak(1);
                             break;
                     }
                 }

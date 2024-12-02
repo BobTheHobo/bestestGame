@@ -6,6 +6,7 @@ package com.mygame.jeremiah_files;
 
 import com.jme3.app.state.AppStateManager;
 import com.jme3.asset.AssetManager;
+import com.jme3.audio.AudioNode;
 import com.jme3.cinematic.MotionPath;
 import com.jme3.cinematic.events.MotionEvent;
 import com.jme3.material.Material;
@@ -19,6 +20,7 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 /**
@@ -35,10 +37,15 @@ public class Board {
     private ArrayList<Card> playerHand = new ArrayList<>(); //Array representing player hand
     private ArrayList<Card> enemyDeck = new ArrayList<>(); //Array representing enemy deck
     private ArrayList<Card> enemyHand = new ArrayList<>(); //Array representing enemy hand
+    private ArrayList<Card> playerDiscard = new ArrayList<>(); //Array representing player discard pile
+    private ArrayList<Card> enemyDiscard = new ArrayList<>(); //Array representing enemy discard pile
     private AssetManager assetManager; //Asset manager
     private Spatial self;
     private Random rand = new Random();
     private AppStateManager stateManager;
+    private AudioNode drawAudio;
+    private AudioNode sinkAudio;
+    private AudioNode playAudio;
     
     
     private int state = 0; //Board state. 0 = No card selected, 1 = Card from hand selected
@@ -51,23 +58,31 @@ public class Board {
         this.stateManager = stateManager;
         table = node;
         selfNode = new Node();
+        
+        playAudio = new AudioNode(assetManager, "Audio/DEAL1.wav");
+        drawAudio = new AudioNode(assetManager, "Audio/SHUFFLE.wav");
+        sinkAudio = new AudioNode(assetManager, "Audio/uwater2.wav");
+        sinkAudio.setPositional(false);
 
         Geometry self = new Geometry("PlayMat", mesh);
         Material tileMat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
         tileMat.setColor("Color", ColorRGBA.Blue);
+        tileMat.setTexture("ColorMap", assetManager.loadTexture("Textures/cloth.jpg"));
         self.setMaterial(tileMat);
         self.center();
         self.move(0, 0.425f, 0.45f);
         
         selfNode.attachChild(self);
         makeGalleys();
+        makeDecks();
         table.attachChild(selfNode);
         selfNode.move(0, 0.01f, 0.0f);
         draw(7, true);
         draw(7, false);
-        showPlayerHand();
-        showEnemyHand();
+        drawAudio.play();
+        //showPlayerHand();
+        //showEnemyHand();
     }
     
     //Initializes our array and galleys in the scene
@@ -80,27 +95,120 @@ public class Board {
         }
     }
     
-    //Draws 'count' cards to a hand; player's hand if 'player' is true, enemy if else 
-    public void draw(int count, boolean player) {
-        ArrayList<Card> hand = player ? playerHand : enemyHand;
-        for (int i = 0; i < count; i++) {
-            int pull = rand.nextInt(101);
-            if (pull <= 19) {
-                hand.add(new Card(assetManager, "Swashbuckler", cards++));
-            } else if (pull <= 39) {
-                hand.add(new Card(assetManager, "Cook", cards++));
-            } else if (pull <= 59) {
-                hand.add(new Card(assetManager, "Gunner", cards++));
-            } else if (pull <= 79) {
-                hand.add(new Card(assetManager, "Cannoneer", cards++));
-            } else {
-                hand.add(new Card(assetManager, "Lookout", cards++));
+    //Default player deck is 8 swashbucklers, 3 each of rest; Enemy is 4 of each
+    private void makeDecks() {
+        for (int i = 0; i < 8; i++) {
+            playerDeck.add(new Card(assetManager, "Swashbuckler", cards++));
+            if (i % 2 == 0) {
+                enemyDeck.add(new Card(assetManager, "Swashbuckler", cards++));            
+                enemyDeck.add(new Card(assetManager, "Cook", cards++));
+                enemyDeck.add(new Card(assetManager, "Gunner", cards++));
+                enemyDeck.add(new Card(assetManager, "Cannoneer", cards++));
+                enemyDeck.add(new Card(assetManager, "Lookout", cards++));          
             }
+        }
+        
+        for (int i = 0; i < 3; i++) {
+            playerDeck.add(new Card(assetManager, "Cook", cards++));
+            playerDeck.add(new Card(assetManager, "Gunner", cards++));
+            playerDeck.add(new Card(assetManager, "Cannoneer", cards++));
+            playerDeck.add(new Card(assetManager, "Lookout", cards++));
+        }
+        
+        Collections.shuffle(playerDeck);
+        Collections.shuffle(enemyDeck);
+        
+        Quaternion angle = new Quaternion();
+        angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0, 1,0));
+        
+        
+        for (int i = 0; i < playerDeck.size(); i++) {
+            Spatial card = playerDeck.get(playerDeck.size() - 1 - i).getSelfNode();
+            card.center();
+            Vector3f spot = new Vector3f(-.3f, .45f + (i * 0.002f), 0.55f);
+            card.move(spot);
+            card.setLocalRotation(angle);
+            card.rotate(0, 0, FastMath.PI);
+            table.attachChild(card);
+        }
+        
+        for (int i = 0; i < enemyDeck.size(); i++) {
+            Spatial card = enemyDeck.get(enemyDeck.size() - 1 - i).getSelfNode();
+            card.center();
+            Vector3f spot = new Vector3f(-.3f, .45f + (i * 0.002f), 0.45f);
+            card.move(spot);
+            card.setLocalRotation(angle);
+            card.rotate(0, 0, FastMath.PI);
+            table.attachChild(card);
         }
     }
     
+    //Draws 'count' cards to a hand; player's hand if 'player' is true, enemy if else 
+    public void draw(int count, boolean player) {
+        ArrayList<Card> hand = player ? playerHand : enemyHand;
+        ArrayList<Card> deck = player ? playerDeck : enemyDeck;
+        ArrayList<Card> discard = player ? playerDiscard : enemyDiscard;
+        
+        for (int i = 0; i < count; i++) {
+            if (deck.isEmpty() && discard.isEmpty()) {
+                return;
+            }
+            playAudio.play();
+            
+            if (deck.isEmpty()) {// Deck is empty, shuffle
+                shuffle(player);
+            }
+            Card card = deck.get(0);
+            hand.add(card);
+            deck.remove(card);
+            
+            Vector3f middle = player ? new Vector3f(0, 0.5f, 1.4f) : new Vector3f(0, 0.5f, -1.4f);//Where the center card is
+            Quaternion angle = new Quaternion();//So we can read the card sitting down
+            if (player) {
+                angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(1,0,0));
+            } else {
+                angle.fromAngleAxis(-FastMath.HALF_PI, new Vector3f(1,0,0));
+            }
+
+            
+            card.getSelfNode().center();
+            card.getSelfNode().move(middle);
+            int direction = (hand.size() - 1) % 2;
+            int step = ((hand.size() - 1) + 1) / 2;
+            if (direction == 0) {//Move card to right
+                card.getSelfNode().move(.07f * step, 0, -.01f * step);
+            } else {// Move card to left
+                card.getSelfNode().move(-.07f * step, 0, -.01f * step);
+            }
+            card.getSelfNode().setLocalRotation(angle);
+        }
+        
+        //showPlayerHand();
+        //showEnemyHand();
+    }
+    
+    //Shuffles discard pile into draw deck
+    private void shuffle(boolean player) {
+        drawAudio.play();
+        System.out.println("Shuffle!");
+        if (player) {
+            for (int i = 0; i < playerDiscard.size(); i++) {
+                playerDeck.add(playerDiscard.get(i));
+            }
+            //playerDeck = playerDiscard;
+            playerDiscard.clear();
+        } else {
+            for (int i = 0; i < enemyDiscard.size(); i++) {
+                enemyDeck.add(enemyDiscard.get(i));
+            }
+            //enemyDeck = enemyDiscard;
+            enemyDiscard.clear();
+        }
+        
+    }
+    
     //Attatches the cards in our hand to the 3d scene
-    public void showPlayerHand() {
+    public void showPlayerHand() {     
         int count = playerHand.size();
         Vector3f middle = new Vector3f(0, 0.5f, 1.4f);//Where the center card is
         Quaternion angle = new Quaternion();//So we can read the card sitting down
@@ -119,6 +227,7 @@ public class Board {
             card.setLocalRotation(angle);
             table.attachChild(card);
         }
+        
     }
     
     //Will be added later to attatch enemy cards to 3d scene so you know how many they have
@@ -141,6 +250,7 @@ public class Board {
             card.setLocalRotation(angle);
             table.attachChild(card);
         }
+        
     }
     
     //Removes the cards from the 3d scene
@@ -160,6 +270,8 @@ public class Board {
         slotObj.setCard(cardObj); //Put card in slot
         
         playerHand.remove(cardObj); //Take card from hand
+        
+        playAudio.play();
        
         showPlayerHand(); //Update hand spatials
         enemyMove();
@@ -215,7 +327,7 @@ public class Board {
             
             Spatial node = enemyGalleys.get(i).getSelfNode();
             Vector3f destination = node.getLocalTranslation();
-            destination = destination.add(-.25f * toMove, 0f, 0f);
+            destination = destination.add(-.2f * toMove, 0f, 0f);
                     
             MotionPath path =  new MotionPath();
             path.addWayPoint(node.getLocalTranslation());
@@ -240,7 +352,7 @@ public class Board {
             
             Spatial node = playerGalleys.get(i).getSelfNode();
             Vector3f destination = node.getLocalTranslation();
-            destination = destination.add(-.25f * toMove, 0f, 0f);
+            destination = destination.add(-.2f * toMove, 0f, 0f);
                     
             MotionPath path =  new MotionPath();
             path.addWayPoint(node.getLocalTranslation());
@@ -270,8 +382,23 @@ public class Board {
             } else {
                 playerGalleys.remove(toSink.get(0));
             }
-            toSink.get(0).getSelfNode().removeFromParent();
+            //toSink.get(0).getSelfNode().removeFromParent();
+            Spatial node = toSink.get(0).getSelfNode();
+            Vector3f destination = node.getLocalTranslation();
+            destination = destination.add(0f, -.05f, 0f);
+                    
+            MotionPath path =  new MotionPath();
+            path.addWayPoint(node.getLocalTranslation());
+            path.addWayPoint(destination);
+            path.setPathSplineType(Spline.SplineType.CatmullRom);
+
+            MotionEvent motion = new MotionEvent(node, path);
+            motion.setDirectionType(MotionEvent.Direction.PathAndRotation);
+            motion.setSpeed(1.5f);
+                    
+            motion.play();
             toSink.remove(0);
+            sinkAudio.play();
         }
         
         
@@ -293,6 +420,9 @@ public class Board {
     
     //Currently very basic AI for how the enemy acts
     private void enemyMove() {
+        if (enemyHand.isEmpty()) {
+            return;
+        }
         int pull = rand.nextInt(enemyHand.size()); //Get a random index hand
         Card card = enemyHand.get(pull); //Get a the card corresponding to index
         enemyHand.remove(card); //Remove the card from the enemy hand
@@ -314,6 +444,7 @@ public class Board {
             open.get(pull).playRandom(card);//Play the card on the galley
 
             table.attachChild(card.getSelfNode());//Show the card in space
+            playAudio.play();
         }
         showEnemyHand();
     }
@@ -351,6 +482,22 @@ public class Board {
         return null;
     }
     
+    public void discard(boolean player, Card card) {
+        ArrayList<Card> discard = player ? playerDiscard : enemyDiscard;
+        discard.add(card);
+        
+        Quaternion angle = new Quaternion();
+        angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0, 1,0));
+        
+        Spatial cardSpatial = card.getSelfNode();
+        cardSpatial.center();
+        Vector3f spot = player ? new Vector3f(.3f, .45f + ((discard.size() - 1) * 0.002f), 0.55f) : new Vector3f(.3f, .45f + ((discard.size() - 1) * 0.002f), 0.45f);
+        cardSpatial.move(spot);
+        cardSpatial.setLocalRotation(angle);
+        cardSpatial.rotate(0, 0, FastMath.PI);
+        table.attachChild(cardSpatial);
+    }
+    
     public AssetManager getAssetManager() {
         return assetManager;
     }
@@ -382,5 +529,13 @@ public class Board {
     
     public ArrayList<Galley> getPlayerGalleys() {
 	return playerGalleys;
+    }
+    
+    public ArrayList<Card> getPlayerDiscard() {
+        return playerDiscard;
+    }
+    
+    public ArrayList<Card> getEnemyDiscard() {
+        return enemyDiscard;
     }
 }

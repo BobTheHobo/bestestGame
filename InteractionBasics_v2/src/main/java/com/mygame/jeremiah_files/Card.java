@@ -31,6 +31,7 @@ public class Card {
     private int power = 0;
     private String topString;
     private BitmapText topText;
+    private BitmapText powerText;
     
     public Card(AssetManager assetManager, String name, int count) {
         this.assetManager = assetManager;
@@ -87,6 +88,8 @@ public class Card {
         }
        
         
+        mat.setTexture("ColorMap", assetManager.loadTexture("Textures/card.jpg"));
+        
         //We only want to print the power and what card type it is
         topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
         
@@ -128,8 +131,12 @@ public class Card {
         topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
         topText.setText(topString);
         if (power <= 0) {//Card was killed, remove it.
+           parent.getParent().getParent().discard(parent.getParent().getIndex() < 3, this);
+           /*
            selfNode.removeFromParent();
+            */
            parent.setFilled(false);
+           
            return 0;
         } else {//Card is not killed
            return 1;
