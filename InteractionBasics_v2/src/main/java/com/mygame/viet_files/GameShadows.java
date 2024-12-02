@@ -5,6 +5,7 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.ViewPort;
 import com.jme3.renderer.queue.RenderQueue;
@@ -12,12 +13,9 @@ import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.shadow.CompareMode;
 import com.jme3.shadow.DirectionalLightShadowFilter;
-import com.jme3.shadow.DirectionalLightShadowRenderer;
 import com.jme3.shadow.EdgeFilteringMode;
 import com.jme3.shadow.PointLightShadowFilter;
-import com.jme3.shadow.PointLightShadowRenderer;
 import com.jme3.shadow.SpotLightShadowFilter;
-import com.jme3.shadow.SpotLightShadowRenderer;
 
 /**
  * Contains functions that help with assigning shadows to objects
@@ -33,7 +31,7 @@ public class GameShadows {
 
     // If filtering is used for shadow simulation (rendering will be used else)
     // Rendering is more precise but more intensive, filtering is less accurate but faster
-    private boolean useFilter = false;
+    private boolean useFilter = true;
 
     // Size of rendered shadow maps, in pixels per side (512, 1024, 2048, etc)
     private int shadowmap_size = 2048;
@@ -63,13 +61,8 @@ public class GameShadows {
 
     FilterPostProcessor fpp;
 
-    DirectionalLightShadowRenderer dlsr;
     DirectionalLightShadowFilter dlsf; 
-
-    PointLightShadowRenderer plsr;
     PointLightShadowFilter plsf; 
-	
-    SpotLightShadowRenderer slsr;
     SpotLightShadowFilter slsf;
 
     SSAOFilter ssaof;
@@ -86,7 +79,6 @@ public class GameShadows {
     public void setupShadowHandlers() {
 	// Keep this on top because other handlers rely on it
 	setupFilterPostProcessor();
-	viewPort.addProcessor(fpp);
 
 	setupDirectionalLightHandlers();
 	setupPointLightHandlers();
@@ -96,14 +88,14 @@ public class GameShadows {
 
 	setupSSAO();
 	setSSAO(ssaoOn);
+
+	    // Add the TranslucentBucketFilter at the end of the stack
+	    TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
+	    this.fpp.addFilter(translucentBucketFilter);
     }
 
     // Handlers for directional light shadows
     private void setupDirectionalLightHandlers() {
-	dlsr = new DirectionalLightShadowRenderer(assetManager, shadowmap_size, shadowmaps);
-        dlsr.setEdgeFilteringMode(edgeFiltering);
-        dlsr.setShadowIntensity(shadowIntensity);
-
 	dlsf = new DirectionalLightShadowFilter(assetManager, shadowmap_size, shadowmaps);
         dlsf.setEdgeFilteringMode(edgeFiltering);
         dlsf.setShadowIntensity(shadowIntensity);
@@ -112,10 +104,6 @@ public class GameShadows {
 
     // Handlers for point light shadows
     private void setupPointLightHandlers() {
-	plsr = new PointLightShadowRenderer(assetManager, shadowmap_size);
-        plsr.setEdgeFilteringMode(edgeFiltering);
-        plsr.setShadowIntensity(shadowIntensity);
-
 	plsf = new PointLightShadowFilter(assetManager, shadowmap_size);
         plsf.setEdgeFilteringMode(edgeFiltering);
         plsf.setShadowIntensity(shadowIntensity);
@@ -124,10 +112,6 @@ public class GameShadows {
 
     // Handlers for spot light shadows
     private void setupSpotLightHandlers() {
-        slsr = new SpotLightShadowRenderer(assetManager, shadowmap_size);
-        slsr.setEdgeFilteringMode(edgeFiltering);
-        slsr.setShadowIntensity(shadowIntensity);
-
         slsf = new SpotLightShadowFilter(assetManager, shadowmap_size);
         slsf.setEdgeFilteringMode(edgeFiltering);
         slsf.setShadowIntensity(shadowIntensity);
@@ -142,6 +126,7 @@ public class GameShadows {
 
     private void setupFilterPostProcessor() {
 	this.fpp = new FilterPostProcessor(assetManager);
+	viewPort.addProcessor(this.fpp);
     }
 
     private void addFilterProcessors() {
@@ -175,10 +160,8 @@ public class GameShadows {
 
 	// Handle turning on and off render processors
 	if (!useFilter) {
-		addRenderProcessors();
 		removeFilterProcessors();
 	} else {
-		removeRenderProcessors();
 		addFilterProcessors();
 	}
 	
@@ -200,7 +183,6 @@ public class GameShadows {
 		switchShadowSimMethod(useFilter);
 	} else {
 		// Remove render processors and turn off shadow filters
-		removeRenderProcessors();
 		removeFilterProcessors();
 	}
     }
@@ -240,11 +222,8 @@ public class GameShadows {
 
     public void setShadowIntensity(float intensity) {
 	this.shadowIntensity = intensity;
-        dlsr.setShadowIntensity(shadowIntensity);
         dlsf.setShadowIntensity(shadowIntensity);
-        plsr.setShadowIntensity(shadowIntensity);
         plsf.setShadowIntensity(shadowIntensity);
-        slsr.setShadowIntensity(shadowIntensity);
         slsf.setShadowIntensity(shadowIntensity);
     }
 
@@ -254,11 +233,8 @@ public class GameShadows {
 
     public void setShadowEdgeThickness(int thickness) {
 	this.shadowEdgeThickness = thickness;
-	dlsr.setEdgesThickness(this.shadowEdgeThickness);
 	dlsf.setEdgesThickness(this.shadowEdgeThickness);
-	slsr.setEdgesThickness(this.shadowEdgeThickness);
 	slsf.setEdgesThickness(this.shadowEdgeThickness);
-	plsr.setEdgesThickness(this.shadowEdgeThickness);
 	plsf.setEdgesThickness(this.shadowEdgeThickness);
     }
 
@@ -269,32 +245,9 @@ public class GameShadows {
     public void setShadowCompareMode(boolean useHW) {
 	this.useHWShadows = useHW;	
 	CompareMode cm = this.useHWShadows ? CompareMode.Hardware : CompareMode.Software;
-	dlsr.setShadowCompareMode(cm);
 	dlsf.setShadowCompareMode(cm);
-	slsr.setShadowCompareMode(cm);
 	slsf.setShadowCompareMode(cm);
-	plsr.setShadowCompareMode(cm);
 	plsf.setShadowCompareMode(cm);
-    }
-
-    private void addRenderProcessors() {
-	// If processor hasn't been added yet then add it
-	if(!viewPort.getProcessors().contains(slsr))
-		viewPort.addProcessor(slsr);
-	if(!viewPort.getProcessors().contains(plsr))
-		viewPort.addProcessor(plsr);
-	if(!viewPort.getProcessors().contains(dlsr))
-		viewPort.addProcessor(dlsr);
-    }
-
-    private void removeRenderProcessors() {
-	// If processor exists then remove
-	if(viewPort.getProcessors().contains(slsr))
-		viewPort.removeProcessor(slsr);
-	if(viewPort.getProcessors().contains(plsr))
-		viewPort.removeProcessor(plsr);
-	if(viewPort.getProcessors().contains(dlsr))
-		viewPort.removeProcessor(dlsr);
     }
 
     // Change shadowmap size
@@ -315,11 +268,8 @@ public class GameShadows {
 
     public void setEdgeFilteringMode(int index) {
 	this.edgeFiltering = EdgeFilteringMode.values()[index];
-	dlsr.setEdgeFilteringMode(this.edgeFiltering);
 	dlsf.setEdgeFilteringMode(this.edgeFiltering);
-	slsr.setEdgeFilteringMode(this.edgeFiltering);
 	slsf.setEdgeFilteringMode(this.edgeFiltering);
-	plsr.setEdgeFilteringMode(this.edgeFiltering);
 	plsf.setEdgeFilteringMode(this.edgeFiltering);
     }
 
@@ -351,24 +301,17 @@ public class GameShadows {
 
     // Add directional light
     public void attachDirectionalLight(DirectionalLight light) {
-	    dlsr.setLight(light);
 	    dlsf.setLight(light);
     }
 
     // Add point light
     public void attachPointLight(PointLight light) {
-	    plsr.setLight(light);
 	    plsf.setLight(light);
     }
 
     // Add spot light
     public void attachSpotLight(SpotLight light) {
-	    slsr.setLight(light);
 	    slsf.setLight(light);
-    }
-
-    public DirectionalLightShadowRenderer getDLSR() {
-	return this.dlsr;
     }
 
     public DirectionalLightShadowFilter getDLSF() {
@@ -393,7 +336,6 @@ public class GameShadows {
     
     public void setShadowStabilization(boolean on) {
 	stabilizationOn = on;
-	dlsr.setEnabledStabilization(stabilizationOn);
 	dlsf.setEnabledStabilization(stabilizationOn);
     }
 

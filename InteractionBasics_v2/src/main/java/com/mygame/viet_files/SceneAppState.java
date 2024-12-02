@@ -42,10 +42,12 @@ public class SceneAppState extends AbstractAppState {
     private GameLighting lighting;
     private GameShadows shadows;
     private GameEnvironment environment;
+    private GameParticles particles;
     private BoardEnvironment boardEnvironment;
     private CameraManager cameraManager; // Camera manager
     private PlayerManager playerManager;
     private InputHandler inputHandler;
+    private MusicManager musicManager;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -80,16 +82,20 @@ public class SceneAppState extends AbstractAppState {
 	shadows = new GameShadows(rootNode, assetManager, viewPort);
 	lighting = new GameLighting(rootNode, assetManager, shadows);
 	environment = new GameEnvironment(rootNode, assetManager, viewPort, shadows);
+	particles = new GameParticles(rootNode, assetManager);
 	boardEnvironment = new BoardEnvironment(rootNode, assetManager, viewPort);
-
+	musicManager = new MusicManager(assetManager);
+	musicManager.loadTrack("Ambience", "Sounds/Music/Ambience-Waves-16bit.wav");
+	musicManager.playTrack("Ambience");
 
 	shadows.setupShadowHandlers();
 	lighting.setupLighting();
 	lighting.insertLightProbe(stateManager.getApplication(), stateManager);
-	//environment.setupSkybox();
+	environment.setupSkybox();
 	environment.addOcean();
+	environment.addFogEffect();
 
-	SceneCreator sceneCreator = new SceneCreator(rootNode, assetManager, viewPort, bulletAppState, shadows, interactionManager);
+	SceneCreator sceneCreator = new SceneCreator(rootNode, assetManager, viewPort, bulletAppState, shadows, particles, interactionManager);
 	sceneCreator.setupScene();
 
 	UIManager ui = new UIManager(this.assetManager, this.shadows, this.app.getGuiNode(), this.viewPort);
@@ -107,7 +113,8 @@ public class SceneAppState extends AbstractAppState {
 	    this.cameraManager,
 	    this.inputHandler,
 	    this.interactionManager,
-            this.app.getContext().getSettings()
+            this.app.getContext().getSettings(),
+		this.assetManager
         );
 	playerManager.setupPlayer();
 

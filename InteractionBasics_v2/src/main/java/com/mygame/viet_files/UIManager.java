@@ -89,8 +89,6 @@ public class UIManager {
 		shadows.getShadowIntensity());
 	shadowStabilizationText.setText(STABILIZATION_TEXT +
 		shadows.getShadowStabilization());
-	shadowZfarText.setText(EXTEND_TEXT +
-		(shadows.getDLSR().getShadowZExtend() > 0));
     }
 
     public void updateTypeText(String mode) {

@@ -24,6 +24,8 @@ import com.jme3.util.TangentBinormalGenerator;
 import com.mygame.PhysicsHelper;
 import com.mygame.PlayerInteractionManager;
 
+
+
 /**
  * @author viet
  */
@@ -36,6 +38,7 @@ public class SceneCreator extends AbstractAppState {
     private BulletAppState bulletAppState;
     private GameShadows shadows;
     private PlayerInteractionManager playerInteractionManager;
+    private GameParticles particles;
     
     private final static Trigger TRIGGER_P= new KeyTrigger(KeyInput.KEY_P);
     private final static String MAPPING_SCENE = "Next Scene";
@@ -49,13 +52,18 @@ public class SceneCreator extends AbstractAppState {
 
     private Table mainTable;
     
-    public SceneCreator(Node rootNode, AssetManager assetManager, ViewPort viewPort, BulletAppState bulletAppState, GameShadows shadows, PlayerInteractionManager playerInteractionManager) {
+    private Key spawnedKey;
+    private static final Vector3f KEY_SPAWN_LOCATION = new Vector3f(-4f, 3f, -5f);
+    private boolean hasSpawnedKey = false;
+    
+    public SceneCreator(Node rootNode, AssetManager assetManager, ViewPort viewPort, BulletAppState bulletAppState, GameShadows shadows, GameParticles particles, PlayerInteractionManager playerInteractionManager) {
 	this.rootNode = rootNode;
 	this.assetManager = assetManager;
 	this.viewPort = viewPort;
 	this.bulletAppState = bulletAppState;
 	this.shadows = shadows;
 	this.playerInteractionManager = playerInteractionManager;
+	this.particles = particles;
     }
             
     // Spawns models in and places them
@@ -89,9 +97,8 @@ public class SceneCreator extends AbstractAppState {
 	//room_node.attachChild(table2);
 
 	// Grandfather clock
-	//Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
-	Clock clock = new Clock("Clock Node", new Vector3f(-3.8f, 0f, -7f), false, assetManager, bulletAppState, shadows);
-	room_node.attachChild(clock.getNode());
+	Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
+	room_node.attachChild(clock);
 
 	// Note when referring to blender positions, x is the same, y and z are swapped
 	// Also, flip signs between the y coords
@@ -124,9 +131,39 @@ public class SceneCreator extends AbstractAppState {
 
 
 	rootNode.attachChild(room_node);
+        
+        playerInteractionManager.setOnPuzzleCompleteListener(() -> {
+            if (!hasSpawnedKey) {
+                spawnKey();
+            }
+        });
 
-	//Util.printChildren(rootNode);
     }
+    
+    private void spawnKey() {
+        hasSpawnedKey = true;
+        if (spawnedKey == null) { // Ensure the key isn't spawned multiple times
+            spawnedKey = new Key(
+                "PuzzleKey",
+                KEY_SPAWN_LOCATION,
+                new Vector3f(0.15f, 0.15f, 0.15f), // Key size
+                assetManager,
+                rootNode,
+                this.bulletAppState
+            );
+            this.playerInteractionManager.setKey(spawnedKey.getGeometry());
+            System.out.println("Key spawned at: " + KEY_SPAWN_LOCATION); // Debugging message
+        }
+    }
+        
+    @Override
+    public void update(float tpf) {
+        if (this.playerInteractionManager.getIsClockPuzzleComplete() && !hasSpawnedKey) {
+            spawnKey();
+        }
+        System.out.println("Puzzle Complete: " + this.playerInteractionManager.getIsClockPuzzleComplete());
+    }
+    
 
     public Table getMainTable() {
 	return this.mainTable;
@@ -153,9 +190,9 @@ public class SceneCreator extends AbstractAppState {
 	mat.setTexture("DiffuseMap", diff);
 
 	//TangentBinormalGenerator.generate(geo);
-	//Texture norm = assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg");
-	//norm.setWrap(Texture.WrapMode.Repeat);
-	///mat.setTexture("NormalMap", norm);
+	Texture norm = assetManager.loadTexture("Textures/Wood/AT_Wood_01_NORM.jpg");
+	norm.setWrap(Texture.WrapMode.Repeat);
+	mat.setTexture("NormalMap", norm);
 
 	geo.setMaterial(mat);
 	//setTextureScale(geo, new Vector2f(0.8f, 0.8f));
@@ -197,6 +234,7 @@ public class SceneCreator extends AbstractAppState {
 	Spatial holder;
 
 	for(Spatial s : geo.getChildren()) {
+		System.out.println(" First Child is: " + s.getName());
 		int i = 0;
 		for(Spatial sp : ((Node)s).getChildren()) {
 			if (i == 0) {
@@ -215,6 +253,7 @@ public class SceneCreator extends AbstractAppState {
 				mat.setColor("Diffuse", ColorRGBA.Orange);   // ... color of light being reflected
 				holder.setMaterial(mat);
 			}
+			System.out.println("Child is: " + sp.getName());
 			i++;
 		}
 	}
@@ -226,6 +265,7 @@ public class SceneCreator extends AbstractAppState {
 
 	// Invisible flame node, specifies where light spawns from
 	Node flame_node = new Node("Flame node for Candle");
+	particles.addFireParticles(flame_node);
 	flame_node.move(0f, 0.8f, 0f); // Add a little offset to make light spawn from actual flame
 	candle_node.attachChild(flame_node);
 	

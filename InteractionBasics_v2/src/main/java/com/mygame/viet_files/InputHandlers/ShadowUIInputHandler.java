@@ -34,7 +34,6 @@ public class ShadowUIInputHandler implements ActionListener {
     private InputManager inputManager;
 
     private GameShadows shadows;
-    private DirectionalLightShadowRenderer dlsr;
     private DirectionalLightShadowFilter dlsf;
 
     private UIManager ui;
@@ -45,7 +44,6 @@ public class ShadowUIInputHandler implements ActionListener {
     public ShadowUIInputHandler(Application app, InputManager inputManager, GameShadows shadows, UIManager ui) {
 	this.inputManager = inputManager;
 	this.shadows = shadows;
-	this.dlsr = this.shadows.getDLSR();
 	this.dlsf = this.shadows.getDLSF();
  	this.ui = ui; 
 
@@ -126,13 +124,11 @@ public class ShadowUIInputHandler implements ActionListener {
 	}
 
         if (name.equals("lambdaUp") && keyPressed) {
-            dlsr.setLambda(dlsr.getLambda() + 0.01f);
-            dlsf.setLambda(dlsr.getLambda() + 0.01f);
-            System.out.println("Lambda : " + dlsr.getLambda());
+            dlsf.setLambda(dlsf.getLambda() + 0.01f);
+            System.out.println("Lambda : " + dlsf.getLambda());
         } else if (name.equals("lambdaDown") && keyPressed) {
-            dlsr.setLambda(dlsr.getLambda() - 0.01f);
-            dlsf.setLambda(dlsr.getLambda() - 0.01f);
-            System.out.println("Lambda : " + dlsr.getLambda());
+            dlsf.setLambda(dlsf.getLambda() - 0.01f);
+            System.out.println("Lambda : " + dlsf.getLambda());
         }
 
         if (name.equals("ShadowUp") && keyPressed) {
@@ -143,29 +139,23 @@ public class ShadowUIInputHandler implements ActionListener {
 	}
 
         if (name.equals("debug") && keyPressed) {
-            dlsr.displayFrustum();
+		System.out.println("Renderer not used anymore, debug not available");
         }
 
         if (name.equals("backShadows") && keyPressed) {
-            dlsr.setRenderBackFacesShadows(!dlsr.isRenderBackFacesShadows());
             dlsf.setRenderBackFacesShadows(!dlsf.isRenderBackFacesShadows());
         }
 
         if (name.equals("stabilize") && keyPressed) {
-            dlsr.setEnabledStabilization(!dlsr.isEnabledStabilization());
             dlsf.setEnabledStabilization(!dlsf.isEnabledStabilization());
         }
 
         if (name.equals("distance") && keyPressed) {
-            if (dlsr.getShadowZExtend() > 0) {
-                dlsr.setShadowZExtend(0);
-                dlsr.setShadowZFadeLength(0);
+            if (dlsf.getShadowZExtend() > 0) {
                 dlsf.setShadowZExtend(0);
                 dlsf.setShadowZFadeLength(0);
 
             } else {
-                dlsr.setShadowZExtend(500);
-                dlsr.setShadowZFadeLength(50);
                 dlsf.setShadowZExtend(500);
                 dlsf.setShadowZFadeLength(50);
             }

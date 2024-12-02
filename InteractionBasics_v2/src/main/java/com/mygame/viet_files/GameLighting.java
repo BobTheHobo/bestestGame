@@ -37,8 +37,8 @@ public class GameLighting {
 	//insertDL(new Vector3f(-0.5f, -0.3f, -1.5f), 1.0f);
 	//insertPL(new Vestor3f(0.0f, 7f, 0f));
 
-	// Test spotlight, 
-	insertSL(new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, 1f, 0f));
+	// An SL that doesn't cast any light, needed for shadow renderer/filter to work properly 
+	insertSL(rootNode, new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, 1f, 0f));
 	insertMoonlight();
 	insertAL(10f);
     }
@@ -87,30 +87,30 @@ public class GameLighting {
     }
 
     // Directional light (basically sun) points in one direction from infinitely far away
-    public void insertDL(Vector3f dir, float mult) {
+    public void insertDL(Node root, Vector3f dir, float mult) {
 	DirectionalLight sun = new DirectionalLight();
 	sun.setDirection(dir);
 	sun.setColor(ColorRGBA.White.mult(mult));
 	shadows.attachDirectionalLight(sun);
 
-	rootNode.addLight(sun);
+	root.addLight(sun);
     }
 
     // Small pointlight just arbitrarily to light up scene
-    public void insertPL(Vector3f vec) {
+    public void insertPL(Node root, Vector3f vec) {
 	PointLight pl = new PointLight();
 	pl.setColor(ColorRGBA.White.mult(0.4f)); //Adjust mult value to increase/decrease brightness
 	pl.setRadius(18f);
 	pl.setPosition(vec);
-	rootNode.addLight(pl);
+	root.addLight(pl);
 	shadows.attachPointLight(pl);
 
 	// Insert a block to help visualize where PL is coming from
-	rootNode.attachChild(Util.insertBlock(this.assetManager, vec));
+	//rootNode.attachChild(Util.insertBlock(this.assetManager, vec));
     }
 
     // Insert a spotlight
-    public void insertSL(Vector3f loc, Vector3f dir) {
+    public void insertSL(Node root, Vector3f loc, Vector3f dir) {
 	SpotLight sl = new SpotLight();
 	sl.setSpotRange(100f);                           // distance
 	sl.setSpotInnerAngle(15f * FastMath.DEG_TO_RAD); // inner light cone (central beam)
@@ -118,7 +118,7 @@ public class GameLighting {
 	sl.setColor(ColorRGBA.White.mult(0f));         // light color
 	sl.setPosition(loc);               		     // location
 	sl.setDirection(dir);                	     // shine direction
-	rootNode.addLight(sl);
+	root.addLight(sl);
 
 	shadows.attachSpotLight(sl);
 
