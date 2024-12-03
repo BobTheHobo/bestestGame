@@ -6,6 +6,7 @@ import com.jme3.effect.ParticleMesh.Type;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.Vector3f;
+import com.jme3.renderer.queue.RenderQueue;
 import com.jme3.scene.Node;
 
 /**
@@ -24,6 +25,7 @@ public class GameParticles {
 	    ParticleEmitter fire = new ParticleEmitter("Emitter", Type.Triangle, 30);
 	    Material mat_red = new Material(assetManager, "Common/MatDefs/Misc/Particle.j3md");
 	    mat_red.setTexture("Texture", assetManager.loadTexture("Effects/flame.png"));
+
 	    fire.setMaterial(mat_red);
 	    fire.setImagesX(2);
 	    fire.setImagesY(2); // 2x2 texture animation
@@ -37,6 +39,9 @@ public class GameParticles {
 	    fire.setLowLife(0.2f);
 	    fire.setHighLife(0.4f);
 	    fire.getParticleInfluencer().setVelocityVariation(0.2f);
+
 	    targetNode.attachChild(fire);
+
+	    fire.setQueueBucket(RenderQueue.Bucket.Translucent);
     }
 }

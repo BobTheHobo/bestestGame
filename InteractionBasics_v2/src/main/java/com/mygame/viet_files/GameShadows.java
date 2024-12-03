@@ -59,6 +59,9 @@ public class GameShadows {
     // Only applies to directional light
     private boolean stabilizationOn = true;
 
+    // Turns off backface shadow rendering
+    private boolean backfaceShadows = false;
+
     FilterPostProcessor fpp;
 
     DirectionalLightShadowFilter dlsf; 
@@ -99,6 +102,7 @@ public class GameShadows {
 	dlsf = new DirectionalLightShadowFilter(assetManager, shadowmap_size, shadowmaps);
         dlsf.setEdgeFilteringMode(edgeFiltering);
         dlsf.setShadowIntensity(shadowIntensity);
+	dlsf.setRenderBackFacesShadows(backfaceShadows);
     	dlsf.setEnabled(true);
     }
 
@@ -107,6 +111,10 @@ public class GameShadows {
 	plsf = new PointLightShadowFilter(assetManager, shadowmap_size);
         plsf.setEdgeFilteringMode(edgeFiltering);
         plsf.setShadowIntensity(shadowIntensity);
+	plsf.setRenderBackFacesShadows(backfaceShadows);
+	plsf.getPreShadowForcedRenderState().setPolyOffset(-2.0f, -2.0f);
+	System.out.println("Hello " + plsf.getPreShadowForcedRenderState().getPolyOffsetFactor());
+	System.out.println("Hello " + plsf.getPreShadowForcedRenderState().isPolyOffset());
     	plsf.setEnabled(true);
     }
 
@@ -115,6 +123,7 @@ public class GameShadows {
         slsf = new SpotLightShadowFilter(assetManager, shadowmap_size);
         slsf.setEdgeFilteringMode(edgeFiltering);
         slsf.setShadowIntensity(shadowIntensity);
+	slsf.setRenderBackFacesShadows(backfaceShadows);
     	slsf.setEnabled(true);
     }
 
@@ -126,6 +135,7 @@ public class GameShadows {
 
     private void setupFilterPostProcessor() {
 	this.fpp = new FilterPostProcessor(assetManager);
+
 	viewPort.addProcessor(this.fpp);
     }
 
@@ -337,6 +347,13 @@ public class GameShadows {
     public void setShadowStabilization(boolean on) {
 	stabilizationOn = on;
 	dlsf.setEnabledStabilization(stabilizationOn);
+    }
+
+    public void setBackfaceShadows(boolean on) {
+	backfaceShadows = on;
+	dlsf.setRenderBackFacesShadows(backfaceShadows);
+	plsf.setRenderBackFacesShadows(backfaceShadows);
+	slsf.setRenderBackFacesShadows(backfaceShadows);
     }
 
     public FilterPostProcessor getFPP() {

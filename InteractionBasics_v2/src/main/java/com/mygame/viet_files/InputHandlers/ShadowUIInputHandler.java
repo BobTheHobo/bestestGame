@@ -34,7 +34,7 @@ public class ShadowUIInputHandler implements ActionListener {
     private InputManager inputManager;
 
     private GameShadows shadows;
-    private DirectionalLightShadowFilter dlsf;
+    //private DirectionalLightShadowFilter dlsf;
 
     private UIManager ui;
 
@@ -44,7 +44,7 @@ public class ShadowUIInputHandler implements ActionListener {
     public ShadowUIInputHandler(Application app, InputManager inputManager, GameShadows shadows, UIManager ui) {
 	this.inputManager = inputManager;
 	this.shadows = shadows;
-	this.dlsf = this.shadows.getDLSF();
+	//this.dlsf = this.shadows.getDLSF();
  	this.ui = ui; 
 
         this.app = (SimpleApplication) app;
@@ -123,13 +123,13 @@ public class ShadowUIInputHandler implements ActionListener {
 		shadows.toggleSSAO();
 	}
 
-        if (name.equals("lambdaUp") && keyPressed) {
-            dlsf.setLambda(dlsf.getLambda() + 0.01f);
-            System.out.println("Lambda : " + dlsf.getLambda());
-        } else if (name.equals("lambdaDown") && keyPressed) {
-            dlsf.setLambda(dlsf.getLambda() - 0.01f);
-            System.out.println("Lambda : " + dlsf.getLambda());
-        }
+        //if (name.equals("lambdaUp") && keyPressed) {
+        //    dlsf.setLambda(dlsf.getLambda() + 0.01f);
+        //    System.out.println("Lambda : " + dlsf.getLambda());
+        //} else if (name.equals("lambdaDown") && keyPressed) {
+        //    dlsf.setLambda(dlsf.getLambda() - 0.01f);
+        //    System.out.println("Lambda : " + dlsf.getLambda());
+        //}
 
         if (name.equals("ShadowUp") && keyPressed) {
 	    shadows.setShadowIntensity(shadows.getShadowIntensity() + 0.05f);
@@ -142,24 +142,24 @@ public class ShadowUIInputHandler implements ActionListener {
 		System.out.println("Renderer not used anymore, debug not available");
         }
 
-        if (name.equals("backShadows") && keyPressed) {
-            dlsf.setRenderBackFacesShadows(!dlsf.isRenderBackFacesShadows());
-        }
+        //if (name.equals("backShadows") && keyPressed) {
+        //    dlsf.setRenderBackFacesShadows(!dlsf.isRenderBackFacesShadows());
+        //}
 
-        if (name.equals("stabilize") && keyPressed) {
-            dlsf.setEnabledStabilization(!dlsf.isEnabledStabilization());
-        }
+ //       if (name.equals("stabilize") && keyPressed) {
+        //    dlsf.setEnabledStabilization(!dlsf.isEnabledStabilization());
+  //      }
 
-        if (name.equals("distance") && keyPressed) {
-            if (dlsf.getShadowZExtend() > 0) {
-                dlsf.setShadowZExtend(0);
-                dlsf.setShadowZFadeLength(0);
-
-            } else {
-                dlsf.setShadowZExtend(500);
-                dlsf.setShadowZFadeLength(50);
-            }
-        }
+ //       if (name.equals("distance") && keyPressed) {
+        //    if (dlsf.getShadowZExtend() > 0) {
+        //        dlsf.setShadowZExtend(0);
+        //        dlsf.setShadowZFadeLength(0);
+//
+        //    } else {
+        //        dlsf.setShadowZExtend(500);
+        //        dlsf.setShadowZFadeLength(50);
+ //           }
+ //       }
 
         if (name.equals("ThicknessUp") && keyPressed) {
 	    int thickness = shadows.getShadowEdgeThickness();

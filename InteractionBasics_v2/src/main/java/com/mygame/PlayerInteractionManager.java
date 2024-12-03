@@ -282,8 +282,12 @@ public class PlayerInteractionManager {
 		if (res.getUserData("puzzle") != null) {
 			target = res;	
 		} else {
-			target = res.getParent().getParent().getParent();
-		}
+			try {
+				target = res.getParent().getParent().getParent();
+			} catch(Exception ex) {
+								
+			}
+		} 
                 float distance = results.getCollision(i).getDistance();
 
                 // Check if the item is within pickup range

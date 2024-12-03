@@ -261,12 +261,17 @@ public class SceneCreator extends AbstractAppState {
 	//System.out.println(geo.getName());
 
 	// Allow model to cast and receive shadows
-	shadows.attachShadowCastAndReceive(candle);
+	shadows.attachShadowOff(candle_node);
+	//shadows.attachShadowCastAndReceive(candle_node);
 
 	// Invisible flame node, specifies where light spawns from
 	Node flame_node = new Node("Flame node for Candle");
-	particles.addFireParticles(flame_node);
-	flame_node.move(0f, 0.8f, 0f); // Add a little offset to make light spawn from actual flame
+	Node flame_particle_node = new Node("Particle node for Candle");
+	flame_node.attachChild(flame_particle_node);
+	flame_particle_node.move(new Vector3f(0f, -0.3f, 0f));
+	particles.addFireParticles(flame_particle_node);
+	flame_node.move(0f, 0.9f, 0f); // Add a little offset to make light spawn from actual flame
+	//flame_node.move(0f, 0.6f, 0f); // Add a little offset to make light spawn from actual flame
 	candle_node.attachChild(flame_node);
 	
 	// Used to find out where to set light origin
@@ -275,8 +280,8 @@ public class SceneCreator extends AbstractAppState {
 
 	// Pointlight from candle
 	PointLight candle_light = new PointLight();
-	candle_light.setColor(ColorRGBA.Orange.mult(1.2f));
-	candle_light.setRadius(8f);
+	candle_light.setColor(ColorRGBA.Orange.mult(2f));
+	candle_light.setRadius(4f);
 	shadows.attachPointLight(candle_light); // Allow this pointlight to cast shadows
 	rootNode.addLight(candle_light);
 
@@ -297,7 +302,7 @@ public class SceneCreator extends AbstractAppState {
 
         return candle_node;
     }
-
+//
     // Inserts chest
     private Spatial insertChest(Vector3f loc) {
 	// Invisible chest node everything is attached to

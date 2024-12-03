@@ -10,6 +10,7 @@ import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
 import com.jme3.post.FilterPostProcessor;
 import com.jme3.post.filters.FogFilter;
+import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
 import com.jme3.util.SkyFactory;
@@ -55,6 +56,15 @@ public class GameEnvironment {
 	water.setWaterHeight(initialWaterHeight);
     	water.setUseRipples(false);
 	fpp.addFilter(water);
+
+	//Ensures translucent bucket is rendered after water
+	TranslucentBucketFilter translucentBucketFilter = fpp.getFilter(TranslucentBucketFilter.class);
+	fpp.removeFilter(translucentBucketFilter); // Remove then readd
+	fpp.addFilter(translucentBucketFilter);
+
+	for (int i = 0; i < fpp.getFilterList().size(); i++) {
+		System.out.println("Filter " + i + ": " + fpp.getFilterList().get(i).getClass().getSimpleName());
+	}
     }
 
     public void addWaves(float tpf) {
