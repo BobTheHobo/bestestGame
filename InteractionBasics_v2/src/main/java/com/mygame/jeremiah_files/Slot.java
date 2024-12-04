@@ -108,8 +108,8 @@ public class Slot {
             case "Lookout":
                 parent.getParent().draw(1, parent.getIndex() >= 3);
                 break;
-            case "Anchorman":
-                ArrayList<Card> hand = parent.getIndex() >= 3 ? parent.getParent().getPlayerHand() : parent.getParent().getEnemyHand();
+            case "Kraken":
+                parent.getParent().setKraken();
                 break;
         }
     }

@@ -16,6 +16,7 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import java.util.Random;
 
 /**
  *
@@ -32,6 +33,7 @@ public class Card {
     private String topString;
     private BitmapText topText;
     private BitmapText powerText;
+    private Random rand = new Random();
     
     public Card(AssetManager assetManager, String name, int count) {
         this.assetManager = assetManager;
@@ -43,46 +45,48 @@ public class Card {
         
         Material mat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.White);//Default look, should never be in 3d scene
+        
+        int pull = rand.nextInt(100);
+        
+        if (pull < 40) {
+            mat.setColor("Color", ColorRGBA.Brown);
+        } else if (pull < 60) {
+            mat.setColor("Color", ColorRGBA.Yellow);
+        } else if (pull < 80) {
+            mat.setColor("Color", ColorRGBA.Orange);
+        } else {
+            mat.setColor("Color", ColorRGBA.LightGray);
+        }
+        
+        
         
         //Changes card to look how it should based on it's name
         switch (this.name.substring(4, this.name.indexOf("-"))) {// Just get the card type
             case "Swashbuckler":
                 power = 4;
-                mat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Pink);
                 break;
             case "Cook":
                 power = 2;
-                mat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Orange);
                 break;
             case "Gunner":
                 power = 2;
-                mat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Green);
                 break;   
             case "Cannoneer":
                 power = 3;
-                mat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Brown);
                 break;         
             case "Lookout":
                 power = 1;
-                mat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.Yellow);
                 break;
             case "Anchorman":
                 power = 3;
-                mat = new Material(assetManager,
-        "Common/MatDefs/Misc/Unshaded.j3md");
-        mat.setColor("Color", ColorRGBA.LightGray);
                 break;
+            case "Kraken":
+                power = 99;
+                mat.setColor("Color", ColorRGBA.Black);
+                break;
+            case "Guilt":
+                power = 30;
+                mat.setColor("Color", ColorRGBA.White);
             default:
                 break;                    
         }
@@ -91,27 +95,38 @@ public class Card {
         mat.setTexture("ColorMap", assetManager.loadTexture("Textures/card.jpg"));
         
         //We only want to print the power and what card type it is
-        topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
+        topString = this.name.substring(4, this.name.indexOf("-"));
         
         BitmapFont font = assetManager.loadFont("Interface/Fonts/LucidaCalligraphy.fnt");
         
         topText = new BitmapText(font);
+        powerText = new BitmapText(font);
         
         topText.setText(topString);
+        powerText.setText(String.format("%d", power));
+        if (this.name.substring(4, this.name.indexOf("-")) == "Kraken") {
+            powerText.setText("");
+        }
         
         self.setMaterial(mat);
         self.center();
         
         //Put the text on the top of the card
         topText.center();
-        topText.move(-.11f, .01f, -.13f);
+        topText.move(-.11f, .01f, -.2f);
         Quaternion back = new Quaternion();
         back.fromAngleAxis(-FastMath.HALF_PI, new Vector3f(1,0,0));
         topText.rotate(back);
         topText.scale(.002f);
+        
+        powerText.center();
+        powerText.move(-.05f, .01f, -.07f);
+        powerText.rotate(back);
+        powerText.scale(.008f);
        
         
         selfNode.attachChild(topText);
+        selfNode.attachChild(powerText);
         
         selfNode.attachChild(self);
         selfNode.scale(.25f);
@@ -128,10 +143,11 @@ public class Card {
     //Negative i indicates a weakening, positive for buffing
     public int changePower(int i) {
         power += i;
-        topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
-        topText.setText(topString);
+        powerText.setText(String.format("%d", power));
+        //topString = String.format("%d-%s", power, this.name.substring(4, this.name.indexOf("-")));
+        //topText.setText(topString);
         if (power <= 0) {//Card was killed, remove it.
-           parent.getParent().getParent().discard(parent.getParent().getIndex() < 3, this);
+           parent.getParent().getParent().discard(!(parent.getParent().getIndex() < 3), this);
            /*
            selfNode.removeFromParent();
             */
@@ -154,4 +170,36 @@ public class Card {
     public int getPower() {
         return power;
     }
+    
+    public void resetPower() {
+        switch (this.name.substring(4, this.name.indexOf("-"))) {// Just get the card type
+            case "Swashbuckler":
+                power = 4;
+                break;
+            case "Cook":
+                power = 2;
+                break;
+            case "Gunner":
+                power = 2;
+                break;   
+            case "Cannoneer":
+                power = 3;
+                break;         
+            case "Lookout":
+                power = 1;
+                break;
+            case "Anchorman":
+                power = 3;
+                break;
+            case "Kraken":
+                power = 999;
+                break;
+            case "Guilt":
+                power = 30;
+            default:
+                break;                    
+        }
+        powerText.setText(String.format("%d", power));
+    }
+    
 }

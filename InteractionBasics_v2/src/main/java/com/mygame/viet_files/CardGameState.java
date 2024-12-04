@@ -20,6 +20,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
 import com.jme3.input.controls.Trigger;
+import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
 import com.jme3.math.FastMath;
 import com.jme3.math.Quaternion;
@@ -27,9 +28,11 @@ import com.jme3.math.Ray;
 import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
+import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
+import com.jme3.scene.shape.Quad;
 import com.jme3.system.NanoTimer;
 import com.mygame.PlayerManager;
 import com.mygame.jeremiah_files.Board;
@@ -83,7 +86,10 @@ public class CardGameState extends AbstractAppState {
     private float calledTime;
     private float dialogueDuration = -1;
     private BitmapText dialogue;
+    private Geometry dialogueBox = new Geometry();
     NanoTimer timer = new NanoTimer();
+    private int opponentCheck = 0;
+    private boolean won = false;
 
     public CardGameState(PlayerManager playerManager, Table table, BoardEnvironment boardEnv) {
 	super();
@@ -143,7 +149,9 @@ public class CardGameState extends AbstractAppState {
         inputManager.addListener(actionListener, MAPPING_RIGHT_CLICK);
         inputManager.addListener(actionListener, MAPPING_RESET);
         
-        dialogue = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
+        dialogue = new BitmapText( assetManager.loadFont("Interface/Fonts/LucidaCalligraphy.fnt"));
+        
+       
     }
 
     public Board getBoard() {
@@ -174,6 +182,7 @@ public class CardGameState extends AbstractAppState {
                                 position = -1;
                                 look = 0;
                                 board.hidePlayerHand();
+                                board.hideEnemyHand();
                                 selected = null;
                             } else if (position == 1) {// Looking at board
                                 cam.setLocation(seatedPos);
@@ -223,14 +232,24 @@ public class CardGameState extends AbstractAppState {
 
                                         board.play(selected, clicked);
                                         selected = null;
-
-                                    } else if (clicked.toString().contains("Roger")) { //Currently nonfunctional
                                         
+
+                                    } else if (clicked.toString().contains("Skull") && board.getPlayed()) { //Currently nonfunctional
+                                        //System.out.println("HAHAHAHA");
+                                        //board.jolly(true);s
+                                        board.nextRound();
+                                        AudioNode an = new AudioNode(assetManager, "Audio/sword.wav");
+                                        an.setPositional(false);    
+                                        an.play(); 
+                                        if (board.isLost()) {
+                                            speak(2);
+                                        }
                                     }
                                 }
                             } else if (position == 0) {// Looking at hand
                                  if (results.size() > 0) { //We cli cked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
+                                    
                                     
                                     if (clicked.toString().contains("Card") && (board.getCard(clicked, board.getPlayerHand()) != null)) { //Raise clicked :)
                                         if (selected != null) {//Lower previously selected card
@@ -260,11 +279,11 @@ public class CardGameState extends AbstractAppState {
                             ray = new Ray(click3d, dir);
                             rootNode.collideWith(ray, results);
                                    
-                            if (position == 1 || position == 0) {// Looking at hand
+                            if (position == 1 || position == 0) {
                                  if (results.size() > 0) { //We clicked something
                                     Spatial clicked = results.getClosestCollision().getGeometry();
-                                    if (clicked.toString().contains("Card") && board.getCard(clicked, board.getEnemyHand()) == null) { //Print card effects on screen
-                                       System.out.println(clicked.toString());
+                                    if (clicked.toString().contains("Card") && board.getCard(clicked, board.getEnemyHand()) == null && board.getCard(clicked, board.getEnemyDeck()) == null && board.getCard(clicked, board.getPlayerDeck()) == null) { //Print card effects on screen
+                                       explain(clicked.toString().substring(4, clicked.toString().indexOf("-")));
                                     }
                                 }
                             }
@@ -279,9 +298,11 @@ public class CardGameState extends AbstractAppState {
                                 position = 0;
                                 look = 0;
                                 board.showPlayerHand();
+                                board.showEnemyHand();
                             } else if (position == 1) {
-                                board.nextRound();
+                                //board.nextRound();
                             }
+                            
                             
                             //speak(1);
                             break;
@@ -291,11 +312,35 @@ public class CardGameState extends AbstractAppState {
        };
     @Override
     public void update(float tpf) {
+        if (board.kraken()) {
+            won = true;
+        }
+        
+        if (position == 0 || position == 1) {
+            board.showEnemyHand();
+            board.showPlayerHand();
+        }
+        if (selected != null) {
+            selected.getParent().move(0, 0.05f, 0);                                           
+        }
         if (dialogueDuration != -1 && (timer.getTimeInSeconds() >= calledTime + dialogueDuration)) {
             dialogue.removeFromParent();
-            flyCam.setEnabled(true);
-            playerManager.setWalkingEnabled(true);
+            dialogueBox.removeFromParent();
+            //flyCam.setEnabled(true);
+            //playerManager.setWalkingEnabled(true);
             dialogueDuration = -1;
+            if (position == 0) {
+                cam.setLocation(seatedPos);
+                cam.setRotation(seatedAng);
+            }
+            if (board.isLost()) {
+                System.exit(0);
+            }
+        }
+        
+        if (opponentCheck == 0  && board.getOpponent() == 2) {
+            speak(1);
+            opponentCheck = 1;
         }
     }
     
@@ -311,17 +356,30 @@ public class CardGameState extends AbstractAppState {
     private void speak(int scene) {
         calledTime = timer.getTimeInSeconds();
         dialogueDuration = getDuration(scene);
+        
+        if (position == 1) {
+            cam.setLocation(seatedPos);
+            cam.setRotation(seatedAng);
+            position = 0;
+        }
           
         cam.lookAt(enemyPos, new Vector3f(0, 1, 0));
-        flyCam.setEnabled(false);
-        playerManager.setWalkingEnabled(false);
+        //flyCam.setEnabled(false);
+        //playerManager.setWalkingEnabled(false);
         
         dialogue.setText(getSceneText(scene));
-        dialogue.setSize(50);
+        dialogue.setSize(30);
         dialogue.setColor(ColorRGBA.White);
         dialogue.setLocalTranslation((app.getCamera().getWidth() - dialogue.getLineWidth()) / 2, app.getCamera().getHeight() / 4, 0); // position
         
+        dialogueBox = new Geometry("Quad", new Quad(dialogue.getLineWidth(), dialogue.getHeight()));
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Black);
+        dialogueBox.setMaterial(mat);
+        dialogueBox.setLocalTranslation(dialogue.getLocalTranslation().add(0, -dialogue.getHeight(), 0));
+        app.getGuiNode().attachChild(dialogueBox);
         app.getGuiNode().attachChild(dialogue);
+
 
         
         AudioNode an = new AudioNode(assetManager, getSceneAudio(scene));
@@ -329,15 +387,88 @@ public class CardGameState extends AbstractAppState {
         an.play();      
     }
     
+    private void explain(String card) {
+        calledTime = timer.getTimeInSeconds();
+        dialogueDuration = 3;
+        
+        dialogue.removeFromParent();
+        dialogueBox.removeFromParent();
+        
+        switch(card) {
+            case "Swashbuckler":
+                dialogue.setText("Swashbuckler");
+                break;
+            case "Cook":
+                dialogue.setText("Cook:\n When played gives +1 power to all pirates on this galley");
+                break;
+            case "Gunner":
+                dialogue.setText("Gunner:\n When played gives -3 power to one pirate on opposite galley");
+                break;
+            case "Cannoneer":
+                dialogue.setText("Cannoneer:\n When played gives -1 power to all pirates on opposite galley");
+                break;
+            case "Lookout":
+                dialogue.setText("Lookout:\n When played draw one card");
+                break;
+            case "Guilt":
+                dialogue.setText("Guilt:\n It's unbearable");
+                break;
+        }
+        
+        
+        
+        dialogue.setSize(30);
+        dialogue.setColor(ColorRGBA.White);
+        dialogue.setLocalTranslation((app.getCamera().getWidth() - dialogue.getLineWidth()) / 2, app.getCamera().getHeight() / 2, 0); // position
+        
+        
+        
+        dialogueBox = new Geometry("Quad", new Quad(dialogue.getLineWidth(), dialogue.getHeight()));
+        Material mat = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat.setColor("Color", ColorRGBA.Black);
+        dialogueBox.setMaterial(mat);
+        dialogueBox.setLocalTranslation(dialogue.getLocalTranslation().add(0, -dialogue.getHeight(), 0));
+        app.getGuiNode().attachChild(dialogueBox);
+        app.getGuiNode().attachChild(dialogue);
+        
+    }
+    
     private String getSceneText(int scene) {
-        return "Ominous Text";
+        switch (scene) {
+            case 1:
+                return "You only delay the inevitable";
+            case 2:
+                return "A dissapointment.";
+            default:
+                return "";
+                
+        }
     }
     
     private String getSceneAudio(int scene) {
-        return "Audio/FOGHORN.wav";
+        switch (scene) {
+            case 1:
+            case 2:
+                return "Audio/FOGHORN.wav";
+            default:
+                return "";
+                
+        }
     }
     
     private float getDuration(int scene) {
-        return 8;
+        switch (scene) {
+            case 1:
+                return 8;
+            case 2:
+                return 5;
+            default:
+                return 0;
+                
+        }
+    }
+    
+    public boolean getWon() {
+        return won;
     }
 }

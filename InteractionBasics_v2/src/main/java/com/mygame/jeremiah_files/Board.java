@@ -31,8 +31,9 @@ public class Board {
     private static Box mesh = new Box(.375f, .001f, .6f);
     private Node table; //Table node where we place our board
     private Node selfNode; //The node representing this board
-    private ArrayList<Galley> enemyGalleys = new ArrayList<>(); //Array of Galleys on board
-    private ArrayList<Galley> playerGalleys = new ArrayList<>(); //Array of Galleys on board
+    private ArrayList<Galley> galleys = new ArrayList<>(); //Array of all Galleys on board
+    private ArrayList<Galley> enemyGalleys = new ArrayList<>(); //Array of enemy Galleys on board
+    private ArrayList<Galley> playerGalleys = new ArrayList<>(); //Array of friendly Galleys on board
     private ArrayList<Card> playerDeck = new ArrayList<>(); //Array representing player deck
     private ArrayList<Card> playerHand = new ArrayList<>(); //Array representing player hand
     private ArrayList<Card> enemyDeck = new ArrayList<>(); //Array representing enemy deck
@@ -46,10 +47,12 @@ public class Board {
     private AudioNode drawAudio;
     private AudioNode sinkAudio;
     private AudioNode playAudio;
-    
-    
-    private int state = 0; //Board state. 0 = No card selected, 1 = Card from hand selected
-    private boolean jolly = false; //Weather or not the jolly roger is being raised
+    private int opponent = 1;
+    private int jollyState = 0; //Board state. 0 = No card selected, 1 = Card from hand selected
+    private boolean hasKraken = false;
+    private boolean kraken = false;
+    private boolean lost = false;
+    private boolean played = false;
     
     int cards = 0;// So each cards has a unique name
     
@@ -76,6 +79,16 @@ public class Board {
         selfNode.attachChild(self);
         makeGalleys();
         makeDecks();
+        Spatial coin = assetManager.loadModel("Models/3D Models/Card-Game-Related/Skull Coin.glb");
+        coin.scale(0.1f);
+        selfNode.attachChild(coin);
+        coin.center();
+        coin.setLocalTranslation(0f, .45f, 0.50f);
+        Quaternion angle = new Quaternion();
+        angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(1, 0,0));
+        coin.setLocalRotation(angle);
+        coin.rotate(0, 0, FastMath.PI);
+
         table.attachChild(selfNode);
         selfNode.move(0, 0.01f, 0.0f);
         draw(7, true);
@@ -88,10 +101,14 @@ public class Board {
     //Initializes our array and galleys in the scene
     private void makeGalleys() {
         for (int i = 0; i < 3; i++) {
-            enemyGalleys.add(new Galley(this, i));
+            Galley galley = new Galley(this, i);
+            enemyGalleys.add(galley);
+            //galleys.add(galley);
         }
         for (int i = 3; i < 6; i++) {
-            playerGalleys.add(new Galley(this, i));
+            Galley galley = new Galley(this, i);
+            playerGalleys.add(galley);
+            //galleys.add(galley);
         }
     }
     
@@ -149,6 +166,35 @@ public class Board {
         ArrayList<Card> deck = player ? playerDeck : enemyDeck;
         ArrayList<Card> discard = player ? playerDiscard : enemyDiscard;
         
+        if (hasKraken && opponent == 2 && player) {
+            Card card = new Card(assetManager, "Kraken", cards++);
+            Vector3f middle = player ? new Vector3f(0, 0.5f, 1.4f) : new Vector3f(0, 0.5f, -1.4f);//Where the center card is
+            Quaternion angle = new Quaternion();//So we can read the card sitting down
+            if (player) {
+                angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(1,0,0));
+            } else {
+                angle.fromAngleAxis(-FastMath.HALF_PI, new Vector3f(1,0,0));
+            }
+
+            
+            card.getSelfNode().center();
+            card.getSelfNode().move(middle);
+            int direction = (hand.size() - 1) % 2;
+            int step = ((hand.size() - 1) + 1) / 2;
+            if (direction == 0) {//Move card to right
+                card.getSelfNode().move(.07f * step, 0, -.01f * step);
+            } else {// Move card to left
+                card.getSelfNode().move(-.07f * step, 0, -.01f * step);
+            }
+            card.getSelfNode().setLocalRotation(angle);
+            hand.add(card);
+
+            table.attachChild(card.getSelfNode());
+            
+            return;
+        }
+        
+        
         for (int i = 0; i < count; i++) {
             if (deck.isEmpty() && discard.isEmpty()) {
                 return;
@@ -159,6 +205,7 @@ public class Board {
                 shuffle(player);
             }
             Card card = deck.get(0);
+            
             hand.add(card);
             deck.remove(card);
             
@@ -190,20 +237,47 @@ public class Board {
     //Shuffles discard pile into draw deck
     private void shuffle(boolean player) {
         drawAudio.play();
-        System.out.println("Shuffle!");
+        //System.out.println("Shuffle!");
+        Quaternion angle = new Quaternion();
+        angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0, 1,0));
+        
         if (player) {
             for (int i = 0; i < playerDiscard.size(); i++) {
                 playerDeck.add(playerDiscard.get(i));
             }
             //playerDeck = playerDiscard;
             playerDiscard.clear();
+            
+            for (int i = 0; i < playerDeck.size(); i++) {
+                Spatial card = playerDeck.get(playerDeck.size() - 1 - i).getSelfNode();
+                card.center();
+                Vector3f spot = new Vector3f(-.3f, .45f + (i * 0.002f), 0.55f);
+                card.move(spot);
+                card.setLocalRotation(angle);
+                card.rotate(0, 0, FastMath.PI);
+                table.attachChild(card);
+            }
         } else {
             for (int i = 0; i < enemyDiscard.size(); i++) {
                 enemyDeck.add(enemyDiscard.get(i));
             }
             //enemyDeck = enemyDiscard;
             enemyDiscard.clear();
+            
+            for (int i = 0; i < enemyDeck.size(); i++) {
+                Spatial card = enemyDeck.get(enemyDeck.size() - 1 - i).getSelfNode();
+                card.center();
+                Vector3f spot = new Vector3f(-.3f, .45f + (i * 0.002f), 0.45f);
+                card.move(spot);
+                card.setLocalRotation(angle);
+                card.rotate(0, 0, FastMath.PI);
+                table.attachChild(card);
+            }
         }
+        
+        
+        
+        
         
     }
     
@@ -261,20 +335,34 @@ public class Board {
         }
     }
     
+    public void hideEnemyHand() {
+        for (int i = 0; i < enemyHand.size(); i++) {
+            Node card = enemyHand.get(i).getSelfNode();
+            card.removeFromParent();
+        }
+    }
+    
     
     //Puts the 'card' in the 'slot' applying game logic
     public void play(Spatial card, Spatial slot) {
         Card cardObj = getCard(card, playerHand);  //Get our card and slot
         Slot slotObj = getSlot(slot);
         
+        if (jollyState == 1) {
+            cardObj.changePower(cardObj.getPower());
+        }
+        
         slotObj.setCard(cardObj); //Put card in slot
         
         playerHand.remove(cardObj); //Take card from hand
         
         playAudio.play();
+        played = true;
+        
        
         showPlayerHand(); //Update hand spatials
         enemyMove();
+        
         
         /*
         if (playerHand.isEmpty()) {
@@ -407,11 +495,15 @@ public class Board {
         draw(2, false);
         showPlayerHand();
         showEnemyHand();
+        played = false;
+        jollyReset();
         
         if (enemyGalleys.isEmpty()) {
-            System.out.println("You Win!");
+            //System.out.println("You Win!");
+            nextOpponent();
         } else if (playerGalleys.isEmpty()) {
-            System.out.println("You Lose!");
+            //System.out.println("You Lose!");
+            lost = true;
         } else {
             System.out.println("Next Round!");
         }
@@ -447,6 +539,10 @@ public class Board {
             playAudio.play();
         }
         showEnemyHand();
+        
+        if (jollyState == 1) {
+            nextRound();
+        }
     }
     
     //Gets the Card object that corresponds to the 'card' spatial
@@ -483,6 +579,8 @@ public class Board {
     }
     
     public void discard(boolean player, Card card) {
+        card.resetPower();
+        
         ArrayList<Card> discard = player ? playerDiscard : enemyDiscard;
         discard.add(card);
         
@@ -490,12 +588,156 @@ public class Board {
         angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0, 1,0));
         
         Spatial cardSpatial = card.getSelfNode();
-        cardSpatial.center();
-        Vector3f spot = player ? new Vector3f(.3f, .45f + ((discard.size() - 1) * 0.002f), 0.55f) : new Vector3f(.3f, .45f + ((discard.size() - 1) * 0.002f), 0.45f);
-        cardSpatial.move(spot);
+        //cardSpatial.center();
+        Vector3f spot = !player ? new Vector3f(.3f, .45f + ((discard.size() - 1) * 0.002f), 0.55f) : new Vector3f(.3f, .45f + ((discard.size() - 1) * 0.002f), 0.45f);
+        //cardSpatial.move(spot);
+        
+        MotionPath path =  new MotionPath();
+        path.addWayPoint(cardSpatial.getLocalTranslation());
+        path.addWayPoint(spot);
+        path.setPathSplineType(Spline.SplineType.CatmullRom);
+  
+        MotionEvent motion = new MotionEvent(cardSpatial, path);
+        motion.setDirectionType(MotionEvent.Direction.PathAndRotation);
+        motion.setSpeed(8f);
+        motion.play();
+        
         cardSpatial.setLocalRotation(angle);
         cardSpatial.rotate(0, 0, FastMath.PI);
         table.attachChild(cardSpatial);
+    }
+    
+    public void nextOpponent() {
+        opponent = 2;
+
+        while (!playerGalleys.isEmpty()) {
+            playerGalleys.get(0).getSelfNode().removeFromParent();
+            playerGalleys.remove(0);
+        }
+        makeGalleys();
+        
+        enemyDeck.clear();
+        
+        for (int i = 0; i < enemyHand.size(); i++) {
+            enemyHand.get(i).getSelfNode().removeFromParent();
+        }
+        enemyHand.clear();
+        
+        for (int i = 0; i < enemyDiscard.size(); i++) {
+            enemyDiscard.get(i).getSelfNode().removeFromParent();
+        }
+        enemyDiscard.clear();
+        
+        while(!playerHand.isEmpty()) {
+            playerDeck.add(playerHand.get(0));
+            playerHand.remove(0);
+        }
+        while (!playerDiscard.isEmpty()) {
+            playerDeck.add(playerDiscard.get(0));
+            playerDiscard.remove(0);
+        }
+        
+        playerDiscard.clear();
+        
+        
+        for (int i = 0; i < 20; i++) {
+            enemyDeck.add(new Card(assetManager, "Guilt", cards++));
+        }
+        
+        Collections.shuffle(playerDeck);
+        Collections.shuffle(enemyDeck);
+        
+        showDeck(true);  
+        showDeck(false);
+        showDiscard(true);
+        showDiscard(false);
+        
+        draw(7, true);
+        draw(7, false);
+        showPlayerHand();
+        showEnemyHand();
+        drawAudio.play();
+    }
+    
+    private void showDeck(boolean player) {
+        Quaternion angle = new Quaternion();
+        angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0, 1,0));
+        
+        if (player) {    
+            for (int i = 0; i < playerDeck.size(); i++) {
+                Spatial card = playerDeck.get(playerDeck.size() - 1 - i).getSelfNode();
+                card.center();
+                Vector3f spot = new Vector3f(-.3f, .45f + (i * 0.002f), 0.55f);
+                card.move(spot);
+                card.setLocalRotation(angle);
+                card.rotate(0, 0, FastMath.PI);
+                table.attachChild(card);
+            }
+        } else {
+            for (int i = 0; i < enemyDeck.size(); i++) {
+                Spatial card = enemyDeck.get(enemyDeck.size() - 1 - i).getSelfNode();
+                card.center();
+                Vector3f spot = new Vector3f(-.3f, .45f + (i * 0.002f), 0.45f);
+                card.move(spot);
+                card.setLocalRotation(angle);
+                card.rotate(0, 0, FastMath.PI);
+                table.attachChild(card);
+            }
+        }
+    }
+    
+    private void showDiscard(boolean player) {
+        if (player) {
+            for (int i = 0; i < playerDiscard.size(); i++) {
+                Quaternion angle = new Quaternion();
+                angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0, 1,0));
+
+                Spatial cardSpatial = playerDiscard.get(i).getSelfNode();
+                cardSpatial.center();
+                Vector3f spot = new Vector3f(.3f, .45f + ((i) * 0.002f), 0.55f);
+                cardSpatial.move(spot);
+                cardSpatial.setLocalRotation(angle);
+                cardSpatial.rotate(0, 0, FastMath.PI);
+                table.attachChild(cardSpatial);
+            }
+        } else {
+            for (int i = 0; i < enemyDiscard.size(); i++) {
+                Quaternion angle = new Quaternion();
+                angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(0, 1,0));
+
+                Spatial cardSpatial = enemyDiscard.get(i).getSelfNode();
+                cardSpatial.center();
+                Vector3f spot = new Vector3f(.3f, .45f + ((i) * 0.002f), 0.45f);
+                cardSpatial.move(spot);
+                cardSpatial.setLocalRotation(angle);
+                cardSpatial.rotate(0, 0, FastMath.PI);
+                table.attachChild(cardSpatial);
+            }
+        }
+    }
+
+    public boolean kraken() {
+        return kraken;
+    }
+    
+    public void setKraken() {
+        kraken = true;
+    }
+    
+    public void jolly(boolean player) {
+        if (player) {
+            if (jollyState == 0) {
+                jollyState = 1;
+            }
+        } else {
+            if (jollyState == 0) {
+                jollyState = -1;
+            }
+        }
+    }
+    
+    private void jollyReset() {
+        jollyState = 0;
     }
     
     public AssetManager getAssetManager() {
@@ -537,5 +779,29 @@ public class Board {
     
     public ArrayList<Card> getEnemyDiscard() {
         return enemyDiscard;
+    }
+    
+    public ArrayList<Card> getPlayerDeck() {
+        return playerDeck;
+    }
+    
+    public ArrayList<Card> getEnemyDeck() {
+        return enemyDeck;
+    }
+    
+    public int getOpponent() {
+        return opponent;
+    }
+    
+    public boolean isLost() {
+        return lost;
+    }
+    
+    public boolean getPlayed() {
+        return played;
+    }
+    
+    public void addKraken() {
+        hasKraken = true;
     }
 }

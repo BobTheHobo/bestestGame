@@ -165,7 +165,14 @@ public class Galley {
     }
     
     public void setSunk(boolean sunk) {
-        this.sunk = sunk;
+            this.sunk = sunk;
+    }
+    
+    public void reset() {
+        selfNode.center();
+        selfNode.move((-.2f + ((index % 3)) * .2f), .43f, (.2f + ((index / 3) * .6f))); 
+        selfNode.scale(.25f);
+        parent.getSelfNode().attachChild(selfNode);
     }
     
 }
