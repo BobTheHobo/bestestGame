@@ -148,6 +148,27 @@ Shadow Testing UI:
 <img src="https://github.com/user-attachments/assets/efa437e6-ffd2-4582-9cfc-d54bdd64bfd8" alt="Shadows using the filtering method" width="300"/>
 
 
+## Third Deliverable 
+Our work for this deliverable consisted of:
+- Fully functional card and puzzle aspects
+- Sound
+- Visual effects
+
+### Card Game Additions
+
+### Puzzle Additions
+
+### Effects
+Fully implemented within the game, we have water, shadows, ambient occlusion, screen shake.
+<a href="https://imgur.com/CdX5BIo"><img src="https://i.imgur.com/CdX5BIo.png" title="source: imgur.com" width="500" /></a>
+
+Also mostly developed, but not integrated into the current submission, we have particle effects(fire) and a skybox.
+<a href="https://imgur.com/UXDr1zO"><img src="https://i.imgur.com/UXDr1zO.png" title="source: imgur.com" width="500" /></a>
+
+<a href="https://imgur.com/mWzWQqw"><img src="https://i.imgur.com/mWzWQqwpng" title="source: imgur.com" width="500" /></a>
+
+These effects are not implemented and the shadow and ambient occlusion effects are in a toggleable testing state as unexpected difficulties prevented testing to resolve bugs and performance issues.
+
 
 
 
