@@ -84,7 +84,7 @@ public class GameInputHandler {
         inputManager.addMapping(MAPPING_LEFT, TRIGGER_A);
         inputManager.addMapping(MAPPING_BACK, TRIGGER_S);
         inputManager.addMapping(MAPPING_RIGHT, TRIGGER_D);
-        inputManager.addMapping(MAPPING_RESET, TRIGGER_Q);
+        //inputManager.addMapping(MAPPING_RESET, TRIGGER_Q);
 
         // Add a key mapping to toggle the crosshair (e.g., "C" key)
         inputManager.addMapping(MAPPING_CROSSHAIR, TRIGGER_C);

@@ -57,7 +57,7 @@ public class CardGameState extends AbstractAppState {
     private final static Trigger TRIGGER_A = new KeyTrigger(KeyInput.KEY_A);
     private final static Trigger TRIGGER_S = new KeyTrigger(KeyInput.KEY_S);
     private final static Trigger TRIGGER_D = new KeyTrigger(KeyInput.KEY_D);
-    private final static Trigger TRIGGER_Q = new KeyTrigger(KeyInput.KEY_Q);
+    private final static Trigger TRIGGER_E = new KeyTrigger(KeyInput.KEY_E);
     private final static Trigger TRIGGER_LEFT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_LEFT);
     private final static Trigger TRIGGER_RIGHT_CLICK = new MouseButtonTrigger(MouseInput.BUTTON_RIGHT);
     private final static String MAPPING_FORWARD = "Move Forward";
@@ -139,7 +139,7 @@ public class CardGameState extends AbstractAppState {
         inputManager.addMapping(MAPPING_RIGHT, TRIGGER_D);
         inputManager.addMapping(MAPPING_LEFT_CLICK, TRIGGER_LEFT_CLICK);
         inputManager.addMapping(MAPPING_RIGHT_CLICK, TRIGGER_RIGHT_CLICK);
-        inputManager.addMapping(MAPPING_RESET, TRIGGER_Q);
+        inputManager.addMapping(MAPPING_RESET, TRIGGER_E);
         
         inputManager.addListener(actionListener, MAPPING_FORWARD);
         inputManager.addListener(actionListener, MAPPING_BACK);

@@ -1,5 +1,6 @@
 package com.mygame;
 
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.PhysicsCollisionObject;
 import com.jme3.bullet.control.CharacterControl;
@@ -9,10 +10,8 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Node;
 import com.jme3.system.AppSettings;
 import com.mygame.viet_files.InputHandlers.InputHandler;
+import com.mygame.viet_files.SFXManager;
 
-/*
-* author: shawn
-*/
 public class PlayerManager {
 
     private CharacterControl player;     // Player control
@@ -22,17 +21,24 @@ public class PlayerManager {
     private CameraManager cameraManager;
     private InputHandler inputHandler;   // For handling input
     private PlayerInteractionManager interactionManager; // Handle interactions
+    private AssetManager assetManager;
     private float playerMoveSpeed = 0.1f;
     private boolean walkingEnabled = false;
 
-    public PlayerManager(BulletAppState bulletAppState, Node rootNode, Camera cam, CameraManager cameraManager, InputHandler inputHandler, PlayerInteractionManager interactionManager, AppSettings settings) {
+    private SFXManager sfxManager;       // SFX Manager for playing sounds
+    private float footstepInterval = 10f; // Interval between footsteps in seconds
+    private float footstepTimer = 0f;     // Timer to track footstep intervals
+
+    public PlayerManager(BulletAppState bulletAppState, Node rootNode, Camera cam, CameraManager cameraManager, InputHandler inputHandler, 
+            PlayerInteractionManager interactionManager, AppSettings settings, AssetManager assetManager) {
         this.bulletAppState = bulletAppState;
         this.cam = cam;
-	this.cameraManager = cameraManager;
+        this.cameraManager = cameraManager;
         this.inputHandler = inputHandler;
-	this.interactionManager = interactionManager;
+        this.interactionManager = interactionManager;
+        this.assetManager = assetManager;
 
-	this.walkingEnabled = false;
+        this.walkingEnabled = false;
     }
 
     // Initialize the player with movement and collision
@@ -42,11 +48,11 @@ public class PlayerManager {
 
         player.getCollisionShape().setMargin(0.01f);  // Reduce collision margin for more precise collision detection
 
-	// Set player to collision group 2
-	player.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
-	// Allow player to collide with environment (default is collision group 1)
-	player.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
-    	System.out.println("Player collision group: " + player.getCollisionGroup());
+        // Set player to collision group 2
+        player.setCollisionGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+        // Allow player to collide with environment (default is collision group 1)
+        player.addCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_01);
+        System.out.println("Player collision group: " + player.getCollisionGroup());
 
         playerNode = new Node("Player");
         playerNode.addControl(player);
@@ -58,15 +64,17 @@ public class PlayerManager {
 
         bulletAppState.getPhysicsSpace().add(player);
 
-        // No need to hide the mouse cursor here; it's handled by FlyCam
+        // Initialize the SFXManager
+        sfxManager = new SFXManager(assetManager);
+        sfxManager.loadSFX("footstep", "Sounds/SFX/Footstep-16bit.wav");
     }
 
     public void setWalkingEnabled(boolean enabled) {
-	walkingEnabled = enabled;
-	if (walkingEnabled) {
-		movePlayerToCamera();
-		cameraManager.setupCamera();
-	} 
+        walkingEnabled = enabled;
+        if (walkingEnabled) {
+            movePlayerToCamera();
+            cameraManager.setupCamera();
+        }
     }
 
     // Return the player's current position (for camera)
@@ -75,7 +83,7 @@ public class PlayerManager {
     }
 
     public void movePlayerToCamera() {
-	player.setPhysicsLocation(cam.getLocation());
+        player.setPhysicsLocation(cam.getLocation());
     }
 
     // Handle player movement based on key inputs
@@ -101,24 +109,36 @@ public class PlayerManager {
 
         player.setWalkDirection(walkDirection);
         player.setViewDirection(camDir);  // Orient the player to face the camera direction
+
+        // Update footstep timer and play sound if moving
+        if (!walkDirection.equals(Vector3f.ZERO)) {
+            footstepTimer += playerMoveSpeed;
+            if (footstepTimer >= footstepInterval) {
+                // Play footstep sound at player's position
+                sfxManager.playSFX("footstep", player.getPhysicsLocation());
+                footstepTimer = 0f; // Reset the timer
+            }
+        } else {
+            // Reset timer if player stops moving
+            footstepTimer = 0f;
+        }
     }
 
     public void updatePlayer(float tpf) {
-	if (walkingEnabled) {
+        if (walkingEnabled) {
+            // Apply movement based on input handler's movement flags
+            movePlayer(
+                inputHandler.gih.isLeft(),
+                inputHandler.gih.isRight(),
+                inputHandler.gih.isForward(),
+                inputHandler.gih.isBackward()
+            );
 
-		// Apply movement based on input handler's movement flags
-		movePlayer(
-			inputHandler.gih.isLeft(),
-			inputHandler.gih.isRight(),
-			inputHandler.gih.isForward(),
-			inputHandler.gih.isBackward()
-		);
+            // Update camera
+            cameraManager.playerMovementCameraUpdate(tpf, getPlayerPosition());
 
-		// Update camera
-		cameraManager.playerMovementCameraUpdate(tpf, getPlayerPosition());
-
-		// Update the interaction manager
-		interactionManager.update(tpf);
-	}
+            // Update the interaction manager
+            interactionManager.update(tpf);
+        }
     }
 }
