@@ -802,6 +802,13 @@ public class Board {
     }
     
     public void addKraken() {
+        
+        if (!hasKraken && opponent == 2) {
+            hasKraken = true;
+            draw(1, true);
+            hidePlayerHand();
+        }
+        
         hasKraken = true;
     }
 }
