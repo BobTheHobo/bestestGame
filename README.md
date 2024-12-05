@@ -174,7 +174,10 @@ Also mostly developed, but not integrated into the current submission, we have p
 
 <a href="https://imgur.com/mWzWQqw"><img src="https://i.imgur.com/mWzWQqw.png" title="source: imgur.com" width="500" /></a>
 
-These effects are not implemented and the shadow and ambient occlusion effects are in a toggleable testing state as unexpected difficulties prevented testing to resolve bugs and performance issues.
+These effects are not implemented and the shadow and ambient occlusion effects are in a toggleable testing state as unexpected difficulties prevented testing to resolve bugs and performance issues. These difficulties are also the reason why we do not currently have:
+- a chest key model
+- the opponent's model/animations
+- clock opening animation trigger
 
 
 
