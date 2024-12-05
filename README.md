@@ -161,7 +161,9 @@ The player can now interact with the clock at any time.
 
 <a href="https://imgur.com/kVDZIV2"><img src="https://i.imgur.com/kVDZIV2.png" title="source: imgur.com" width="500" /></a>
 
-After getting the secret code by using the candle to inspect the note, t
+After getting the secret code by using the candle to inspect the note, the player can go interact with the clock to initiate a prompt. By using prompted the 'Z' and 'X' keys, they can set the clock to the time specified on the aforementioned note. As the confirmation mechanism, staying on the correct time for 3 seconds will dispense the chest key.
+
+<a href="https://imgur.com/6FL6Ujw"><img src="https://i.imgur.com/6FL6Ujw.png" title="source: imgur.com" width="500" /></a>
 
 ### Effects
 Fully implemented within the game, we have water, shadows, ambient occlusion, screen shake.  Screen shake is not depicted below, but occurs during the sequence triggered by winning the game.
