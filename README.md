@@ -155,6 +155,40 @@ Our work for this deliverable consisted of:
 - Visual effects
 
 ### Card Game Additions
+Sources:
+  - Coin: Skull Coin by Quaternius (https://poly.pizza/m/lx1A0s4aoH)
+  - Audio: https://www.findsounds.com/ISAPI/search.dll
+  - Textures: https://texturelabs.org/
+
+The appearances of the cards, playing mat, and galleys have been updated to utize cardstock, cloth, and wood.
+
+<a href="https://imgur.com/scZzmIZ"><img src="https://i.imgur.com/scZzmIZ.png" title="source: imgur.com" width="500" /></a>
+
+The rules have been updated, and a fully playable game loop is possible with the following rules:
+  - You start seated looking across from your opponent and at your hand.
+  - You may press W and S to look at the board or back at your hand, or if you press S while looking at your hand you stand from the table.  Pressing E while walking around will allow you to sit back down.  Additionally, pressing A or D while looking at your hand allows you to turn your head.
+  - At the start of each game, you and your opponent each draw 7 cards.
+  - While looking at your hand, you may left click a card to select it.
+  - While a card is selected, clicking a slot on the near side of the table plays the card on that slot.  Each of these slots belongs to one of 3 near, galleys.  Your opponent then immediately plays a card from their hand into one of the far galleys.
+  - Cards have power and some have effects that trigger on play.  You may right click a card in your hand, on the table, or the top of a discard pile to read its effects.
+  - There is a skull coin in the middle of the board.  If you have played at least one card, you may left click the coin to advance the round.
+  - When the round advances, each galley sums all of the power of the cards in its slots, and if it exceeds the opposite galley’s power, the opposite galley is sunk.  The board updates itself to allow further play.
+  - If both players still have at least one galley, each player draws 2 cards and play continues.  If one player is out of galleys, then that player loses.
+
+<a href="https://imgur.com/asMQ6pT"><img src="https://i.imgur.com/asMQ6pT.png" title="source: imgur.com" width="500" /></a>
+
+<a href="https://imgur.com/pNc5Q9j"><img src="https://i.imgur.com/pNc5Q9j.png" title="source: imgur.com" width="500" /></a>
+
+<a href="https://imgur.com/uroZvZh"><img src="https://i.imgur.com/uroZvZh.png" title="source: imgur.com" width="500" /></a>
+
+Additionally, when you either win against the first opponent or lose to any apponent, a 'dialogue' system is implemented.
+
+<a href="https://imgur.com/k6l0hCw"><img src="https://i.imgur.com/k6l0hCw.png" title="source: imgur.com" width="500" /></a>
+
+The card game is also implemented with the puzzle aspects, allowing you to win the game once you play the kraken card obtained through the puzzles against the second opponent.
+
+<a href="https://imgur.com/pT0VcBl"><img src="https://i.imgur.com/pT0VcBl.png" title="source: imgur.com" width="500" /></a>
+
 
 ### Puzzle Additions
 The player can now interact with the clock at any time.
@@ -180,6 +214,9 @@ Some examples of non-positional audio we implemented:
 - Ship creaking ambience. Fades out when the player wins.
 - Ambient low drone. Fades out when the player wins.
 - Ship sinking/rumble sounds when the player wins and the camera starts shaking. Fades out only after the win screen appears.
+- Card noises (Playing, shuffling)
+- Dialogue 'voice'
+- Card game progression triggers (sinking of galleys, triggering of fight sequence)
 
 Some examples of positional audio we implemented:
 - A dynamic footstep system. Plays at parameterized intervals controlled in PlayerManager. Only plays when the player is walking.
