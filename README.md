@@ -165,6 +165,14 @@ After getting the secret code by using the candle to inspect the note, the playe
 
 <a href="https://imgur.com/6FL6Ujw"><img src="https://i.imgur.com/6FL6Ujw.png" title="source: imgur.com" width="500" /></a>
 
+The chest is interactable in this deliverable but has the prompt "locked" when the player is close to it. If the player approaches with the chest key from the clock however, pressing 'F' would unlock the chest and grant the player the "Kraken" card. This card has 99 power and is crucial to winning against the otherwise-impossible second opponent, and eventually trigger the win condition.
+
+<a href="https://imgur.com/QW8PBZ7"><img src="https://i.imgur.com/QW8PBZ7.png" title="source: imgur.com" width="500" /></a>
+
+When the "Kraken" card is played against the second opponent, the screen (and player) will start shaking randomly with increasing intensity for 5 seconds, until the win screen appears with a prompt to exit the game.
+
+<a href="https://imgur.com/eKJiuYr"><img src="https://i.imgur.com/eKJiuYr.png" title="source: imgur.com" width="500" /></a>
+
 ### Effects
 Fully implemented within the game, we have water, shadows, ambient occlusion, screen shake.  Screen shake is not depicted below, but occurs during the sequence triggered by winning the game.
 <a href="https://imgur.com/CdX5BIo"><img src="https://i.imgur.com/CdX5BIo.png" title="source: imgur.com" width="500" /></a>
