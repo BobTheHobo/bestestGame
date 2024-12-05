@@ -173,6 +173,21 @@ When the "Kraken" card is played against the second opponent, the screen (and pl
 
 <a href="https://imgur.com/eKJiuYr"><img src="https://i.imgur.com/eKJiuYr.png" title="source: imgur.com" width="500" /></a>
 
+### Sound
+For this submission, we created dedicated helper classes SFXManager and MusicManager to streamline audio-playing processes. This allows us to easily do both positional and non-positional audio. 
+
+Some examples of non-positional audio we implemented:
+- Ship creaking ambience. Fades out when the player wins.
+- Ambient low drone. Fades out when the player wins.
+- Ship sinking/rumble sounds when the player wins and the camera starts shaking. Fades out only after the win screen appears.
+
+Some examples of positional audio we implemented:
+- A dynamic footstep system. Plays at parameterized intervals controlled in PlayerManager. Only plays when the player is walking.
+- Treasure chest opening sound for when the key is used on the chest.
+- UI sound for turning the clock hands in the clock puzzle.
+- Key dropping on wood sound for when the key is dispensed after completing the clock puzzle.
+- Note read sound for when the player uses the candle to read the note.
+
 ### Effects
 Fully implemented within the game, we have water, shadows, ambient occlusion, screen shake.  Screen shake is not depicted below, but occurs during the sequence triggered by winning the game.
 <a href="https://imgur.com/CdX5BIo"><img src="https://i.imgur.com/CdX5BIo.png" title="source: imgur.com" width="500" /></a>
