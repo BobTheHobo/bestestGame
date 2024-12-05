@@ -240,8 +240,24 @@ These effects are not implemented and the shadow and ambient occlusion effects a
 - clock opening animation trigger
 
 
+# Member Contributions
 
+## Shawn
+- Puzzle logic
+- Walking system
+- Object and environment collision
+- Puzzle, and ambient environment sounds
 
+## Jeremiah
+- Puzzle logic
+- Dialogue and game triggers
+- Communication between puzzle and card game
+- Card game and dialogue sounds
+
+## Viet
+- Environment modeling
+- Model sourcing for puzzles
+- Shadows and other vfx
 
 
 
