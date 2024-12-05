@@ -159,7 +159,7 @@ Our work for this deliverable consisted of:
 ### Puzzle Additions
 
 ### Effects
-Fully implemented within the game, we have water, shadows, ambient occlusion, screen shake.
+Fully implemented within the game, we have water, shadows, ambient occlusion, screen shake.  Screen shake is not depicted below, but occurs during the sequence triggered by winning the game.
 <a href="https://imgur.com/CdX5BIo"><img src="https://i.imgur.com/CdX5BIo.png" title="source: imgur.com" width="500" /></a>
 
 Also mostly developed, but not integrated into the current submission, we have particle effects(fire) and a skybox.
