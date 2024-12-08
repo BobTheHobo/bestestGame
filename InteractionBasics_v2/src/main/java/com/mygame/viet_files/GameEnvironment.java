@@ -34,6 +34,8 @@ public class GameEnvironment {
     private float time = 0.0f;
     private float waterHeight = 0.0f;
 
+    private FogFilter fog;
+
     public GameEnvironment(Node rootNode, AssetManager assetManager, ViewPort viewPort, GameShadows shadows) {
 	this.rootNode = rootNode;
 	this.assetManager = assetManager;
@@ -77,12 +79,23 @@ public class GameEnvironment {
     public void addFogEffect() {
 	    fpp = shadows.getFPP();
 	    // Create a FogFilter
-	    FogFilter fog = new FogFilter();
+	    fog = new FogFilter();
 	    fog.setFogColor(new ColorRGBA(0.0f, 0.0f, 0.0f, 0.6f)); // Fog color (light blue in this case)
 	    fog.setFogDistance(1000); // Distance at which fog starts
 	    fog.setFogDensity(1.6f); // Fog density (higher value = thicker fog)
 	    
 	    // Add the FogFilter to the FilterPostProcessor
 	    fpp.addFilter(fog);
+
+	    setFogDistance(1000);
+	    setFogDensity(1);
+    }
+
+    public void setFogDistance(float num) {
+	    fog.setFogDistance(num);
+    }
+
+    public void setFogDensity(float num) {
+	    fog.setFogDensity(num);
     }
 }
