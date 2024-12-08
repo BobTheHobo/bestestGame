@@ -4,6 +4,7 @@ import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.app.state.AppStateManager;
+import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.input.InputManager;
 import com.jme3.input.KeyInput;
@@ -12,6 +13,7 @@ import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Node;
+import com.mygame.viet_files.SFXManager;
 
 /*
 * author: shawn
@@ -28,6 +30,7 @@ public class InteractiveDemoAppState extends AbstractAppState {
     private InputHandler inputHandler; // Input handler
     private boolean nextScene = false;
     private Node rootNode;
+    private SFXManager sfxManager;
     
     private InputManager inputManager;
     private final static Trigger TRIGGER_P= new KeyTrigger(KeyInput.KEY_P);
@@ -69,11 +72,14 @@ public class InteractiveDemoAppState extends AbstractAppState {
         // Set up the player and the scene
         playerManager.setupPlayer();
         sceneManager.setupScene();
+        
+        sfxManager = new SFXManager(app.getAssetManager());
 
         // Initialize the interaction manager
         interactionManager = new PlayerInteractionManager(
             this.app,
-            bulletAppState.getPhysicsSpace()
+            bulletAppState.getPhysicsSpace(),
+            sfxManager
         );
 
         // Initialize the crosshair manager

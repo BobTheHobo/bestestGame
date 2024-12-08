@@ -23,6 +23,7 @@ import com.jme3.ui.Picture;
 import com.mygame.viet_files.Key;
 import com.jme3.bullet.BulletAppState;
 import com.mygame.viet_files.SFXManager;
+import com.mygame.viet_files.Util;
 
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -88,8 +89,10 @@ public class PlayerInteractionManager {
     private boolean showRewardText = false; // Flag to control visibility
 
     private SFXManager sfxManager;
+    
+    private Spatial keyNode; // Stores node of key
 
-    public PlayerInteractionManager(SimpleApplication app, PhysicsSpace physicsSpace) {
+    public PlayerInteractionManager(SimpleApplication app, PhysicsSpace physicsSpace, SFXManager sfxManager) {
         this.inputManager = app.getInputManager();
         this.cam = app.getCamera();
         this.rootNode = app.getRootNode(); // Access rootNode directly
@@ -98,7 +101,8 @@ public class PlayerInteractionManager {
         this.app = app;
         
         bulletAppState = new BulletAppState();
-        sfxManager = new SFXManager(app.getAssetManager());
+        this.sfxManager = new SFXManager(app.getAssetManager());
+        this.sfxManager = sfxManager;
         
         sfxManager.loadSFX("Chest-Open", "Sounds/SFX/Chest-Open.wav");
         sfxManager.loadSFX("Clock-Turn", "Sounds/SFX/Clock-Turn-16bit.wav");
@@ -267,64 +271,74 @@ public class PlayerInteractionManager {
     }
 
     private void pickUpItem() {
-        // Cast a ray from the camera to detect items under the crosshair
-        CollisionResults results = new CollisionResults();
-        Vector3f origin = cam.getLocation();
-        Vector3f direction = cam.getDirection();
+        try {
+            // Cast a ray from the camera to detect items under the crosshair
+            CollisionResults results = new CollisionResults();
+            Vector3f origin = cam.getLocation();
+            Vector3f direction = cam.getDirection();
 
-        Ray ray = new Ray(origin, direction);
-        rootNode.collideWith(ray, results);
+            Ray ray = new Ray(origin, direction);
+            rootNode.collideWith(ray, results);
 
-        if (results.size() > 0) {
-            for (int i = 0; i < results.size(); i++) {
-		Spatial target = null;
-		Spatial res = results.getCollision(i).getGeometry();
-		if (res.getUserData("puzzle") != null) {
-			target = res;	
-		} else {
-			try {
-				target = res.getParent().getParent().getParent();
-			} catch(Exception ex) {
-								
-			}
-		} 
-                float distance = results.getCollision(i).getDistance();
+            if (results.size() > 0) {
+                for (int i = 0; i < results.size(); i++) {
+                    Spatial target = null;
+                    Spatial res = results.getCollision(i).getGeometry();
 
-                // Check if the item is within pickup range
-                if (distance <= pickupRange) {
-                    // Retrieve the canBePickedUp flag from the item's user data
-                    Boolean canBePickedUp = (Boolean) target.getUserData("canBePickedUp");
-                    if (Boolean.TRUE.equals(canBePickedUp)) {
-                        // Pick up the item
-                        heldItem = target;
-                        heldItemControl = heldItem.getControl(RigidBodyControl.class);
+                    if (res.getUserData("puzzle") != null) {
+                        target = res;	
+                    } else if (res.getName().equals("Key4.001"))  {
+                        target = res.getParent();
+                        keyNode = target;
+                    } else {
+                        target = res.getParent().getParent().getParent();
+                    } 
+                    float distance = results.getCollision(i).getDistance();
 
-                        if (heldItemControl != null) {
-			    // Remove collision with player (group 2)
-			    heldItemControl.removeCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
+                    // Check if the item is within pickup range
+                    if (distance <= pickupRange && target != null) {
+                        // Retrieve the canBePickedUp flag from the item's user data
+                        Boolean canBePickedUp = (Boolean) target.getUserData("canBePickedUp");
+                        System.out.println(target.getName() + " : " + canBePickedUp);
+                        if (Boolean.TRUE.equals(canBePickedUp)) {
+                            // Pick up the item
+                            heldItem = target;
+                            heldItemControl = heldItem.getControl(RigidBodyControl.class);
 
-                            // Set the physics control to kinematic mode
-                            heldItemControl.setKinematic(true);
+                            if (heldItemControl != null) {
+                                // Remove collision with player (group 2)
+                                heldItemControl.removeCollideWithGroup(PhysicsCollisionObject.COLLISION_GROUP_02);
 
-			    // Turn off collision shape
-			    heldItemControl.setEnabled(false);
+                                // Set the physics control to kinematic mode
+                                heldItemControl.setKinematic(true);
 
-                            // Optional: Set the gravity to zero, IDK IF I SHOULD DO THIS
-//                            heldItemControl.setGravity(Vector3f.ZERO);
+                                // Turn off collision shape
+                                heldItemControl.setEnabled(false);
+
+                                // Optional: Set the gravity to zero, IDK IF I SHOULD DO THIS
+    //                            heldItemControl.setGravity(Vector3f.ZERO);
+                            }
+
+                            // Detach from previous parent and attach to hand node
+                            if (heldItem.getParent() != null) {
+                                heldItem.getParent().detachChild(heldItem);
+                            }
+                            heldItem.setLocalTranslation(Vector3f.ZERO);
+                            handNode.attachChild(heldItem);
+                            try {
+                                System.out.println("node " + heldItemControl.getSpatial().getName());
+                            } catch (Exception e) {
+                                // throw away
+                            }
+
+                            break; // Item picked up, exit loop
                         }
-
-                        // Detach from previous parent and attach to hand node
-                        if (heldItem.getParent() != null) {
-                            heldItem.getParent().detachChild(heldItem);
-                        }
-                        heldItem.setLocalTranslation(Vector3f.ZERO);
-                        handNode.attachChild(heldItem);
-			System.out.println("node " + heldItemControl.getSpatial().getName());
-
-                        break; // Item picked up, exit loop
                     }
                 }
             }
+        } catch (Exception ex) {
+            // I will legit kill someone if i get another error from this
+            System.out.println("pickup exception " + ex.toString());
         }
     }
 
@@ -365,6 +379,15 @@ public class PlayerInteractionManager {
                 // No collision within range; drop at maximum pickup range
                 dropPosition = origin.add(direction.mult(pickupRange));
                 System.out.println("Dropping at max range: " + dropPosition);
+            }
+            
+            Node moveableNode = (Node)rootNode.getChild("Move object node");
+            // Add object back to the moveable object node (which killplane depends on)
+            if (heldItem.getName().equals("key")) {
+                ((Node)rootNode.getChild("Key node")).attachChild(heldItem);
+                Util.printChildren(moveableNode);
+            } else {
+                moveableNode.attachChild(heldItem);
             }
 
             // Update the spatial's local translation to the drop position

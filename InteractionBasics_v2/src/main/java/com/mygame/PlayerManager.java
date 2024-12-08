@@ -26,9 +26,11 @@ public class PlayerManager {
     private boolean walkingEnabled = false;
 
     private SFXManager sfxManager;       // SFX Manager for playing sounds
-    private float footstepInterval = 3f; // Interval between footsteps in seconds
+    private float footstepInterval = 5f; // Interval between footsteps in seconds
     private float footstepTimer = 0f;     // Timer to track footstep intervals
 
+    private Vector3f spawnPos = new Vector3f(0, 2f, 0);
+    
     public PlayerManager(BulletAppState bulletAppState, Node rootNode, Camera cam, CameraManager cameraManager, InputHandler inputHandler, 
             PlayerInteractionManager interactionManager, AppSettings settings, AssetManager assetManager) {
         this.bulletAppState = bulletAppState;
@@ -57,7 +59,7 @@ public class PlayerManager {
         playerNode = new Node("Player");
         playerNode.addControl(player);
 
-        player.setPhysicsLocation(new Vector3f(0, 2, 0));
+        player.setPhysicsLocation(spawnPos);
         player.setJumpSpeed(20);
         player.setFallSpeed(30);
         player.setGravity(30);
@@ -84,6 +86,11 @@ public class PlayerManager {
 
     public void movePlayerToCamera() {
         player.setPhysicsLocation(cam.getLocation());
+    }
+    
+    public void resetPlayerPosition() {
+        cam.setLocation(spawnPos);
+        movePlayerToCamera();
     }
 
     // Handle player movement based on key inputs

@@ -40,7 +40,7 @@ public class GameLighting {
 	// An SL that doesn't cast any light, needed for shadow renderer/filter to work properly 
 	insertSL(rootNode, new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, 1f, 0f));
 	insertMoonlight();
-	insertAL(100f);
+	insertAL(40f);
     }
 
     public void insertLightProbe(Application app, AppStateManager stateManager) {

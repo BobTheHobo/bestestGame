@@ -72,6 +72,15 @@ public class Util {
 	    }
     }
 
+    public static Geometry getFirstGeo(Spatial s) {
+            for (Spatial child : ((Node)s).getChildren()) {
+                if (s instanceof Geometry) {
+                    return (Geometry)s;
+                }
+            }
+            return null;
+    }
+
     public static void addAmbient(Spatial s, AssetManager assetManager) {
 	    recurseAddAmbient(s, assetManager);
     }
@@ -102,5 +111,19 @@ public class Util {
 	    for (Spatial child : ((Node)s).getChildren()) {
 		    recurseAddAmbient(child, assetManager);
 	    }
+    }
+    
+    public Geometry addShipVis(AssetManager assetManager) {
+        //x (total) = 5.5
+        // z back (1 half from 0) = 4.45
+        // z front (1 half from 0) = 4.1
+        //z (total) = 8.55
+        Geometry shipsize = new Geometry("ShipSize", new Box(5.5f, 0.1f, 8.2f));
+        Material mat2 = new Material(assetManager, "Common/MatDefs/Misc/Unshaded.j3md");
+        mat2.setColor("Color", ColorRGBA.Blue);
+        shipsize.setMaterial(mat2);
+        shipsize.setLocalTranslation(0, 0.5f, 0);
+        
+        return shipsize;
     }
 }

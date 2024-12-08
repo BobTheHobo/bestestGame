@@ -4,6 +4,8 @@ import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
@@ -44,6 +46,7 @@ public class SceneCreator extends AbstractAppState {
     private final static String MAPPING_SCENE = "Next Scene";
     private boolean nextScene = false;
     private Node room_node;
+    private Node moveable_node;
     private Node guiNode;
     private Quaternion rotateY90;
 
@@ -53,7 +56,7 @@ public class SceneCreator extends AbstractAppState {
     private Table mainTable;
     
     private Key spawnedKey;
-    private static final Vector3f KEY_SPAWN_LOCATION = new Vector3f(-4f, 3f, -5f);
+    private static final Vector3f KEY_SPAWN_LOCATION = new Vector3f(-4f, 3.5f, -5f);
     private boolean hasSpawnedKey = false;
     
     public SceneCreator(Node rootNode, AssetManager assetManager, ViewPort viewPort, BulletAppState bulletAppState, GameShadows shadows, GameParticles particles, PlayerInteractionManager playerInteractionManager) {
@@ -70,7 +73,10 @@ public class SceneCreator extends AbstractAppState {
     public void setupScene() {
 	// Main node for the room
 	room_node = new Node("Room setup node");
-
+        
+        // Moveable node for all objects that move and might need reseting thru killplane
+        moveable_node = new Node("Move object node");
+        
 	// Rotation quats along Y axis
 	rotateY90 = new Quaternion();
 	rotateY90.fromAngleAxis(90f *FastMath.DEG_TO_RAD, Vector3f.UNIT_Y);
@@ -81,6 +87,7 @@ public class SceneCreator extends AbstractAppState {
 	
 	// Ship hull (with roof)
 	Spatial room_model = insertRoom();
+        //Spatial room_model = insertRoom2();
 	room_node.attachChild(room_model);
 
 	// Main game table
@@ -107,7 +114,7 @@ public class SceneCreator extends AbstractAppState {
 	Spatial table_candle = insertCandle(new Vector3f(0.6f, 5f, -1f));
 	playerInteractionManager.setCandle(table_candle);
 	System.out.println(table_candle.getName());
-	room_node.attachChild(table_candle);
+	moveable_node.attachChild(table_candle);
 
 	Spatial chest = insertChest(new Vector3f(-5f, 1f, 0.2f));
 	room_node.attachChild(chest);
@@ -129,18 +136,23 @@ public class SceneCreator extends AbstractAppState {
         Vector3f origin = new Vector3f(0f, 0f, 0f);
         room_node.setLocalTranslation(origin);
 
-
-	rootNode.attachChild(room_node);
-        
         playerInteractionManager.setOnPuzzleCompleteListener(() -> {
             if (!hasSpawnedKey) {
-                spawnKey();
+                moveable_node.attachChild(spawnKey().getKeyNode());
             }
         });
+        
+        //room_node.attachChild(spawnKey().getGeometry());
+        //Spatial table_candle = insertCandle(new Vector3f(0.6f, 2.1f, -1f));
+	//Spatial key = insertKey(new Vector3f(0.6f, 1f, -1f));
+	
+        room_node.attachChild(moveable_node);
+        
+        rootNode.attachChild(room_node);
 
     }
     
-    private void spawnKey() {
+    private Key spawnKey() {
         hasSpawnedKey = true;
         if (spawnedKey == null) { // Ensure the key isn't spawned multiple times
             spawnedKey = new Key(
@@ -149,11 +161,13 @@ public class SceneCreator extends AbstractAppState {
                 new Vector3f(0.15f, 0.15f, 0.15f), // Key size
                 assetManager,
                 rootNode,
-                this.bulletAppState
+                this.bulletAppState,
+                this.shadows
             );
             this.playerInteractionManager.setKey(spawnedKey.getGeometry());
             System.out.println("Key spawned at: " + KEY_SPAWN_LOCATION); // Debugging message
         }
+        return spawnedKey;
     }
         
     @Override
@@ -167,6 +181,11 @@ public class SceneCreator extends AbstractAppState {
 
     public Table getMainTable() {
 	return this.mainTable;
+    }
+    
+    private Spatial insertRoom2() {
+        Spatial room_model = assetManager.loadModel("Models/thingy1/thingy1.j3o");
+	return room_model;
     }
 
     private Spatial insertRoom() {
@@ -302,7 +321,36 @@ public class SceneCreator extends AbstractAppState {
 
         return candle_node;
     }
-//
+
+    // Overloaded to be able to specify a location for the candle
+    private Spatial insertKey(Vector3f loc) {
+	// Invisible candle node everything is attached to
+	Node key_node = new Node("Key node");
+	key_node.setLocalTranslation(loc);
+	    
+	// Load actual model and attach it to candle node
+	Spatial key = assetManager.loadModel("Models/mdl_key_main_v1/mdl_key_main_v1.j3o");
+
+	key.setName("key");
+	key_node.attachChild(key);
+
+	shadows.attachShadowOff(key_node);
+	//shadows.attachShadowCastAndReceive(key_node);
+
+        // Set the canBePickedUp flag as user data
+        key.setUserData("canBePickedUp", true);
+        key.setUserData("puzzle", true);
+        
+        // Create a custom cube-shaped collision shape
+        Vector3f halfExtents = new Vector3f(0.2f, 0.14f, 0.45f); // Cube dimensions: 1x1x1
+        BoxCollisionShape cubeShape = new BoxCollisionShape(halfExtents);
+        
+	// Add physics
+	PhysicsHelper.addPhysics(key, true, true, bulletAppState, cubeShape);	
+
+        return key_node;
+    }
+    
     // Inserts chest
     private Spatial insertChest(Vector3f loc) {
 	// Invisible chest node everything is attached to

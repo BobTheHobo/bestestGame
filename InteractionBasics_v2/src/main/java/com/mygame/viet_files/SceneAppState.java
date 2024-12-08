@@ -37,6 +37,7 @@ public class SceneAppState extends AbstractAppState {
     private boolean nextScene = false;
     private Node room_node;
     private Node guiNode;
+    private KillPlane killPlane;
 
     private PlayerInteractionManager interactionManager; // Interaction manager
     private CrosshairManager crosshairManager; // Crosshair manager
@@ -49,6 +50,7 @@ public class SceneAppState extends AbstractAppState {
     private PlayerManager playerManager;
     private InputHandler inputHandler;
     private MusicManager musicManager;
+    private SFXManager sfxManager;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -63,9 +65,10 @@ public class SceneAppState extends AbstractAppState {
         inputManager.addListener(actionListener, MAPPING_SCENE);
 
 	bulletAppState = new BulletAppState();
-	//bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
+        bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
 	stateManager.attach(bulletAppState);
-
+        
+        sfxManager = new SFXManager(assetManager);
 
         crosshairManager = new CrosshairManager(
             this.app.getAssetManager(),
@@ -76,7 +79,8 @@ public class SceneAppState extends AbstractAppState {
         // Initialize the interaction manager
         interactionManager = new PlayerInteractionManager(
             this.app,
-            bulletAppState.getPhysicsSpace()
+            bulletAppState.getPhysicsSpace(),
+            sfxManager
         );
 
 
@@ -121,11 +125,11 @@ public class SceneAppState extends AbstractAppState {
 
 	// Tiny rotation to (hopefully) fix shadow artifacts
 	//rootNode.rotate(0, 0.01f, 0);
+        
+        killPlane = new KillPlane(this.rootNode, this.assetManager, this.playerManager, this.sfxManager);
 
         CardGameState state = new CardGameState(playerManager, sceneCreator.getMainTable(), boardEnvironment);
         stateManager.attach(state);
-
-	
 
     }
     
@@ -150,8 +154,8 @@ public class SceneAppState extends AbstractAppState {
         //TODO: implement behavior during runtime
 	super.update(tpf);
 	playerManager.updatePlayer(tpf);
+        killPlane.checkForResets(tpf);
 	environment.addWaves(tpf);
-
     }
     
     @Override
