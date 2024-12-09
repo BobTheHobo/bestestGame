@@ -1,12 +1,13 @@
 package com.mygame.viet_files;
 
+import com.jme3.anim.AnimComposer;
 import com.jme3.app.SimpleApplication;
 import com.jme3.app.state.AbstractAppState;
 import com.jme3.asset.AssetManager;
 import com.jme3.bullet.BulletAppState;
 import com.jme3.bullet.collision.shapes.BoxCollisionShape;
-import com.jme3.bullet.control.RigidBodyControl;
 import com.jme3.input.KeyInput;
+import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.light.PointLight;
@@ -104,9 +105,12 @@ public class SceneCreator extends AbstractAppState {
 	//room_node.attachChild(table2);
 
 	// Grandfather clock
-	Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
-	room_node.attachChild(clock);
-
+	//Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
+	//room_node.attachChild(clock);
+        
+        Clock clock = new Clock("Clock", new Vector3f(-3.8f, 0f, -7f), false, assetManager, bulletAppState, shadows);
+        room_node.attachChild(clock.getNode());
+        
 	// Note when referring to blender positions, x is the same, y and z are swapped
 	// Also, flip signs between the y coords
 	
@@ -138,7 +142,15 @@ public class SceneCreator extends AbstractAppState {
 
         playerInteractionManager.setOnPuzzleCompleteListener(() -> {
             if (!hasSpawnedKey) {
+                clock.playAnimation();
                 moveable_node.attachChild(spawnKey().getKeyNode());
+            }
+        });
+        
+        playerInteractionManager.setOnCardGotten(() -> {
+            if (hasSpawnedKey) {
+                System.out.println("removing key");
+                ((Node)rootNode.getChild("HandNode")).detachChild(spawnKey().getGeometry().getParent());
             }
         });
         
@@ -378,8 +390,12 @@ public class SceneCreator extends AbstractAppState {
 	clock_node.setLocalTranslation(loc);
 
 	// Load actual model and attach it to candle node
-	Spatial clock = assetManager.loadModel("Models/mdl_grandfatherclock_main_v2_fixorigin/mdl_grandfatherclock_main_v2_fixorigin.j3o");
+	Spatial clock = assetManager.loadModel("Models/Clock-With-Anim/Clock-With-Anim.j3o");
 	clock_node.attachChild(clock);
+        
+        // Add animation composer
+        AnimComposer composer = ((Node)clock).getChild("Grandfathers_clock.002").getControl(AnimComposer.class);
+        composer.setCurrentAction("ClockFaceSlide");
 
 	// Add shadows
 	shadows.attachShadowReceive(clock);

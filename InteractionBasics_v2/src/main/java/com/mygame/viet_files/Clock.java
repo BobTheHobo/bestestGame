@@ -24,6 +24,7 @@ public class Clock {
 
 	private AnimComposer animComposer;
 	private static final String ANI_MOVE_FACE = "ClockFaceSlide";
+        private Runnable animDone;
 
     	// Constructor that takes all parameters needed to create and add a clock to the world
 	public Clock(String name, Vector3f position, boolean canBePickedUp, AssetManager assetManager, BulletAppState bulletAppState, GameShadows shadows) {
@@ -46,9 +47,6 @@ public class Clock {
 		
 		// Print out available animations
 		Util.printAnimationNames(animComposer);
-
-		// Add animation
-		animComposer.setCurrentAction(ANI_MOVE_FACE);
 		
 		// Add shadows
 		shadows.attachShadowReceive(clock);
@@ -58,7 +56,20 @@ public class Clock {
 	}
 
 	public Node getNode() {
-		return clock_node;
+            return clock_node;
 	}
-	
+        
+        public void playAnimation() {
+            // Only play animation once
+            animComposer.setCurrentAction(ANI_MOVE_FACE, AnimComposer.DEFAULT_LAYER, false);
+        }
+        
+        // Method to set the card get listener
+        public void setAnimDone(Runnable listener) {
+            this.animDone = listener;
+        }
+        
+        public AnimComposer getAnimComposer() {
+            return this.animComposer;
+        }
 }

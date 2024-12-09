@@ -29,7 +29,7 @@ public class KillPlane {
     private float killPlaneY = -0.7f; // y-coordinate of the kill plane
     private float playerKillY = -120f;
     private float objRespawnY = 0.5f;
-    private Vector3f objRespawnPt = new Vector3f(0.6f, 0.5f, -4f);
+    private Vector3f objRespawnPt = new Vector3f(0.6f, 0.3f, -4f);
     
     public KillPlane(Node rootNode, AssetManager assetManager, PlayerManager playerManager, SFXManager sfxManager) {
         this.rootNode = rootNode;

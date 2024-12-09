@@ -76,6 +76,7 @@ public class PlayerInteractionManager {
     private Key spawnedKey;
     private final BulletAppState bulletAppState;
     private Runnable onPuzzleComplete;
+    private Runnable onCardGot;
     
     private Spatial key; // The key spatial for proximity checks
     private static final Vector3f CHEST_LOCATION = new Vector3f(-5f, 1f, 0.2f); // Treasure chest location
@@ -604,6 +605,12 @@ public class PlayerInteractionManager {
         this.onPuzzleComplete = listener;
     }
     
+        // Method to set the card get listener
+    public void setOnCardGotten(Runnable listener) {
+        this.onCardGot = listener;
+    }
+   
+    
     private void setupChestText() {
         chestText = new BitmapText(app.getAssetManager().loadFont("Interface/Fonts/Default.fnt"), false);
         chestText.setColor(ColorRGBA.White);
@@ -630,6 +637,7 @@ public class PlayerInteractionManager {
 
         if (playerToChestDistance <= CHEST_INTERACTION_RANGE && keyToChestDistance <= KEY_CHEST_RANGE) {
             chestUnlocked = true;
+            onCardGot.run();
             chestText.setCullHint(BitmapText.CullHint.Always); // Hide the chest prompt
             System.out.println("chest opened");
 

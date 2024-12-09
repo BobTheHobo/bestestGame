@@ -1,5 +1,6 @@
 package com.mygame.viet_files;
 
+import com.jme3.anim.AnimComposer;
 import com.mygame.viet_files.InputHandlers.InputHandler;
 import com.jme3.app.Application;
 import com.jme3.app.SimpleApplication;
@@ -12,9 +13,7 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
-import com.jme3.material.RenderState;
 import com.jme3.renderer.ViewPort;
-import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.mygame.CameraManager;
 import com.mygame.CrosshairManager;
@@ -51,6 +50,7 @@ public class SceneAppState extends AbstractAppState {
     private InputHandler inputHandler;
     private MusicManager musicManager;
     private SFXManager sfxManager;
+    private AnimComposer animComposer;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -65,7 +65,7 @@ public class SceneAppState extends AbstractAppState {
         inputManager.addListener(actionListener, MAPPING_SCENE);
 
 	bulletAppState = new BulletAppState();
-        bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
+        //bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
 	stateManager.attach(bulletAppState);
         
         sfxManager = new SFXManager(assetManager);
@@ -89,7 +89,8 @@ public class SceneAppState extends AbstractAppState {
 	environment = new GameEnvironment(rootNode, assetManager, viewPort, shadows);
 	particles = new GameParticles(rootNode, assetManager);
 	boardEnvironment = new BoardEnvironment(rootNode, assetManager, viewPort);
-	musicManager = new MusicManager(assetManager);
+        
+        musicManager = new MusicManager(assetManager);
 	musicManager.loadTrack("Ambience", "Sounds/Music/Ambience-Waves-16bit.wav");
 	musicManager.playTrack("Ambience");
 
