@@ -22,13 +22,14 @@ public class Main extends SimpleApplication {
     boolean lockout = false;
     private final static Trigger TRIGGER_P= new KeyTrigger(KeyInput.KEY_P);
     private final static String MAPPING_SCENE = "Next Scene";
+    private static AppSettings settings;
+    private static Main app;
 
     public static void main(String[] args) {
-        Main app = new Main();
-
+        app = new Main();
 
         // Application settings
-        AppSettings settings = new AppSettings(true);
+        settings = new AppSettings(true);
         settings.setResolution(1280, 960);
         settings.setFullscreen(false);
         settings.setTitle("InteractionBasics");
@@ -41,6 +42,9 @@ public class Main extends SimpleApplication {
     @Override
     public void simpleInitApp() {
        	enableSceneSwitching(false); 
+        inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
+        
+        inputManager.addListener(actionListener, MAPPING_SCENE);
     }
     
     @Override
@@ -52,14 +56,12 @@ public class Main extends SimpleApplication {
         public void onAction(String name, boolean isPressed, float tpf)
         { 
                 if (!isPressed && name.equals(MAPPING_SCENE) && !lockout) {
-			if (scene == 0) {
-				lockout = true;
-			    scene = 1;
 			    System.out.println("Next scene 1");
-			    stateManager.detach(cardAppState);
+                            app.getRootNode().detachAllChildren();
+                            app.getGuiNode().detachAllChildren();
+			    stateManager.detach(sceneState);
 			    sceneState = new SceneAppState();
 			    stateManager.attach(sceneState);
-			}
 		}
     	}
     };

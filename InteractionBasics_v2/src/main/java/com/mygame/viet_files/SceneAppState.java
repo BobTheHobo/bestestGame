@@ -50,6 +50,7 @@ public class SceneAppState extends AbstractAppState {
     private PlayerManager playerManager;
     private InputHandler inputHandler;
     private CardGameState state;
+    private AppStateManager stateManager;
     
     private static final Trigger TRIGGER_R = new KeyTrigger(KeyInput.KEY_R); // 'R' key trigger for testing
     private static final Trigger TRIGGER_ESC = new KeyTrigger(KeyInput.KEY_ESCAPE); // 'ESC' key trigger to exit game
@@ -78,6 +79,8 @@ public class SceneAppState extends AbstractAppState {
         
         this.musicManager = new MusicManager(assetManager);
         this.sfxManager = new SFXManager(assetManager);
+        
+        this.stateManager = stateManager;
         
         musicManager.loadTrack("Ambience-Rumble", "Sounds/MusicPlus/Ambience-Rumble-16bit.wav");
         musicManager.loadTrack("Ambience-Waves", "Sounds/Music/Ambience-Waves-16bit.wav");
@@ -269,10 +272,14 @@ public class SceneAppState extends AbstractAppState {
     @Override
     public void cleanup() {
         super.cleanup();
+        
         app.getInputManager().deleteMapping(MAPPING_WIN);
-        //room_node.removeFromParent();
-        //TODO: clean up what you initialized in the initialize method,
-        //e.g. remove all spatials from rootNode
-        //this is called on the OpenGL thread after the AppState has been detached
+        environment.reset();
+        shadows.reset();
+        stateManager.detach(bulletAppState);
+        stateManager.detach(state);
+        musicManager.stopTrack("Ambience-Rumble");
+        musicManager.stopTrack("Ambience-Waves");
+        playerManager.cleanup();
     }
 }

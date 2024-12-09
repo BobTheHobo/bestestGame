@@ -56,6 +56,8 @@ public class PlayerManager {
 
         playerNode = new Node("Player");
         playerNode.addControl(player);
+        
+        
 
         player.setPhysicsLocation(new Vector3f(0, 2, 0));
         player.setJumpSpeed(20);
@@ -140,5 +142,9 @@ public class PlayerManager {
             // Update the interaction manager
             interactionManager.update(tpf);
         }
+    }
+    
+    public void cleanup() {
+        playerNode.removeControl(player);
     }
 }

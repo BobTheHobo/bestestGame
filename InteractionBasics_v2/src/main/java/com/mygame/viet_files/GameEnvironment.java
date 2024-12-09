@@ -61,4 +61,8 @@ public class GameEnvironment {
 	water.setWaterHeight(initialWaterHeight + waterHeight);
 	//System.out.println("Wave height: " + waterHeight);
     }
+    
+    public void reset() {
+        fpp.removeAllFilters();
+    }
 }
