@@ -44,7 +44,7 @@ public class PlayerInteractionManager {
     
     private Spatial note;
     private Spatial candle;
-    private static final float NOTE_INTERACTION_RANGE = 5f;
+    private static final float NOTE_INTERACTION_RANGE = 3f;
     private static final float CANDLE_NOTE_RANGE = 4f;
     
     private BitmapText rangeText;
