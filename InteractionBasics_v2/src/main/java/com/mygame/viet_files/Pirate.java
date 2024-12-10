@@ -33,6 +33,8 @@ public class Pirate {
 		
 		// Load actual model and attach it to node
 		Spatial pirate = assetManager.loadModel("Models/pirate/pirate.j3o");
+                pirate.setCullHint(Spatial.CullHint.Never);
+                
 		pirate_node.attachChild(pirate);
 		
 		// Move

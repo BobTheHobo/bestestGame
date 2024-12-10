@@ -56,6 +56,7 @@ public class CrosshairManager {
         if (!isVisible) {
             crosshairGeometry.setCullHint(CullHint.Never);
             isVisible = true;
+            guiNode.attachChild(crosshairGeometry);
         }
     }
 
@@ -63,6 +64,7 @@ public class CrosshairManager {
         if (isVisible) {
             crosshairGeometry.setCullHint(CullHint.Always);
             isVisible = false;
+            guiNode.detachChild(crosshairGeometry);
         }
     }
 

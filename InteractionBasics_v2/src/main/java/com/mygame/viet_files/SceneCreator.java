@@ -130,7 +130,7 @@ public class SceneCreator extends AbstractAppState {
 	// Also, flip signs between the y coords
 	
 	//Spatial table_candle = insertCandle(new Vector3f(0.6f, 2.1f, -1f));
-	Spatial table_candle = insertCandle(new Vector3f(0.6f, 5f, -1f));
+	Spatial table_candle = insertCandle(new Vector3f(0.6f, 1.96f, -1f));
 	playerInteractionManager.setCandle(table_candle);
 	System.out.println(table_candle.getName());
 	moveable_node.attachChild(table_candle);

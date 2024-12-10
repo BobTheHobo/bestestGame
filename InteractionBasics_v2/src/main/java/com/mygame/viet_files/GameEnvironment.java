@@ -59,10 +59,9 @@ public class GameEnvironment {
     	water.setUseRipples(false);
 	fpp.addFilter(water);
 
-	//Ensures translucent bucket is rendered after water
-	TranslucentBucketFilter translucentBucketFilter = fpp.getFilter(TranslucentBucketFilter.class);
-	fpp.removeFilter(translucentBucketFilter); // Remove then readd
-	fpp.addFilter(translucentBucketFilter);
+
+        // Fix filter ordering and ensure translucent bucket rendered after water
+        shadows.fixFilterOrdering();
 
 	for (int i = 0; i < fpp.getFilterList().size(); i++) {
 		System.out.println("Filter " + i + ": " + fpp.getFilterList().get(i).getClass().getSimpleName());
@@ -87,7 +86,7 @@ public class GameEnvironment {
 	    // Add the FogFilter to the FilterPostProcessor
 	    fpp.addFilter(fog);
 
-	    setFogDistance(1000);
+	    setFogDistance(100);
 	    setFogDensity(1);
     }
 

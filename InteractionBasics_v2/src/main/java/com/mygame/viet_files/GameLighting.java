@@ -15,6 +15,7 @@ import com.jme3.math.ColorRGBA;
 import static com.jme3.math.ColorRGBA.fromRGBA255;
 import com.jme3.math.FastMath;
 import com.jme3.math.Vector3f;
+import com.jme3.post.filters.FadeFilter;
 import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.texture.Image;
@@ -26,6 +27,7 @@ public class GameLighting {
     private final Node rootNode;
     private final AssetManager assetManager;
     private final GameShadows shadows;
+    private Runnable lightingDoneAction;
 
     public GameLighting(Node rootNode, AssetManager assetManager, GameShadows gameShadows) {
 	this.rootNode = rootNode;
@@ -57,12 +59,18 @@ public class GameLighting {
 	    LightProbe probe = LightProbeFactory.makeProbe(envCam, rootNode, new JobProgressAdapter<LightProbe>() {
 		    @Override
 		    public void done(LightProbe result) {
-			    System.out.println("PBR Probe results in");
+			System.out.println("PBR Probe results in");
+                        lightingDoneAction.run();
 		    }
 	    });
 	    probe.getArea().setRadius(50);
 	    probe.setPosition(pos);
 	    rootNode.addLight(probe);
+    }
+    
+    // Defines what to run when lighting probe is done running 
+    public void setLightingDoneAction(Runnable action) {
+        this.lightingDoneAction = action;
     }
 
     public void insertAL (float mult) {

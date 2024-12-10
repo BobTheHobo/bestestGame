@@ -5,6 +5,8 @@ import com.jme3.light.DirectionalLight;
 import com.jme3.light.PointLight;
 import com.jme3.light.SpotLight;
 import com.jme3.post.FilterPostProcessor;
+import com.jme3.post.filters.FadeFilter;
+import com.jme3.post.filters.FogFilter;
 import com.jme3.post.filters.TranslucentBucketFilter;
 import com.jme3.post.ssao.SSAOFilter;
 import com.jme3.renderer.ViewPort;
@@ -69,6 +71,8 @@ public class GameShadows {
     SpotLightShadowFilter slsf;
 
     SSAOFilter ssaof;
+    
+    FadeFilter fadef;
 
     public GameShadows(Node rootNode, AssetManager assetManager, ViewPort viewPort) {
 	this.rootNode = rootNode;
@@ -86,15 +90,58 @@ public class GameShadows {
 	setupDirectionalLightHandlers();
 	setupPointLightHandlers();
 	setupSpotLightHandlers();
+        
+
 	
         toggleShadows(shadowsOn);
 
 	setupSSAO();
 	setSSAO(ssaoOn);
 
-	    // Add the TranslucentBucketFilter at the end of the stack
-	    TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
-	    this.fpp.addFilter(translucentBucketFilter);
+        // Add the TranslucentBucketFilter at the end of the stack
+        TranslucentBucketFilter translucentBucketFilter = new TranslucentBucketFilter();
+        this.fpp.addFilter(translucentBucketFilter);
+        
+        // Needed for transitions
+        addFadeFilter();
+    }
+    
+    //Add fade filter
+    private void addFadeFilter() {
+        fadef = new FadeFilter();
+	fpp.addFilter(fadef);
+        System.out.println("Added fade filter");
+    }
+    
+    public FadeFilter getFadeFilter() {
+        return fadef;
+    }
+    
+    public void fixFilterOrdering() {
+        //fog over water, 3rd to last
+        setFadeLastFilter();
+        
+        //Ensures translucent bucket is rendered after water by adding as 2nd to last
+        // Also partilces can't render over fade transition in this ordering
+	setParticlesLastFilter();
+        
+        // Add fade filter as last filter so shows over everything
+        fpp.removeFilter(fadef);
+        fpp.addFilter(fadef);
+    }
+    
+    public void setParticlesLastFilter() {
+        //Enables particles and other translucent effects to show through everything
+        //except solid objects and gui
+	TranslucentBucketFilter translucentBucketFilter = fpp.getFilter(TranslucentBucketFilter.class);
+	fpp.removeFilter(translucentBucketFilter); // Remove then readd
+	fpp.addFilter(translucentBucketFilter);
+    }
+    
+    public void setFadeLastFilter() {
+        FogFilter fogFilter = fpp.getFilter(FogFilter.class);
+        fpp.removeFilter(fogFilter);
+        fpp.addFilter(fogFilter);
     }
 
     // Handlers for directional light shadows

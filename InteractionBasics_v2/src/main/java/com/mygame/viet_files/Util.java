@@ -9,13 +9,15 @@ import com.jme3.scene.Geometry;
 import com.jme3.scene.Node;
 import com.jme3.scene.Spatial;
 import com.jme3.scene.shape.Box;
-import com.jme3.texture.Texture;
+import com.jme3.system.NanoTimer;
 
 /**
  * Contains general utility functions 
  * @author viet
  */
 public class Util {
+    
+    private static float tpf;
 
     // Creates a simple blue box for testing and whatnot
 	// params: assetManager; local translation vector where you want block placed

@@ -54,6 +54,8 @@ public class SceneAppState extends AbstractAppState {
     private InputHandler inputHandler;
     private CardGameState state;
     private AppStateManager stateManager;
+    private TransitionManager transitions;
+    private GuiManager guiManager;
     
     private static final Trigger TRIGGER_R = new KeyTrigger(KeyInput.KEY_R); // 'R' key trigger for testing
     private static final Trigger TRIGGER_ESC = new KeyTrigger(KeyInput.KEY_ESCAPE); // 'ESC' key trigger to exit game
@@ -116,14 +118,18 @@ public class SceneAppState extends AbstractAppState {
             sfxManager
         );
 
+        guiManager = new GuiManager(
+            this.app.getContext().getSettings(),
+            assetManager,
+            this.app.getGuiNode()
+        );
 
 	shadows = new GameShadows(rootNode, assetManager, viewPort);
 	lighting = new GameLighting(rootNode, assetManager, shadows);
 	environment = new GameEnvironment(rootNode, assetManager, viewPort, shadows);
 	particles = new GameParticles(rootNode, assetManager);
 	boardEnvironment = new BoardEnvironment(rootNode, assetManager, viewPort);
-        
-
+        transitions = new TransitionManager(assetManager, shadows, lighting, guiManager, crosshairManager, sfxManager, rootNode);
 
 	shadows.setupShadowHandlers();
 	lighting.setupLighting();
@@ -131,6 +137,7 @@ public class SceneAppState extends AbstractAppState {
 	environment.setupSkybox();
 	environment.addFogEffect();
 	environment.addOcean();
+        transitions.setupFadeFilter();      
 
 	SceneCreator sceneCreator = new SceneCreator(rootNode, assetManager, viewPort, bulletAppState, shadows, particles, interactionManager);
 	sceneCreator.setupScene();
@@ -250,6 +257,8 @@ public class SceneAppState extends AbstractAppState {
 	playerManager.updatePlayer(tpf);
         killPlane.checkForResets(tpf);
 	environment.addWaves(tpf);
+        guiManager.dialogUpdater(tpf);
+        transitions.runnableUpdater(tpf);
         
         if (!wonCalled && state.getWon()) {
             
