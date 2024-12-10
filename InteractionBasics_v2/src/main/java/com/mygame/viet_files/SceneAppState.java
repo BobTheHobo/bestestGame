@@ -293,12 +293,15 @@ public class SceneAppState extends AbstractAppState {
         super.cleanup();
         
         app.getInputManager().deleteMapping(MAPPING_WIN);
+        app.getInputManager().clearRawInputListeners();
         environment.reset();
         shadows.reset();
-        stateManager.detach(bulletAppState);
+        //stateManager.detach(bulletAppState);
         stateManager.detach(state);
         musicManager.stopTrack("Ambience-Rumble");
         musicManager.stopTrack("Ambience-Waves");
         playerManager.cleanup();
+        inputHandler.reset();
+        
     }
 }

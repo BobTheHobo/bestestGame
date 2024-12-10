@@ -60,8 +60,10 @@ public class Main extends SimpleApplication {
                             app.getRootNode().detachAllChildren();
                             app.getGuiNode().detachAllChildren();
 			    stateManager.detach(sceneState);
+                            inputManager.clearRawInputListeners();
 			    sceneState = new SceneAppState();
 			    stateManager.attach(sceneState);
+                            
 		}
     	}
     };

@@ -45,4 +45,8 @@ public class InputHandler {
 	gih = new GameInputHandler(app, crosshairManager, interactionManager, inputManager, cameraManager);
 	ShadowUIInputHandler sih = new ShadowUIInputHandler(app, inputManager, shadows, ui);
     }
+    
+    public void reset() {
+        gih.reset();
+    }
 }

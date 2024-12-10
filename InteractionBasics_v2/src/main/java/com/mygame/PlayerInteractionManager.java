@@ -88,6 +88,8 @@ public class PlayerInteractionManager {
     private BitmapText rewardText;
     private float rewardTextTimer = 0f; // Timer for showing the reward text
     private boolean showRewardText = false; // Flag to control visibility
+    
+    private boolean held;
 
     private SFXManager sfxManager;
     
@@ -295,15 +297,17 @@ public class PlayerInteractionManager {
                     } 
                     float distance = results.getCollision(i).getDistance();
 
-                    // Check if the item is within pickup range
-                    if (distance <= pickupRange && target != null) {
-                        // Retrieve the canBePickedUp flag from the item's user data
-                        Boolean canBePickedUp = (Boolean) target.getUserData("canBePickedUp");
-                        System.out.println(target.getName() + " : " + canBePickedUp);
-                        if (Boolean.TRUE.equals(canBePickedUp)) {
-                            // Pick up the item
-                            heldItem = target;
-                            heldItemControl = heldItem.getControl(RigidBodyControl.class);
+                // Check if the item is within pickup range
+                if (distance <= pickupRange && target != null) {
+                    // Retrieve the canBePickedUp flag from the item's user data
+                    Boolean canBePickedUp = (Boolean) target.getUserData("canBePickedUp");
+                    System.out.println(target.getName() + " : " + canBePickedUp);
+                    if (Boolean.TRUE.equals(canBePickedUp)) {
+                        // Pick up the item
+                        heldItem = target;
+                        heldItemControl = heldItem.getControl(RigidBodyControl.class);
+                        System.out.println("Picking something up");
+                        held = true;
 
                             if (heldItemControl != null) {
                                 // Remove collision with player (group 2)
@@ -344,6 +348,7 @@ public class PlayerInteractionManager {
 
 
     private void dropItem() {
+        held = false;
         if (heldItem != null) {
             // Detach the item from the hand node
             handNode.detachChild(heldItem);
@@ -422,9 +427,9 @@ public class PlayerInteractionManager {
 
 
     public void handleInteraction() {
-        if (heldItem == null) {
+        if (heldItem == null  && !held) {
             pickUpItem();
-        } else {
+        } else if (held) {
             dropItem();
         }
     }
