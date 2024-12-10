@@ -52,6 +52,8 @@ public class SceneCreator extends AbstractAppState {
     private Node moveable_node;
     private Node guiNode;
     private Quaternion rotateY90;
+    private Quaternion rotateY180;
+    private Quaternion rotateY180neg;
 
     private GameLighting lighting;
     private GameEnvironment environment;
@@ -83,6 +85,8 @@ public class SceneCreator extends AbstractAppState {
 	// Rotation quats along Y axis
 	rotateY90 = new Quaternion();
 	rotateY90.fromAngleAxis(90f *FastMath.DEG_TO_RAD, Vector3f.UNIT_Y);
+        rotateY180 = new Quaternion();
+	rotateY180.fromAngleAxis(180f *FastMath.DEG_TO_RAD, Vector3f.UNIT_Y);
 	
 	// Ship hull (without roof)
 	// Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v1_fixedmesh/mdl_room_main_v1_fixedmesh.j3o");
@@ -100,11 +104,20 @@ public class SceneCreator extends AbstractAppState {
 	room_node.attachChild(table.getNode());
 
 	// Side table
-	//Table table2 = new Table("Side Table", new Vector3f(3,0,0), false, assetManager, bulletAppState, shadows);
-	//System.out.println("loc: " + table2.getLocation());
-	//table2.translate(new Vector3f(0,1,0));
-	//System.out.println("loc: " + table2.getLocation());
-	//room_node.attachChild(table2);
+        Table table2 = new Table("Side Table", new Vector3f(0,0,0), false, assetManager, bulletAppState, shadows);
+	table2.translate(new Vector3f(-4.3f,1f,6.4f));
+	room_node.attachChild(table2.getNode());
+
+        
+        Chair playerChair = new Chair("playerChair", new Vector3f(0.05f, 0f, 3f), rotateY180, 
+                rootNode, assetManager, bulletAppState, shadows
+        );
+	room_node.attachChild(playerChair.getNode());
+        
+        Chair enemyChair = new Chair("enemyChair", new Vector3f(0.05f, 0f, -3f), new Quaternion(), 
+                rootNode, assetManager, bulletAppState, shadows
+        );
+	room_node.attachChild(enemyChair.getNode());
 
 	// Grandfather clock
 	//Spatial clock = insertClock(new Vector3f(-3.8f, 0f, -7f));
@@ -125,7 +138,7 @@ public class SceneCreator extends AbstractAppState {
 	Spatial chest = insertChest(new Vector3f(-5f, 1f, 0.2f));
 	room_node.attachChild(chest);
 
-	Note note = new Note("NoteRectangle", new Vector3f(-4.5f, 0f, 8f), new Vector3f(0.4f, 0.01f, 0.2f), ColorRGBA.White, assetManager, rootNode, bulletAppState);
+	Note note = new Note("NoteRectangle", new Vector3f(-4f, 1.9f, 5f), new Vector3f(0.4f, 0.01f, 0.2f), ColorRGBA.White, assetManager, rootNode, bulletAppState);
 	Geometry notegeo = note.getGeometry();
 	notegeo.setUserData("puzzle", true);
 	rootNode.attachChild(note.getGeometry());
@@ -159,7 +172,13 @@ public class SceneCreator extends AbstractAppState {
         //room_node.attachChild(spawnKey().getGeometry());
         //Spatial table_candle = insertCandle(new Vector3f(0.6f, 2.1f, -1f));
 	//Spatial key = insertKey(new Vector3f(0.6f, 1f, -1f));
-	
+        
+        Pirate pirate = new Pirate("Pirate", new Vector3f(0f, -0.3f, -2.66f), assetManager, bulletAppState, shadows);
+	rootNode.attachChild(pirate.getNode());
+        
+        // Insert extra props
+        insertExtraStuff();
+        
         room_node.attachChild(moveable_node);
         
         rootNode.attachChild(room_node);
@@ -195,6 +214,13 @@ public class SceneCreator extends AbstractAppState {
 
     public Table getMainTable() {
 	return this.mainTable;
+    }
+    
+    private void insertExtraStuff() {   
+        // Side table2
+        Table table3 = new Table("Side Table", new Vector3f(0,0,0), false, assetManager, bulletAppState, shadows);
+	table3.translate(new Vector3f(4.3f,1f,6.4f));
+	room_node.attachChild(table3.getNode());
     }
     
     private Spatial insertRoom2() {
@@ -409,27 +435,27 @@ public class SceneCreator extends AbstractAppState {
 
 	return clock_node;
     }
+    
+    public void setTextureScale(Spatial spatial, Vector2f vector) {
 
-	public void setTextureScale(Spatial spatial, Vector2f vector) {
+            if (spatial instanceof Node) {
 
-		if (spatial instanceof Node) {
+                    Node findingnode = (Node) spatial;
 
-			Node findingnode = (Node) spatial;
+                    for (int i = 0; i < findingnode.getQuantity(); i++) {
 
-			for (int i = 0; i < findingnode.getQuantity(); i++) {
+                            Spatial child = findingnode.getChild(i);
 
-				Spatial child = findingnode.getChild(i);
+                            setTextureScale(child, vector);
 
-				setTextureScale(child, vector);
+                    }
 
-			}
+            } else if (spatial instanceof Geometry) {
 
-		} else if (spatial instanceof Geometry) {
+                    ((Geometry) spatial).getMesh().scaleTextureCoordinates(vector);
 
-			((Geometry) spatial).getMesh().scaleTextureCoordinates(vector);
+            }
 
-		}
-
-	}
+    }
 
 }
