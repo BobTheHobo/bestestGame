@@ -90,6 +90,8 @@ public class CardGameState extends AbstractAppState {
     NanoTimer timer = new NanoTimer();
     private int opponentCheck = 0;
     private boolean won = false;
+    private boolean lost = false;
+    private AudioNode an;
 
     public CardGameState(PlayerManager playerManager, Table table, BoardEnvironment boardEnv) {
 	super();
@@ -334,7 +336,9 @@ public class CardGameState extends AbstractAppState {
                 cam.setRotation(seatedAng);
             }
             if (board.isLost()) {
-                System.exit(0);
+                //System.exit(0);
+                lost = true;
+                an.stop();
             }
         }
         
@@ -382,7 +386,7 @@ public class CardGameState extends AbstractAppState {
 
 
         
-        AudioNode an = new AudioNode(assetManager, getSceneAudio(scene));
+        an = new AudioNode(assetManager, getSceneAudio(scene));
         an.setPositional(false);    
         an.play();      
     }
@@ -396,7 +400,7 @@ public class CardGameState extends AbstractAppState {
         
         switch(card) {
             case "Swashbuckler":
-                dialogue.setText("Swashbuckler");
+                dialogue.setText("Swashbuckler:\n Basic pirate");
                 break;
             case "Cook":
                 dialogue.setText("Cook:\n When played gives +1 power to all pirates on this galley");
@@ -470,5 +474,9 @@ public class CardGameState extends AbstractAppState {
     
     public boolean getWon() {
         return won;
+    }
+    
+    public boolean getLost() {
+        return lost;
     }
 }

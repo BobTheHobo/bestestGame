@@ -71,6 +71,7 @@ public class SceneAppState extends AbstractAppState {
     private float calledTime;
     private int delay = -1;
     private boolean wonCalled = false;
+    private boolean lostCalled = false;
     NanoTimer timer = new NanoTimer();
     
     private Picture endScreen;
@@ -325,6 +326,8 @@ public class SceneAppState extends AbstractAppState {
             calledTime = timer.getTimeInSeconds();
             delay = 1;
         }
+        
+       
 
         if (delay != -1 && timer.getTimeInSeconds() > (calledTime + delay) && state.getWon()) {
             Win();
@@ -371,5 +374,12 @@ public class SceneAppState extends AbstractAppState {
         inputHandler.reset();
 
         System.out.println("Scene cleanup complete.");
+    }
+    
+    public boolean lost() {
+         if (!lostCalled && state.getLost()) {
+            return true;
+        }
+        return false;
     }
     }
