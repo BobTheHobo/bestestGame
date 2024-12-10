@@ -72,6 +72,8 @@ public class SceneAppState extends AbstractAppState {
     private int delay = -1;
     private boolean wonCalled = false;
     NanoTimer timer = new NanoTimer();
+    
+    private Picture endScreen;
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -198,33 +200,47 @@ public class SceneAppState extends AbstractAppState {
     }
     
     private void showEndScreen() {
-        Picture endScreen = new Picture("EndScreen");
-        endScreen.setImage(assetManager, "Textures/Mutiny-End-Screen.png", true);
-        endScreen.setWidth(app.getCamera().getWidth());
-        endScreen.setHeight(app.getCamera().getHeight());
-        endScreen.setPosition(0, 0);
+        if (endScreen == null) { // Create the end screen only once
+            endScreen = new Picture("EndScreen");
+            endScreen.setImage(assetManager, "Textures/Mutiny-End-Screen-v2.png", true);
+            endScreen.setWidth(app.getCamera().getWidth());
+            endScreen.setHeight(app.getCamera().getHeight());
+            endScreen.setPosition(0, 0);
+        }
+
         app.getGuiNode().attachChild(endScreen);
         System.out.println("End screen displayed.");
-        
-        
+
         musicManager.stopTrack("Ambience-Rumble");
-        musicManager.stopTrack("Ambience-Waves");
-        
-        enableExit();
+        musicManager.stopTrack("Ambience-Waves"); 
+
+        enableRestart();
     }
-    
+
     private void disableInput() {
-        app.getInputManager().clearMappings(); // Remove all input mappings
-        System.out.println("Input disabled.");
+        // Do not disable camera mappings or input controls
+//        app.getInputManager().clearMappings(); // Clear non-essential mappings
+//        app.getInputManager().clearRawInputListeners();
+        System.out.println("Input disabled but camera mappings preserved.");
     }
+
     
-    private void enableExit() {
+    private void enableRestart() {
         InputManager inputManager = app.getInputManager();
-        inputManager.addMapping(MAPPING_EXIT, TRIGGER_ESC); // Rebind ESC for exiting
+
+        // Clear only mappings related to gameplay, not core controls like ESC
+        inputManager.deleteMapping(MAPPING_SCENE); 
+        inputManager.deleteMapping(MAPPING_WIN); 
+
+        // Rebind 'P' for restarting the game
+        inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
+        inputManager.addListener(actionListenerRestart, MAPPING_SCENE);
+
+        // Rebind 'ESC' for exiting
+        inputManager.addMapping(MAPPING_EXIT, TRIGGER_ESC);
         inputManager.addListener(actionListenerWin, MAPPING_EXIT);
-        System.out.println("'ESC' key enabled for exiting.");
-        
-        
+
+        System.out.println("'P' key enabled for restarting and 'ESC' key enabled for exiting.");
     }
     
     private ActionListener actionListener = new ActionListener() {
@@ -238,6 +254,59 @@ public class SceneAppState extends AbstractAppState {
 	    	}
 	    }
     };
+
+    private final ActionListener actionListenerRestart = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (!isPressed && name.equals(MAPPING_SCENE) && winTriggered) { // Check if triggered from the end screen
+                System.out.println("Restarting game from end screen...");
+
+                // Properly reset the scene
+                resetScene();
+            }
+        }
+    };
+
+    private void resetScene() {
+        System.out.println("Resetting scene...");
+
+        // Detach the current app state
+        stateManager.detach(this);
+
+        // Detach all children from rootNode and guiNode
+        app.getRootNode().detachAllChildren();
+        app.getGuiNode().detachAllChildren();
+
+        // Clear input mappings but preserve critical mappings like ESC
+        app.getInputManager().clearRawInputListeners();
+        app.getInputManager().deleteMapping(MAPPING_SCENE);
+        app.getInputManager().deleteMapping(MAPPING_WIN);
+
+        // Re-add essential input mappings
+        app.getInputManager().addMapping(MAPPING_EXIT, TRIGGER_ESC);
+        app.getInputManager().addListener(actionListenerWin, MAPPING_EXIT);
+
+        // Re-enable the FlyByCamera
+        app.getFlyByCamera().setEnabled(true);
+        app.getFlyByCamera().setDragToRotate(false); // Ensure camera rotates with mouse movement
+
+        // Reinitialize the camera using the CameraManager
+        if (cameraManager != null) {
+            cameraManager.resetCamera(); // Ensure camera is fully reinitialized
+        }
+
+        // Create a new instance of SceneAppState
+        SceneAppState newScene = new SceneAppState();
+
+        // Attach the new app state
+        stateManager.attach(newScene);
+
+        System.out.println("Game reset complete.");
+    }
+
+
+
+
     
     public boolean getNextScene() {
         return nextScene;
@@ -245,28 +314,26 @@ public class SceneAppState extends AbstractAppState {
 
     @Override
     public void update(float tpf) {
-        //TODO: implement behavior during runtime
-	super.update(tpf);
-	playerManager.updatePlayer(tpf);
-        killPlane.checkForResets(tpf);
-	environment.addWaves(tpf);
-        
+        super.update(tpf);
+
+        playerManager.updatePlayer(tpf); // Ensure player and camera controls work
+        killPlane.checkForResets(tpf);  // Check for reset conditions
+        environment.addWaves(tpf);     // Update environment animations
+
         if (!wonCalled && state.getWon()) {
-            
             wonCalled = true;
             calledTime = timer.getTimeInSeconds();
             delay = 1;
         }
-        
+
         if (delay != -1 && timer.getTimeInSeconds() > (calledTime + delay) && state.getWon()) {
-            //delay = -1;
             Win();
         }
-        
+
         if (interactionManager.getChestUnlocked()) {
             state.getBoard().addKraken();
         }
-        
+
         if (isShaking) {
             shakeTime -= tpf;
 
@@ -281,27 +348,28 @@ public class SceneAppState extends AbstractAppState {
             if (shakeTime <= 0) {
                 isShaking = false;
                 app.getCamera().setLocation(new Vector3f(0, 0, 0)); // Reset camera position
-                disableInput(); // Disable all inputs
+                disableInput(); // Disable gameplay inputs
                 showEndScreen(); // Show the end screen
+                enableRestart(); // Allow restarting the game
             }
         }
-
     }
     
     @Override
     public void cleanup() {
         super.cleanup();
-        
+
+        // Preserve input mappings for ESC and restart
         app.getInputManager().deleteMapping(MAPPING_WIN);
-        app.getInputManager().clearRawInputListeners();
         environment.reset();
         shadows.reset();
-        //stateManager.detach(bulletAppState);
         stateManager.detach(state);
+
         musicManager.stopTrack("Ambience-Rumble");
         musicManager.stopTrack("Ambience-Waves");
         playerManager.cleanup();
         inputHandler.reset();
-        
+
+        System.out.println("Scene cleanup complete.");
     }
-}
+    }
