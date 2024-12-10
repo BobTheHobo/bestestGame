@@ -32,6 +32,7 @@ public class Key {
     private BulletAppState bulletAppState;
     private GameShadows shadows;
     private String name;
+    private boolean keyRemoved;
 
     // Constructor that takes all parameters needed to create and add a key to the world
     public Key(String name, Vector3f position, Vector3f size, AssetManager assetManager, Node rootNode, BulletAppState bulletAppState, GameShadows shadows) {
@@ -42,6 +43,9 @@ public class Key {
         this.bulletAppState = bulletAppState;
         this.shadows = shadows;
         
+        this.keyRemoved = false;
+        
+        //key itself isn't always attached to key_node
         key_node = new Node("Key node");
         createKey();
     }
@@ -54,6 +58,21 @@ public class Key {
     // Getter for the key node
     public Spatial getKeyNode() {
         return key_node;
+    }
+    
+    public void removeKey() {
+        keyRemoved = true;
+        
+        try { 
+            Spatial key = rootNode.getChild("key");
+            
+            // just blanket remove everything
+            rootNode.detachChild(key);
+            ((Node)rootNode.getChild("HandNode")).detachChild(keyGeom.getParent());
+            
+            // rename the key because name of node is how it keeps on getting reattached in drop item handler
+            key.setName("keyremoved");
+        } catch (Exception ex) {}
     }
     
     // Create key

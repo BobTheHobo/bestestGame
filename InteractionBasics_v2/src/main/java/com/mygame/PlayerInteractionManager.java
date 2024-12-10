@@ -102,7 +102,7 @@ public class PlayerInteractionManager {
         this.app = app;
         
         bulletAppState = new BulletAppState();
-        this.sfxManager = new SFXManager(app.getAssetManager());
+        this.sfxManager = sfxManager;
         
         sfxManager.loadSFX("Chest-Open", "Sounds/SFX/Chest-Open.wav");
         sfxManager.loadSFX("Clock-Turn", "Sounds/SFX/Clock-Turn-16bit.wav");
@@ -383,9 +383,15 @@ public class PlayerInteractionManager {
             
             Node moveableNode = (Node)rootNode.getChild("Move object node");
             // Add object back to the moveable object node (which killplane depends on)
-            if (heldItem.getName().equals("key")) {
+            // unless removed
+            if (heldItem.getName().equals("keyremoved")) {
+                // Clear held item references
+                heldItem = null;
+                heldItemControl = null;
+                return;
+            } else if (heldItem.getName().equals("key")) {
                 ((Node)rootNode.getChild("Key node")).attachChild(heldItem);
-                Util.printChildren(moveableNode);
+                System.out.println("putting key back");
             } else {
                 moveableNode.attachChild(heldItem);
             }

@@ -32,13 +32,14 @@ public class PlayerManager {
     private Vector3f spawnPos = new Vector3f(0, 2f, 0);
     
     public PlayerManager(BulletAppState bulletAppState, Node rootNode, Camera cam, CameraManager cameraManager, InputHandler inputHandler, 
-            PlayerInteractionManager interactionManager, AppSettings settings, AssetManager assetManager) {
+            PlayerInteractionManager interactionManager, AppSettings settings, AssetManager assetManager, SFXManager sfxManager) {
         this.bulletAppState = bulletAppState;
         this.cam = cam;
         this.cameraManager = cameraManager;
         this.inputHandler = inputHandler;
         this.interactionManager = interactionManager;
         this.assetManager = assetManager;
+        this.sfxManager = sfxManager;
 
         this.walkingEnabled = false;
     }
@@ -67,7 +68,6 @@ public class PlayerManager {
         bulletAppState.getPhysicsSpace().add(player);
 
         // Initialize the SFXManager
-        sfxManager = new SFXManager(assetManager);
         sfxManager.loadSFX("footstep", "Sounds/SFX/Footstep-16bit.wav");
     }
 

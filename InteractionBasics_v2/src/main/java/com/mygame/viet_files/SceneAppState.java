@@ -102,8 +102,6 @@ public class SceneAppState extends AbstractAppState {
 	bulletAppState = new BulletAppState();
         //bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
 	stateManager.attach(bulletAppState);
-        
-        sfxManager = new SFXManager(assetManager);
 
         crosshairManager = new CrosshairManager(
             this.app.getAssetManager(),
@@ -125,9 +123,7 @@ public class SceneAppState extends AbstractAppState {
 	particles = new GameParticles(rootNode, assetManager);
 	boardEnvironment = new BoardEnvironment(rootNode, assetManager, viewPort);
         
-        musicManager = new MusicManager(assetManager);
-	musicManager.loadTrack("Ambience", "Sounds/Music/Ambience-Waves-16bit.wav");
-	musicManager.playTrack("Ambience");
+
 
 	shadows.setupShadowHandlers();
 	lighting.setupLighting();
@@ -154,8 +150,9 @@ public class SceneAppState extends AbstractAppState {
 	    this.cameraManager,
 	    this.inputHandler,
 	    this.interactionManager,
-        this.app.getContext().getSettings(),
-		this.assetManager
+            this.app.getContext().getSettings(),
+            this.assetManager,
+            this.sfxManager
         );
 	playerManager.setupPlayer();
 
@@ -171,63 +168,6 @@ public class SceneAppState extends AbstractAppState {
 
         state = new CardGameState(playerManager, sceneCreator.getMainTable(), boardEnvironment);
         stateManager.attach(state);
-    }
-    
-    private final ActionListener actionListenerWin = new ActionListener() {
-        @Override
-        public void onAction(String name, boolean isPressed, float tpf) {
-            if (name.equals(MAPPING_WIN) && isPressed) {
-                //Win();
-                wonCalled = true;
-                calledTime = timer.getTimeInSeconds();
-                delay = 1;
-            } else if (name.equals(MAPPING_EXIT) && isPressed) {
-                app.stop();
-            }
-        }
-    };
-    
-    public void Win() {
-        if (winTriggered) return; // Ensure the win sequence only runs once
-        winTriggered = true;
-
-        System.out.println("Win function triggered!");
-
-        // Start shaking
-        isShaking = true;
-        shakeTime = 5f; // Total duration for shaking
-        shakeIntensity = 0.2f; // Initial shake intensity
-        sfxManager.playSFX("Ship-Sink", new Vector3f(0, 0, 0));
-    }
-    
-    private void showEndScreen() {
-        Picture endScreen = new Picture("EndScreen");
-        endScreen.setImage(assetManager, "Textures/Mutiny-End-Screen.png", true);
-        endScreen.setWidth(app.getCamera().getWidth());
-        endScreen.setHeight(app.getCamera().getHeight());
-        endScreen.setPosition(0, 0);
-        app.getGuiNode().attachChild(endScreen);
-        System.out.println("End screen displayed.");
-        
-        
-        musicManager.stopTrack("Ambience-Rumble");
-        musicManager.stopTrack("Ambience-Waves");
-        
-        enableExit();
-    }
-    
-    private void disableInput() {
-        app.getInputManager().clearMappings(); // Remove all input mappings
-        System.out.println("Input disabled.");
-    }
-    
-    private void enableExit() {
-        InputManager inputManager = app.getInputManager();
-        inputManager.addMapping(MAPPING_EXIT, TRIGGER_ESC); // Rebind ESC for exiting
-        inputManager.addListener(actionListenerWin, MAPPING_EXIT);
-        System.out.println("'ESC' key enabled for exiting.");
-        
-        
     }
     
     private final ActionListener actionListenerWin = new ActionListener() {

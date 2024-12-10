@@ -152,7 +152,7 @@ public class SceneCreator extends AbstractAppState {
         playerInteractionManager.setOnCardGotten(() -> {
             if (hasSpawnedKey) {
                 System.out.println("removing key");
-                ((Node)rootNode.getChild("HandNode")).detachChild(spawnKey().getGeometry().getParent());
+                spawnedKey.removeKey();
             }
         });
         
