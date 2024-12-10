@@ -86,6 +86,8 @@ public class PlayerInteractionManager {
     private BitmapText rewardText;
     private float rewardTextTimer = 0f; // Timer for showing the reward text
     private boolean showRewardText = false; // Flag to control visibility
+    
+    private boolean held;
 
     private SFXManager sfxManager;
 
@@ -294,6 +296,8 @@ public class PlayerInteractionManager {
                         // Pick up the item
                         heldItem = target;
                         heldItemControl = heldItem.getControl(RigidBodyControl.class);
+                        System.out.println("Picking something up");
+                        held = true;
 
                         if (heldItemControl != null) {
 			    // Remove collision with player (group 2)
@@ -315,8 +319,9 @@ public class PlayerInteractionManager {
                         }
                         heldItem.setLocalTranslation(Vector3f.ZERO);
                         handNode.attachChild(heldItem);
-			System.out.println("node " + heldItemControl.getSpatial().getName());
+			System.out.println("node " + heldItemControl.getSpatial().getName() + " at: " + heldItemControl.getSpatial().getLocalTranslation());
 
+                       
                         break; // Item picked up, exit loop
                     }
                 }
@@ -326,6 +331,7 @@ public class PlayerInteractionManager {
 
 
     private void dropItem() {
+        held = false;
         if (heldItem != null) {
             // Detach the item from the hand node
             handNode.detachChild(heldItem);
@@ -389,9 +395,9 @@ public class PlayerInteractionManager {
 
 
     public void handleInteraction() {
-        if (heldItem == null) {
+        if (heldItem == null  && !held) {
             pickUpItem();
-        } else {
+        } else if (held) {
             dropItem();
         }
     }

@@ -18,6 +18,7 @@ import com.jme3.input.controls.Trigger;
 import com.jme3.renderer.Camera;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import com.jme3.system.NanoTimer;
 import com.mygame.CameraManager;
 import com.mygame.CrosshairManager;
 import com.mygame.PlayerInteractionManager;
@@ -57,6 +58,9 @@ public class GameInputHandler {
     private final static String MAPPING_RESET = "Reset";
     private final static String MAPPING_CROSSHAIR = "Toggle Crosshair";
     private final static String MAPPING_TOGGLE_WALKING = "Toggle Walking";
+    
+    private NanoTimer timer = new NanoTimer();
+    private float time = timer.getTimeInSeconds();
 
     // Movement flags
     private boolean left = false, right = false, forward = false, backward = false;
@@ -145,9 +149,16 @@ public class GameInputHandler {
                     }
                     break;
                 case MAPPING_LEFT_CLICK:
-                    if (isPressed) {
+                    //if(MouseInput.get().isButtonDown(0)) return;
+                    
+                    //MouseInput.
+
+                    if (isPressed  && (timer.getTimeInSeconds() > (time + 0.5f))) {
                         // Delegate interaction to the PlayerInteractionManager
+                        time = timer.getTimeInSeconds();                                                                                    
                         interactionManager.handleInteraction();
+                        //System.out.println("Input manager: ");
+                        System.out.println("Input manager: " + inputManager.toString());
                     }
                     break;
             }
@@ -169,5 +180,10 @@ public class GameInputHandler {
 
     public boolean isBackward() {
         return backward;
+    }
+    
+    public void reset() {
+        inputManager.removeListener(walkingActionListener);
+        inputManager.removeListener(cameraActionListener);
     }
 }

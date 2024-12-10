@@ -7,6 +7,7 @@ import com.jme3.input.MouseInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.MouseButtonTrigger;
+import com.jme3.system.NanoTimer;
 
 /*
 * author: shawn
@@ -16,6 +17,8 @@ public class InputHandler {
     private InputManager inputManager;
     private CrosshairManager crosshairManager;
     private PlayerInteractionManager interactionManager;
+    private NanoTimer timer = new NanoTimer();
+    private float time;
 
     // Movement flags
     private boolean left = false, right = false, forward = false, backward = false;
@@ -24,6 +27,7 @@ public class InputHandler {
         this.inputManager = app.getInputManager();
         this.crosshairManager = crosshairManager;
         this.interactionManager = interactionManager;
+        time = timer.getTimeInSeconds();
 
         setupKeys();
     }
@@ -38,6 +42,7 @@ public class InputHandler {
         inputManager.addMapping("ToggleCrosshair", new KeyTrigger(KeyInput.KEY_C));
 
         // Add a mouse mapping for interaction (left mouse button)
+        inputManager.addMapping("Interact", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
         inputManager.addMapping("Interact", new MouseButtonTrigger(MouseInput.BUTTON_LEFT));
 
         inputManager.addListener(actionListener, "Left", "Right", "Forward", "Backward", "ToggleCrosshair", "Interact");
@@ -71,7 +76,10 @@ public class InputHandler {
                 case "Interact":
                     if (isPressed) {
                         // Delegate interaction to the PlayerInteractionManager
+                        
                         interactionManager.handleInteraction();
+                        time = timer.getTimeInSeconds();
+                        
                     }
                     break;
             }
@@ -93,5 +101,9 @@ public class InputHandler {
 
     public boolean isBackward() {
         return backward;
+    }
+    
+    public void reset() {
+        inputManager.clearMappings();
     }
 }
