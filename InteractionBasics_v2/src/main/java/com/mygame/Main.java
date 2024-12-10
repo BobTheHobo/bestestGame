@@ -49,6 +49,7 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleUpdate(float tpf) {
+        /*
         if (sceneState.lost()) {
             app.enqueue(() -> {
                 app.getRootNode().detachAllChildren();
@@ -60,7 +61,8 @@ public class Main extends SimpleApplication {
             
             });
              
-        }
+        
+        */
     }
     
     private ActionListener actionListener = new ActionListener() {

@@ -327,6 +327,13 @@ public class SceneAppState extends AbstractAppState {
             delay = 1;
         }
         
+        if (!lostCalled && state.getLost()) {
+            lostCalled = true;
+            app.enqueue(() -> {
+                resetScene();
+            });
+        }
+        
        
 
         if (delay != -1 && timer.getTimeInSeconds() > (calledTime + delay) && state.getWon()) {
