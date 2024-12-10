@@ -29,6 +29,8 @@ import com.mygame.PlayerInteractionManager;
 
 
 
+
+
 /**
  * @author viet
  */
@@ -266,6 +268,7 @@ public class SceneCreator extends AbstractAppState {
 
 	for(Spatial s : geo.getChildren()) {
 		System.out.println(" First Child is: " + s.getName());
+		System.out.println(" First Child is: " + s.getName());
 		int i = 0;
 		for(Spatial sp : ((Node)s).getChildren()) {
 			if (i == 0) {
@@ -284,6 +287,7 @@ public class SceneCreator extends AbstractAppState {
 				mat.setColor("Diffuse", ColorRGBA.Orange);   // ... color of light being reflected
 				holder.setMaterial(mat);
 			}
+			System.out.println("Child is: " + sp.getName());
 			System.out.println("Child is: " + sp.getName());
 			i++;
 		}

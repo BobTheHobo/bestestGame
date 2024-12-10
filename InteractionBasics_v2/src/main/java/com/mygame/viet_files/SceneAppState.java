@@ -13,8 +13,12 @@ import com.jme3.input.KeyInput;
 import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
+import com.jme3.math.FastMath;
+import com.jme3.math.Vector3f;
 import com.jme3.renderer.ViewPort;
 import com.jme3.scene.Node;
+import com.jme3.system.NanoTimer;
+import com.jme3.ui.Picture;
 import com.mygame.CameraManager;
 import com.mygame.CrosshairManager;
 import com.mygame.PlayerInteractionManager;
@@ -48,9 +52,26 @@ public class SceneAppState extends AbstractAppState {
     private CameraManager cameraManager; // Camera manager
     private PlayerManager playerManager;
     private InputHandler inputHandler;
-    private MusicManager musicManager;
+    private CardGameState state;
+    private AppStateManager stateManager;
+    
+    private static final Trigger TRIGGER_R = new KeyTrigger(KeyInput.KEY_R); // 'R' key trigger for testing
+    private static final Trigger TRIGGER_ESC = new KeyTrigger(KeyInput.KEY_ESCAPE); // 'ESC' key trigger to exit game
+    private static final String MAPPING_WIN = "Win Game";
+    private static final String MAPPING_EXIT = "Exit Game";
+
+    private float shakeTime = 0f; // Timer for shake duration
+    private boolean isShaking = false;
+    private float shakeIntensity = 0f; // Shake intensity
+    private boolean winTriggered = false; // Tracks if the win sequence is in progress
+    private MusicManager musicManager; 
     private SFXManager sfxManager;
     private AnimComposer animComposer;
+    
+    private float calledTime;
+    private int delay = -1;
+    private boolean wonCalled = false;
+    NanoTimer timer = new NanoTimer();
 
     @Override
     public void initialize(AppStateManager stateManager, Application app) {
@@ -60,9 +81,23 @@ public class SceneAppState extends AbstractAppState {
         this.assetManager = this.app.getAssetManager();
 	this.viewPort = this.app.getViewPort();
         
+        this.musicManager = new MusicManager(assetManager);
+        this.sfxManager = new SFXManager(assetManager);
+        
+        this.stateManager = stateManager;
+        
+        musicManager.loadTrack("Ambience-Rumble", "Sounds/MusicPlus/Ambience-Rumble-16bit.wav");
+        musicManager.loadTrack("Ambience-Waves", "Sounds/Music/Ambience-Waves-16bit.wav");
+        sfxManager.loadSFX("Ship-Sink", "Sounds/SFXPlus/Ship-Sink-16bit.wav");
+        
+        musicManager.playTrack("Ambience-Rumble");
+        musicManager.playTrack("Ambience-Waves");
+        
         InputManager inputManager = this.app.getInputManager();
         inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
+        inputManager.addMapping(MAPPING_WIN, TRIGGER_R);
         inputManager.addListener(actionListener, MAPPING_SCENE);
+        inputManager.addListener(actionListenerWin, MAPPING_WIN);
 
 	bulletAppState = new BulletAppState();
         //bulletAppState.setDebugEnabled(true); // ENABLE FOR COLLISION WIREFRAMES
@@ -119,7 +154,7 @@ public class SceneAppState extends AbstractAppState {
 	    this.cameraManager,
 	    this.inputHandler,
 	    this.interactionManager,
-            this.app.getContext().getSettings(),
+        this.app.getContext().getSettings(),
 		this.assetManager
         );
 	playerManager.setupPlayer();
@@ -129,9 +164,127 @@ public class SceneAppState extends AbstractAppState {
         
         killPlane = new KillPlane(this.rootNode, this.assetManager, this.playerManager, this.sfxManager);
 
-        CardGameState state = new CardGameState(playerManager, sceneCreator.getMainTable(), boardEnvironment);
-        stateManager.attach(state);
+	// Tiny rotation to (hopefully) fix shadow artifacts
+	//rootNode.rotate(0, 0.01f, 0);
+        
+        killPlane = new KillPlane(this.rootNode, this.assetManager, this.playerManager, this.sfxManager);
 
+        state = new CardGameState(playerManager, sceneCreator.getMainTable(), boardEnvironment);
+        stateManager.attach(state);
+    }
+    
+    private final ActionListener actionListenerWin = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (name.equals(MAPPING_WIN) && isPressed) {
+                //Win();
+                wonCalled = true;
+                calledTime = timer.getTimeInSeconds();
+                delay = 1;
+            } else if (name.equals(MAPPING_EXIT) && isPressed) {
+                app.stop();
+            }
+        }
+    };
+    
+    public void Win() {
+        if (winTriggered) return; // Ensure the win sequence only runs once
+        winTriggered = true;
+
+        System.out.println("Win function triggered!");
+
+        // Start shaking
+        isShaking = true;
+        shakeTime = 5f; // Total duration for shaking
+        shakeIntensity = 0.2f; // Initial shake intensity
+        sfxManager.playSFX("Ship-Sink", new Vector3f(0, 0, 0));
+    }
+    
+    private void showEndScreen() {
+        Picture endScreen = new Picture("EndScreen");
+        endScreen.setImage(assetManager, "Textures/Mutiny-End-Screen.png", true);
+        endScreen.setWidth(app.getCamera().getWidth());
+        endScreen.setHeight(app.getCamera().getHeight());
+        endScreen.setPosition(0, 0);
+        app.getGuiNode().attachChild(endScreen);
+        System.out.println("End screen displayed.");
+        
+        
+        musicManager.stopTrack("Ambience-Rumble");
+        musicManager.stopTrack("Ambience-Waves");
+        
+        enableExit();
+    }
+    
+    private void disableInput() {
+        app.getInputManager().clearMappings(); // Remove all input mappings
+        System.out.println("Input disabled.");
+    }
+    
+    private void enableExit() {
+        InputManager inputManager = app.getInputManager();
+        inputManager.addMapping(MAPPING_EXIT, TRIGGER_ESC); // Rebind ESC for exiting
+        inputManager.addListener(actionListenerWin, MAPPING_EXIT);
+        System.out.println("'ESC' key enabled for exiting.");
+        
+        
+    }
+    
+    private final ActionListener actionListenerWin = new ActionListener() {
+        @Override
+        public void onAction(String name, boolean isPressed, float tpf) {
+            if (name.equals(MAPPING_WIN) && isPressed) {
+                //Win();
+                wonCalled = true;
+                calledTime = timer.getTimeInSeconds();
+                delay = 1;
+            } else if (name.equals(MAPPING_EXIT) && isPressed) {
+                app.stop();
+            }
+        }
+    };
+    
+    public void Win() {
+        if (winTriggered) return; // Ensure the win sequence only runs once
+        winTriggered = true;
+
+        System.out.println("Win function triggered!");
+
+        // Start shaking
+        isShaking = true;
+        shakeTime = 5f; // Total duration for shaking
+        shakeIntensity = 0.2f; // Initial shake intensity
+        sfxManager.playSFX("Ship-Sink", new Vector3f(0, 0, 0));
+    }
+    
+    private void showEndScreen() {
+        Picture endScreen = new Picture("EndScreen");
+        endScreen.setImage(assetManager, "Textures/Mutiny-End-Screen.png", true);
+        endScreen.setWidth(app.getCamera().getWidth());
+        endScreen.setHeight(app.getCamera().getHeight());
+        endScreen.setPosition(0, 0);
+        app.getGuiNode().attachChild(endScreen);
+        System.out.println("End screen displayed.");
+        
+        
+        musicManager.stopTrack("Ambience-Rumble");
+        musicManager.stopTrack("Ambience-Waves");
+        
+        enableExit();
+    }
+    
+    private void disableInput() {
+        app.getInputManager().clearMappings(); // Remove all input mappings
+        System.out.println("Input disabled.");
+    }
+    
+    private void enableExit() {
+        InputManager inputManager = app.getInputManager();
+        inputManager.addMapping(MAPPING_EXIT, TRIGGER_ESC); // Rebind ESC for exiting
+        inputManager.addListener(actionListenerWin, MAPPING_EXIT);
+        System.out.println("'ESC' key enabled for exiting.");
+        
+        
     }
     
     private ActionListener actionListener = new ActionListener() {
@@ -157,14 +310,55 @@ public class SceneAppState extends AbstractAppState {
 	playerManager.updatePlayer(tpf);
         killPlane.checkForResets(tpf);
 	environment.addWaves(tpf);
+        
+        if (!wonCalled && state.getWon()) {
+            
+            wonCalled = true;
+            calledTime = timer.getTimeInSeconds();
+            delay = 1;
+        }
+        
+        if (delay != -1 && timer.getTimeInSeconds() > (calledTime + delay) && state.getWon()) {
+            //delay = -1;
+            Win();
+        }
+        
+        if (interactionManager.getChestUnlocked()) {
+            state.getBoard().addKraken();
+        }
+        
+        if (isShaking) {
+            shakeTime -= tpf;
+
+            // Apply screen shake logic
+            float shakeX = (FastMath.rand.nextFloat() - 0.5f) * 2f * shakeIntensity;
+            float shakeY = (FastMath.rand.nextFloat() - 0.5f) * 2f * shakeIntensity;
+            app.getCamera().setLocation(app.getCamera().getLocation().add(new Vector3f(shakeX, shakeY, 0)));
+
+            // Gradually increase shake intensity
+            shakeIntensity += tpf * 0.1f;
+
+            if (shakeTime <= 0) {
+                isShaking = false;
+                app.getCamera().setLocation(new Vector3f(0, 0, 0)); // Reset camera position
+                disableInput(); // Disable all inputs
+                showEndScreen(); // Show the end screen
+            }
+        }
+
     }
     
     @Override
     public void cleanup() {
         super.cleanup();
-        //room_node.removeFromParent();
-        //TODO: clean up what you initialized in the initialize method,
-        //e.g. remove all spatials from rootNode
-        //this is called on the OpenGL thread after the AppState has been detached
+        
+        app.getInputManager().deleteMapping(MAPPING_WIN);
+        environment.reset();
+        shadows.reset();
+        stateManager.detach(bulletAppState);
+        stateManager.detach(state);
+        musicManager.stopTrack("Ambience-Rumble");
+        musicManager.stopTrack("Ambience-Waves");
+        playerManager.cleanup();
     }
 }

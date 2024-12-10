@@ -103,7 +103,6 @@ public class PlayerInteractionManager {
         
         bulletAppState = new BulletAppState();
         this.sfxManager = new SFXManager(app.getAssetManager());
-        this.sfxManager = sfxManager;
         
         sfxManager.loadSFX("Chest-Open", "Sounds/SFX/Chest-Open.wav");
         sfxManager.loadSFX("Clock-Turn", "Sounds/SFX/Clock-Turn-16bit.wav");
@@ -709,5 +708,9 @@ public class PlayerInteractionManager {
                 showRewardText = false;
             }
         }
+    }
+    
+    public boolean getChestUnlocked() {
+        return chestUnlocked;
     }
 } 

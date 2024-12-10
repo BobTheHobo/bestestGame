@@ -1,0 +1,2400 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  SIGSEGV (0xb) at pc=0x00007ff80759fbc6, pid=30554, tid=259
+#
+# JRE version: OpenJDK Runtime Environment Temurin-17.0.9+9 (17.0.9+9) (build 17.0.9+9)
+# Java VM: OpenJDK 64-Bit Server VM Temurin-17.0.9+9 (17.0.9+9, mixed mode, tiered, compressed oops, compressed class ptrs, g1 gc, bsd-amd64)
+# Problematic frame:
+# C  [libsystem_platform.dylib+0x5bc6]  _platform_memmove$VARIANT$Rosetta+0x126
+#
+# No core dump will be written. Core dumps have been disabled. To enable core dumping, try "ulimit -c unlimited" before starting Java again
+#
+# If you would like to submit a bug report, please visit:
+#   https://github.com/adoptium/adoptium-support/issues
+# The crash happened outside the Java Virtual Machine in native code.
+# See problematic frame for where to report the bug.
+#
+
+---------------  S U M M A R Y ------------
+
+Command Line: -Dfile.encoding=UTF-8 -Duser.country=AU -Duser.language=en -Duser.variant com.mygame.Main
+
+Host: "Mac14,6" x86_64 (EMULATED) 2400 MHz, 12 cores, 96G, Darwin 22.6.0, macOS 13.6.7 (22G720)
+Time: Mon Dec  9 15:39:51 2024 EST elapsed time: 6.322873 seconds (0d 0h 0m 6s)
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00007fcad080be00):  JavaThread "jME3 Main" [_thread_in_native, id=259, stack(0x000000030c5bf000,0x000000030cdbf000)]
+
+Stack: [0x000000030c5bf000,0x000000030cdbf000],  sp=0x000000030cdb8860,  free space=8166k
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+C  [libsystem_platform.dylib+0x5bc6]  _platform_memmove$VARIANT$Rosetta+0x126
+C  [AppleMetalOpenGLRenderer+0x46af6]  gldRenderVertexArray(GLDContextRec*, unsigned int, unsigned int, int, int, unsigned int, void const*, int, void const*)+0x5d3
+C  [GLEngine+0xbcde2]  glDrawRangeElements_ACC_GL3Exec+0x1a5
+C  [libGL.dylib+0x3625]  glDrawRangeElements+0x2d
+J 3488  org.lwjgl.opengl.GL12C.nglDrawRangeElements(IIIIIJ)V (0 bytes) @ 0x000000011fdd9e95 [0x000000011fdd9dc0+0x00000000000000d5]
+J 3900 c2 com.jme3.renderer.opengl.GLRenderer.drawTriangleList(Lcom/jme3/scene/VertexBuffer;Lcom/jme3/scene/Mesh;I)V (500 bytes) @ 0x000000011fe6c918 [0x000000011fe6c780+0x0000000000000198]
+J 3723 c2 com.jme3.renderer.opengl.GLRenderer.renderMeshDefault(Lcom/jme3/scene/Mesh;II[Lcom/jme3/scene/VertexBuffer;)V (242 bytes) @ 0x000000011fe2efc0 [0x000000011fe2e960+0x0000000000000660]
+J 3863 c2 com.jme3.material.logic.DefaultTechniqueDefLogic.renderMeshFromGeometry(Lcom/jme3/renderer/Renderer;Lcom/jme3/scene/Geometry;)V (64 bytes) @ 0x000000011fe601c0 [0x000000011fe600e0+0x00000000000000e0]
+J 4347 c1 com.jme3.material.logic.DefaultTechniqueDefLogic.render(Lcom/jme3/renderer/RenderManager;Lcom/jme3/shader/Shader;Lcom/jme3/scene/Geometry;Lcom/jme3/light/LightList;I)V (21 bytes) @ 0x00000001185fe094 [0x00000001185fdf40+0x0000000000000154]
+J 4354 c1 com.jme3.material.Technique.render(Lcom/jme3/renderer/RenderManager;Lcom/jme3/shader/Shader;Lcom/jme3/scene/Geometry;Lcom/jme3/light/LightList;I)V (24 bytes) @ 0x00000001186239ec [0x00000001186238c0+0x000000000000012c]
+J 3358 c1 com.jme3.material.Material.render(Lcom/jme3/scene/Geometry;Lcom/jme3/light/LightList;Lcom/jme3/renderer/RenderManager;)V (130 bytes) @ 0x00000001186f34d4 [0x00000001186f2f60+0x0000000000000574]
+J 4352 c1 com.jme3.renderer.RenderManager.renderGeometry(Lcom/jme3/scene/Geometry;)V (264 bytes) @ 0x00000001181268d4 [0x00000001181258a0+0x0000000000001034]
+J 3626 c1 com.jme3.renderer.queue.RenderQueue.renderGeometryList(Lcom/jme3/renderer/queue/GeometryList;Lcom/jme3/renderer/RenderManager;Lcom/jme3/renderer/Camera;Z)V (77 bytes) @ 0x000000011876da34 [0x000000011876d7c0+0x0000000000000274]
+J 3862 c1 com.jme3.renderer.queue.RenderQueue.renderQueue(Lcom/jme3/renderer/queue/RenderQueue$Bucket;Lcom/jme3/renderer/RenderManager;Lcom/jme3/renderer/Camera;Z)V (147 bytes) @ 0x00000001187d1b44 [0x00000001187d13e0+0x0000000000000764]
+j  com.jme3.renderer.RenderManager.renderViewPortQueues(Lcom/jme3/renderer/ViewPort;Z)V+60
+j  com.jme3.renderer.RenderManager.flushQueue(Lcom/jme3/renderer/ViewPort;)V+3
+j  com.jme3.renderer.RenderManager.renderViewPort(Lcom/jme3/renderer/ViewPort;F)V+457
+j  com.jme3.environment.EnvironmentCamera.render(Lcom/jme3/renderer/RenderManager;)V+60
+j  com.jme3.app.state.AppStateManager.render(Lcom/jme3/renderer/RenderManager;)V+81
+j  com.jme3.app.SimpleApplication.update()V+161
+j  com.jme3.system.lwjgl.LwjglWindow.runLoop()V+37
+j  com.jme3.system.lwjgl.LwjglWindow.run()V+54
+j  com.jme3.system.lwjgl.LwjglWindow.create(Z)V+60
+j  com.jme3.app.LegacyApplication.start(Lcom/jme3/system/JmeContext$Type;Z)V+94
+j  com.jme3.app.LegacyApplication.start()V+5
+j  com.jme3.app.SimpleApplication.start()V+51
+j  com.mygame.Main$1.onAction(Ljava/lang/String;ZF)V+34
+j  com.jme3.input.InputManager.invokeActions(IZ)V+105
+j  com.jme3.input.InputManager.onKeyEventQueued(Lcom/jme3/input/event/KeyInputEvent;)V+22
+j  com.jme3.input.InputManager.processQueue()V+318
+j  com.jme3.input.InputManager.update(F)V+103
+j  com.jme3.app.LegacyApplication.update()V+91
+j  com.jme3.app.SimpleApplication.update()V+20
+j  com.jme3.system.lwjgl.LwjglWindow.runLoop()V+37
+j  com.jme3.system.lwjgl.LwjglWindow.run()V+54
+j  com.jme3.system.lwjgl.LwjglWindow.create(Z)V+60
+j  com.jme3.app.LegacyApplication.start(Lcom/jme3/system/JmeContext$Type;Z)V+94
+j  com.jme3.app.LegacyApplication.start()V+5
+j  com.jme3.app.SimpleApplication.start()V+51
+j  com.mygame.Main.main([Ljava/lang/String;)V+59
+v  ~StubRoutines::call_stub
+V  [libjvm.dylib+0x519d91]  JavaCalls::call_helper(JavaValue*, methodHandle const&, JavaCallArguments*, JavaThread*)+0x2a1
+V  [libjvm.dylib+0x57e7a0]  jni_invoke_static(JNIEnv_*, JavaValue*, _jobject*, JNICallType, _jmethodID*, JNI_ArgumentPusher*, JavaThread*)+0x160
+V  [libjvm.dylib+0x581cbe]  jni_CallStaticVoidMethod+0x19e
+C  [libjli.dylib+0x8fcf]  JavaMain+0x9bf
+C  [libjli.dylib+0xb94c]  __JVMInit_block_invoke+0x4c
+C  [Foundation+0x417e1]  __NSBLOCKOPERATION_IS_CALLING_OUT_TO_A_BLOCK__+0x7
+C  [Foundation+0x416d9]  -[NSBlockOperation main]+0x62
+C  [Foundation+0x41672]  __NSOPERATION_IS_INVOKING_MAIN__+0x11
+C  [Foundation+0x40972]  -[NSOperation start]+0x30e
+C  [Foundation+0x7f5b3]  __NSThreadPerformPerform+0xb1
+C  [CoreFoundation+0x7c876]  __CFRUNLOOP_IS_CALLING_OUT_TO_A_SOURCE0_PERFORM_FUNCTION__+0x11
+C  [CoreFoundation+0x7c819]  __CFRunLoopDoSource0+0x9d
+C  [CoreFoundation+0x7c5f6]  __CFRunLoopDoSources0+0xd9
+C  [CoreFoundation+0x7b27a]  __CFRunLoopRun+0x394
+C  [CoreFoundation+0x7a88c]  CFRunLoopRunSpecific+0x230
+C  [libjli.dylib+0xafa2]  CreateExecutionEnvironment+0x182
+C  [libjli.dylib+0x6d1c]  JLI_Launch+0x59c
+C  [java+0x3c11]  main+0x191
+C  0x000000020485041f
+
+Java frames: (J=compiled Java code, j=interpreted, Vv=VM code)
+J 3488  org.lwjgl.opengl.GL12C.nglDrawRangeElements(IIIIIJ)V (0 bytes) @ 0x000000011fdd9e13 [0x000000011fdd9dc0+0x0000000000000053]
+J 3900 c2 com.jme3.renderer.opengl.GLRenderer.drawTriangleList(Lcom/jme3/scene/VertexBuffer;Lcom/jme3/scene/Mesh;I)V (500 bytes) @ 0x000000011fe6c918 [0x000000011fe6c780+0x0000000000000198]
+J 3723 c2 com.jme3.renderer.opengl.GLRenderer.renderMeshDefault(Lcom/jme3/scene/Mesh;II[Lcom/jme3/scene/VertexBuffer;)V (242 bytes) @ 0x000000011fe2efc0 [0x000000011fe2e960+0x0000000000000660]
+J 3863 c2 com.jme3.material.logic.DefaultTechniqueDefLogic.renderMeshFromGeometry(Lcom/jme3/renderer/Renderer;Lcom/jme3/scene/Geometry;)V (64 bytes) @ 0x000000011fe601c0 [0x000000011fe600e0+0x00000000000000e0]
+J 4347 c1 com.jme3.material.logic.DefaultTechniqueDefLogic.render(Lcom/jme3/renderer/RenderManager;Lcom/jme3/shader/Shader;Lcom/jme3/scene/Geometry;Lcom/jme3/light/LightList;I)V (21 bytes) @ 0x00000001185fe094 [0x00000001185fdf40+0x0000000000000154]
+J 4354 c1 com.jme3.material.Technique.render(Lcom/jme3/renderer/RenderManager;Lcom/jme3/shader/Shader;Lcom/jme3/scene/Geometry;Lcom/jme3/light/LightList;I)V (24 bytes) @ 0x00000001186239ec [0x00000001186238c0+0x000000000000012c]
+J 3358 c1 com.jme3.material.Material.render(Lcom/jme3/scene/Geometry;Lcom/jme3/light/LightList;Lcom/jme3/renderer/RenderManager;)V (130 bytes) @ 0x00000001186f34d4 [0x00000001186f2f60+0x0000000000000574]
+J 4352 c1 com.jme3.renderer.RenderManager.renderGeometry(Lcom/jme3/scene/Geometry;)V (264 bytes) @ 0x00000001181268d4 [0x00000001181258a0+0x0000000000001034]
+J 3626 c1 com.jme3.renderer.queue.RenderQueue.renderGeometryList(Lcom/jme3/renderer/queue/GeometryList;Lcom/jme3/renderer/RenderManager;Lcom/jme3/renderer/Camera;Z)V (77 bytes) @ 0x000000011876da34 [0x000000011876d7c0+0x0000000000000274]
+J 3862 c1 com.jme3.renderer.queue.RenderQueue.renderQueue(Lcom/jme3/renderer/queue/RenderQueue$Bucket;Lcom/jme3/renderer/RenderManager;Lcom/jme3/renderer/Camera;Z)V (147 bytes) @ 0x00000001187d1b44 [0x00000001187d13e0+0x0000000000000764]
+j  com.jme3.renderer.RenderManager.renderViewPortQueues(Lcom/jme3/renderer/ViewPort;Z)V+60
+j  com.jme3.renderer.RenderManager.flushQueue(Lcom/jme3/renderer/ViewPort;)V+3
+j  com.jme3.renderer.RenderManager.renderViewPort(Lcom/jme3/renderer/ViewPort;F)V+457
+j  com.jme3.environment.EnvironmentCamera.render(Lcom/jme3/renderer/RenderManager;)V+60
+j  com.jme3.app.state.AppStateManager.render(Lcom/jme3/renderer/RenderManager;)V+81
+j  com.jme3.app.SimpleApplication.update()V+161
+j  com.jme3.system.lwjgl.LwjglWindow.runLoop()V+37
+j  com.jme3.system.lwjgl.LwjglWindow.run()V+54
+j  com.jme3.system.lwjgl.LwjglWindow.create(Z)V+60
+j  com.jme3.app.LegacyApplication.start(Lcom/jme3/system/JmeContext$Type;Z)V+94
+j  com.jme3.app.LegacyApplication.start()V+5
+j  com.jme3.app.SimpleApplication.start()V+51
+j  com.mygame.Main$1.onAction(Ljava/lang/String;ZF)V+34
+j  com.jme3.input.InputManager.invokeActions(IZ)V+105
+j  com.jme3.input.InputManager.onKeyEventQueued(Lcom/jme3/input/event/KeyInputEvent;)V+22
+j  com.jme3.input.InputManager.processQueue()V+318
+j  com.jme3.input.InputManager.update(F)V+103
+j  com.jme3.app.LegacyApplication.update()V+91
+j  com.jme3.app.SimpleApplication.update()V+20
+j  com.jme3.system.lwjgl.LwjglWindow.runLoop()V+37
+j  com.jme3.system.lwjgl.LwjglWindow.run()V+54
+j  com.jme3.system.lwjgl.LwjglWindow.create(Z)V+60
+j  com.jme3.app.LegacyApplication.start(Lcom/jme3/system/JmeContext$Type;Z)V+94
+j  com.jme3.app.LegacyApplication.start()V+5
+j  com.jme3.app.SimpleApplication.start()V+51
+j  com.mygame.Main.main([Ljava/lang/String;)V+59
+v  ~StubRoutines::call_stub
+
+siginfo: si_signo: 11 (SIGSEGV), si_code: 1 (SEGV_MAPERR), si_addr: 0x0000000000000000
+
+Registers:
+RAX=0x00000001fd81c000, RBX=0x00007fcabf74a2a0, RCX=0x00000001fd81c020, RDX=0x0000000000000048
+RSP=0x000000030cdb8860, RBP=0x000000030cdb8890, RSI=0x0000000000000000, RDI=0x00000001fd81c000
+R8 =0x0000000000000009, R9 =0x0000000000001360, R10=0x00007ffa4a09dbd0, R11=0x00007ff82583361f
+R12=0x00006000038ed340, R13=0x0000000000000000, R14=0x0000000000000048, R15=0x00006000037658f0
+RIP=0x00007ff80759fbc6, EFLAGS=0x0000000000000287, ERR=0x0000000000000004
+  TRAPNO=0x000000000000000e
+
+
+Register to memory mapping:
+
+RAX=0x00000001fd81c000 points into unknown readable memory: 0x0000000000000000 | 00 00 00 00 00 00 00 00
+RBX=0x00007fcabf74a2a0 points into unknown readable memory: 0x011dfffa4a09dbd5 | d5 db 09 4a fa ff 1d 01
+RCX=0x00000001fd81c020 points into unknown readable memory: 0x0000000000000000 | 00 00 00 00 00 00 00 00
+RDX=0x0000000000000048 is an unknown value
+RSP=0x000000030cdb8860 is pointing into the stack for thread: 0x00007fcad080be00
+RBP=0x000000030cdb8890 is pointing into the stack for thread: 0x00007fcad080be00
+RSI=0x0 is NULL
+RDI=0x00000001fd81c000 points into unknown readable memory: 0x0000000000000000 | 00 00 00 00 00 00 00 00
+R8 =0x0000000000000009 is an unknown value
+R9 =0x0000000000001360 is an unknown value
+R10=0x00007ffa4a09dbd0: OBJC_CLASS_$_AGXG14XFamilyBuffer+0 in /System/Library/Extensions/AGXMetalG14X.bundle/Contents/MacOS/AGXMetalG14X at 0x00007ffa22592000
+R11=0x00007ff82583361f: -[IOGPUMetalResource virtualAddress]+0 in /System/Library/PrivateFrameworks/IOGPU.framework/Versions/A/IOGPU at 0x00007ff825823000
+R12=0x00006000038ed340 points into unknown readable memory: 0x0000600003a5f8d0 | d0 f8 a5 03 00 60 00 00
+R13=0x0 is NULL
+R14=0x0000000000000048 is an unknown value
+R15=0x00006000037658f0 points into unknown readable memory: 0x00000001aae799b8 | b8 99 e7 aa 01 00 00 00
+
+
+Top of Stack: (sp=0x000000030cdb8860)
+0x000000030cdb8860:   000000030cdb8890 00007fcabf74a2a0
+0x000000030cdb8870:   00006000038ed340 0000000000000000
+0x000000030cdb8880:   0000000000000048 00006000037658f0
+0x000000030cdb8890:   000000030cdb8d40 00000001aae4faf6
+0x000000030cdb88a0:   0000000000000000 0000000000000000
+0x000000030cdb88b0:   000000030cdb88e0 00007ffa202f1a35
+0x000000030cdb88c0:   00000000c0000000 0000000000000004
+0x000000030cdb88d0:   00007ffa48f0a560 00007ffa48f0a5c0
+0x000000030cdb88e0:   000000030cdb8c40 00007ffa203d5446
+0x000000030cdb88f0:   00000000c34d0adf 0000000000000000
+0x000000030cdb8900:   00007fca90210000 00000011cf7986f0
+0x000000030cdb8910:   0000000100000000 00007fcacf7986f0
+0x000000030cdb8920:   0000000000000000 0000000090000000
+0x000000030cdb8930:   000000030cdb8c90 00007ffa203d50e1
+0x000000030cdb8940:   000000030cdb8970 0000000000000000
+0x000000030cdb8950:   00007fca90210000 00000011491d3a00
+0x000000030cdb8960:   0000000000040000 000000000004007f
+0x000000030cdb8970:   0000000000000000 00007ffa22ae5041
+0x000000030cdb8980:   00007ff8071da580 0000000000003200
+0x000000030cdb8990:   0000000000000003 00000005cfbae800
+0x000000030cdb89a0:   000000030cdb8aa0 000000030cdb8a99
+0x000000030cdb89b0:   000000030cdb8a20 00007ff8110f5d5e
+0x000000030cdb89c0:   0000000300000001 000000010c9fe000
+0x000000030cdb89d0:   0000000000000047 00007ff800000001
+0x000000030cdb89e0:   0000600000000000 000000030cdb8bc8
+0x000000030cdb89f0:   0000600002c18680 000000030cdb8a78
+0x000000030cdb8a00:   0000600000ce8840 00007ff800000003
+0x000000030cdb8a10:   0000000000000000 00007fca90158d10
+0x000000030cdb8a20:   0000000000000030 00006000038ed340
+0x000000030cdb8a30:   0000000000000001 00007fca90150000
+0x000000030cdb8a40:   000000030cdb8be0 00000001aae37b64
+0x000000030cdb8a50:   0000000000000000 0000000000000001 
+
+Instructions: (pc=0x00007ff80759fbc6)
+0x00007ff80759fac6:   00 00 00 55 48 89 e5 41 57 41 56 41 55 41 54 53
+0x00007ff80759fad6:   48 83 ec 08 0f ae f0 48 83 c1 20 48 83 e1 e0 4c
+0x00007ff80759fae6:   8b 26 4c 8b 6e 08 4c 8b 76 10 4c 8b 7e 18 48 01
+0x00007ff80759faf6:   ce 48 29 fe 48 8b 1e 4c 8b 4e 08 4c 8b 56 10 4c
+0x00007ff80759fb06:   8b 5e 18 48 83 c6 20 48 29 ca 48 01 fa 4c 0f c3
+0x00007ff80759fb16:   27 4c 0f c3 6f 08 4c 0f c3 77 10 4c 0f c3 7f 18
+0x00007ff80759fb26:   48 83 ea 40 76 30 48 0f c3 19 4c 0f c3 49 08 4c
+0x00007ff80759fb36:   0f c3 51 10 4c 0f c3 59 18 48 83 c1 20 48 8b 1e
+0x00007ff80759fb46:   4c 8b 4e 08 4c 8b 56 10 4c 8b 5e 18 48 83 c6 20
+0x00007ff80759fb56:   48 83 ea 20 77 d0 48 01 d6 4c 8b 26 4c 8b 6e 08
+0x00007ff80759fb66:   4c 8b 76 10 4c 8b 7e 18 48 0f c3 19 4c 0f c3 49
+0x00007ff80759fb76:   08 4c 0f c3 51 10 4c 0f c3 59 18 48 01 d1 4c 0f
+0x00007ff80759fb86:   c3 61 20 4c 0f c3 69 28 4c 0f c3 71 30 4c 0f c3
+0x00007ff80759fb96:   79 38 0f ae f0 48 89 f8 48 83 c4 08 5b 41 5c 41
+0x00007ff80759fba6:   5d 41 5e 41 5f 5d c3 55 48 89 e5 41 57 41 56 41
+0x00007ff80759fbb6:   55 41 54 53 48 83 ec 08 48 83 c1 20 48 83 e1 e0
+0x00007ff80759fbc6:   4c 8b 26 4c 8b 6e 08 4c 8b 76 10 4c 8b 7e 18 48
+0x00007ff80759fbd6:   01 ce 48 29 fe 48 8b 1e 4c 8b 4e 08 4c 8b 56 10
+0x00007ff80759fbe6:   4c 8b 5e 18 48 83 c6 20 48 29 ca 48 01 fa 4c 89
+0x00007ff80759fbf6:   27 4c 89 6f 08 4c 89 77 10 4c 89 7f 18 48 83 ea
+0x00007ff80759fc06:   40 76 2c 48 89 19 4c 89 49 08 4c 89 51 10 4c 89
+0x00007ff80759fc16:   59 18 48 83 c1 20 48 8b 1e 4c 8b 4e 08 4c 8b 56
+0x00007ff80759fc26:   10 4c 8b 5e 18 48 83 c6 20 48 83 ea 20 77 d4 48
+0x00007ff80759fc36:   01 d6 4c 8b 26 4c 8b 6e 08 4c 8b 76 10 4c 8b 7e
+0x00007ff80759fc46:   18 48 89 19 4c 89 49 08 4c 89 51 10 4c 89 59 18
+0x00007ff80759fc56:   48 01 d1 4c 89 61 20 4c 89 69 28 4c 89 71 30 4c
+0x00007ff80759fc66:   89 79 38 48 89 f8 48 83 c4 08 5b 41 5c 41 5d 41
+0x00007ff80759fc76:   5e 41 5f 5d c3 4c 8b 06 48 83 c6 08 4c 89 01 48
+0x00007ff80759fc86:   83 c1 08 48 83 ea 08 73 ec 48 83 c2 08 74 15 44
+0x00007ff80759fc96:   0f b6 06 48 83 c6 01 44 88 01 48 83 c1 01 48 83
+0x00007ff80759fca6:   ea 01 75 eb 48 89 f8 c3 48 85 c9 0f 84 09 02 00
+0x00007ff80759fcb6:   00 48 8d 04 17 48 01 d6 48 83 fa 40 0f 82 d5 01 
+
+
+Stack slot to memory mapping:
+stack at sp + 0 slots: 0x000000030cdb8890 is pointing into the stack for thread: 0x00007fcad080be00
+stack at sp + 1 slots: 0x00007fcabf74a2a0 points into unknown readable memory: 0x011dfffa4a09dbd5 | d5 db 09 4a fa ff 1d 01
+stack at sp + 2 slots: 0x00006000038ed340 points into unknown readable memory: 0x0000600003a5f8d0 | d0 f8 a5 03 00 60 00 00
+stack at sp + 3 slots: 0x0 is NULL
+stack at sp + 4 slots: 0x0000000000000048 is an unknown value
+stack at sp + 5 slots: 0x00006000037658f0 points into unknown readable memory: 0x00000001aae799b8 | b8 99 e7 aa 01 00 00 00
+stack at sp + 6 slots: 0x000000030cdb8d40 is pointing into the stack for thread: 0x00007fcad080be00
+stack at sp + 7 slots: 0x00000001aae4faf6: _ZL20gldRenderVertexArrayP13GLDContextRecjjiijPKviS2_+0x5d3 in /System/Library/Extensions/AppleMetalOpenGLRenderer.bundle/Contents/MacOS/AppleMetalOpenGLRenderer at 0x00000001aae09000
+
+
+Compiled method (n/a)    6330 3488     n 0       org.lwjgl.opengl.GL12C::nglDrawRangeElements (native)
+ total in heap  [0x000000011fdd9c10,0x000000011fdd9fa8] = 920
+ relocation     [0x000000011fdd9d70,0x000000011fdd9da8] = 56
+ main code      [0x000000011fdd9dc0,0x000000011fdd9fa0] = 480
+ oops           [0x000000011fdd9fa0,0x000000011fdd9fa8] = 8
+
+[Constant Pool (empty)]
+
+[MachCode]
+[Entry Point]
+  # {method} {0x00000001a3d320f0} 'nglDrawRangeElements' '(IIIIIJ)V' in 'org/lwjgl/opengl/GL12C'
+  # parm0:    rsi       = int
+  # parm1:    rdx       = int
+  # parm2:    rcx       = int
+  # parm3:    r8        = int
+  # parm4:    r9        = int
+  # parm5:    rdi:rdi   = long
+  #           [sp+0x60]  (sp of caller)
+  0x000000011fdd9dc0: 448b 5608 | 49c1 e203 | 493b c20f | 8407 0000 
+
+  0x000000011fdd9dd0: ;   {runtime_call ic_miss_stub}
+  0x000000011fdd9dd0: 00e9 aaff | 87ff 6690 
+[Verified Entry Point]
+  0x000000011fdd9dd8: 8984 2400 | c0fe ff55 | 488b ec48 | 83ec 5048 | 897c 2408 | 4c89 0c24 | 4d8b c84c | 8bc1 488b 
+  0x000000011fdd9df8: ca48 8bd6 
+
+  0x000000011fdd9dfc: ;   {oop(a 'java/lang/Class'{0x000000090d28c5d0} = 'org/lwjgl/opengl/GL12C')}
+  0x000000011fdd9dfc: 49be d0c5 | 280d 0900 | 0000 4c89 | 7424 404c | 8d74 2440 
+
+  0x000000011fdd9e10: ; ImmutableOopMap {[64]=Oop }
+                      ;   {section_word}
+  0x000000011fdd9e10: 498b f649 | ba13 9edd | 1f01 0000 | 004d 8997 | 9802 0000 | 4989 a790 
+
+  0x000000011fdd9e28: ;   {external_word}
+  0x000000011fdd9e28: 0200 0080 | 3d90 b3b6 | ee00 0f84 | 3e00 0000 | 5652 5141 
+
+  0x000000011fdd9e3c: ;   {metadata({method} {0x00000001a3d320f0} 'nglDrawRangeElements' '(IIIIIJ)V' in 'org/lwjgl/opengl/GL12C')}
+  0x000000011fdd9e3c: 5041 5148 | bef0 20d3 | a301 0000 | 0049 8bff | f7c4 0f00 | 0000 0f84 | 1200 0000 | 4883 ec08 
+  0x000000011fdd9e5c: ;   {runtime_call SharedRuntime::dtrace_method_entry(JavaThread*, Method*)}
+  0x000000011fdd9e5c: e81f e575 | ee48 83c4 | 08e9 0500 
+
+  0x000000011fdd9e68: ;   {runtime_call SharedRuntime::dtrace_method_entry(JavaThread*, Method*)}
+  0x000000011fdd9e68: 0000 e811 | e575 ee41 | 5941 5859 | 5a5e 498d | bfb0 0200 | 0041 c787 | 4003 0000 | 0400 0000 
+  0x000000011fdd9e88: ;   {runtime_call}
+  0x000000011fdd9e88: 49ba 2043 | 5bb4 0100 | 0000 41ff | d241 c787 | 4003 0000 | 0500 0000 | f083 4424 | c000 493b 
+  0x000000011fdd9ea8: af48 0300 | 000f 8711 | 0000 0041 | 81bf 3003 | 0000 0000 | 0000 0f84 | 2000 0000 | 498b ff4c 
+  0x000000011fdd9ec8: 8be4 4883 | ec00 4883 
+
+  0x000000011fdd9ed0: ;   {runtime_call JavaThread::check_special_condition_for_native_trans(JavaThread*)}
+  0x000000011fdd9ed0: e4f0 e849 | a68a ee49 | 8be4 49bc | 0000 000d | 0300 0000 | 41c7 8740 | 0300 0008 | 0000 0041 
+  0x000000011fdd9ef0: 81bf b003 | 0000 0200 | 0000 0f84 | 7900 0000 
+
+  0x000000011fdd9f00: ;   {external_word}
+  0x000000011fdd9f00: 803d bbb2 | b6ee 000f | 8430 0000 
+
+  0x000000011fdd9f0c: ;   {metadata({method} {0x00000001a3d320f0} 'nglDrawRangeElements' '(IIIIIJ)V' in 'org/lwjgl/opengl/GL12C')}
+  0x000000011fdd9f0c: 0048 bef0 | 20d3 a301 | 0000 0049 | 8bff f7c4 | 0f00 0000 | 0f84 1200 | 0000 4883 
+
+  0x000000011fdd9f28: ;   {runtime_call SharedRuntime::dtrace_method_exit(JavaThread*, Method*)}
+  0x000000011fdd9f28: ec08 e801 | e575 ee48 | 83c4 08e9 | 0500 0000 
+
+  0x000000011fdd9f38: ;   {runtime_call SharedRuntime::dtrace_method_exit(JavaThread*, Method*)}
+  0x000000011fdd9f38: e8f3 e475 | ee49 c787 | 9002 0000 | 0000 0000 | 49c7 8798 | 0200 0000 | 0000 0049 | 8b8f d800 
+  0x000000011fdd9f58: 0000 c781 | 0001 0000 | 0000 0000 | c949 817f | 0800 0000 | 000f 8501 | 0000 00c3 
+
+  0x000000011fdd9f74: ;   {runtime_call StubRoutines (1)}
+  0x000000011fdd9f74: e987 fc82 | ff4c 8be4 | 4883 ec00 | 4883 e4f0 
+
+  0x000000011fdd9f84: ;   {runtime_call SharedRuntime::reguard_yellow_pages()}
+  0x000000011fdd9f84: e8c7 0976 | ee49 8be4 | 49bc 0000 | 000d 0300 | 0000 e965 | ffff fff4 | f4f4 f4f4 
+[/MachCode]
+
+
+Compiled method (c2)    6333 3900       4       com.jme3.renderer.opengl.GLRenderer::drawTriangleList (500 bytes)
+ total in heap  [0x000000011fe6c590,0x000000011fe6d338] = 3496
+ relocation     [0x000000011fe6c6f0,0x000000011fe6c780] = 144
+ main code      [0x000000011fe6c780,0x000000011fe6cbe0] = 1120
+ stub code      [0x000000011fe6cbe0,0x000000011fe6cc30] = 80
+ oops           [0x000000011fe6cc30,0x000000011fe6cc60] = 48
+ metadata       [0x000000011fe6cc60,0x000000011fe6ccf8] = 152
+ scopes data    [0x000000011fe6ccf8,0x000000011fe6d070] = 888
+ scopes pcs     [0x000000011fe6d070,0x000000011fe6d250] = 480
+ dependencies   [0x000000011fe6d250,0x000000011fe6d278] = 40
+ handler table  [0x000000011fe6d278,0x000000011fe6d2d8] = 96
+ nul chk table  [0x000000011fe6d2d8,0x000000011fe6d338] = 96
+
+[Constant Pool (empty)]
+
+[MachCode]
+[Entry Point]
+  # {method} {0x00000001a3c1fde0} 'drawTriangleList' '(Lcom/jme3/scene/VertexBuffer;Lcom/jme3/scene/Mesh;I)V' in 'com/jme3/renderer/opengl/GLRenderer'
+  # this:     rsi:rsi   = 'com/jme3/renderer/opengl/GLRenderer'
+  # parm0:    rdx:rdx   = 'com/jme3/scene/VertexBuffer'
+  # parm1:    rcx:rcx   = 'com/jme3/scene/Mesh'
+  # parm2:    r8        = int
+  #           [sp+0x50]  (sp of caller)
+  0x000000011fe6c780: 448b 5608 | 49c1 e203 
+
+  0x000000011fe6c788: ;   {runtime_call ic_miss_stub}
+  0x000000011fe6c788: 493b c20f | 85ef d57e | ff66 6690 | 0f1f 8400 | 0000 0000 | 6666 6690 
+[Verified Entry Point]
+  0x000000011fe6c7a0: 8984 2400 | c0fe ff55 | 4883 ec40 | 4489 4424 | 1848 894c | 2410 4889 | 3424 4889 | 5424 0844 
+  0x000000011fe6c7c0: ;   {oop(a 'com/jme3/scene/VertexBuffer$Type'{0x000000090d091678})}
+  0x000000011fe6c7c0: 8b5a 4041 | 81fb cf22 | 01c0 0f85 | 9402 0000 | 448b 5a44 
+
+  0x000000011fe6c7d4: ; implicit exception: dispatches to 0x000000011fe6cb10
+  0x000000011fe6c7d4: 438b 6cdc | 0c83 fd09 | 0f83 f301 
+
+  0x000000011fe6c7e0: ;   {oop([I{0x000000031010af78})}
+  0x000000011fe6c7e0: 0000 49ba | 78af 1010 | 0300 0000 | 418b 6caa | 1083 fd04 | 0f85 6401 | 0000 4c8b | 5424 0845 
+  0x000000011fe6c800: 0fb6 5a10 | 4585 db0f | 85b3 0100 | 004c 8b14 | 2445 8b5a | 5047 8b54 | dc10 4c8b | 5c24 0841 
+  0x000000011fe6c820: 8b53 0c44 | 3bd2 743a | 4c8b 1424 | 418b 6a6c 
+
+  0x000000011fe6c830: ; implicit exception: dispatches to 0x000000011fe6cb70
+  0x000000011fe6c830: 458b 54ec 
+
+  0x000000011fe6c834: ;   {metadata('com/jme3/renderer/lwjgl/LwjglGL')}
+  0x000000011fe6c834: 0841 81fa | 0020 622c | 0f85 1202 | 0000 be93 | 8800 0089 
+
+  0x000000011fe6c848: ;   {static_call}
+  0x000000011fe6c848: 5424 1ce8 
+
+  0x000000011fe6c84c: ; ImmutableOopMap {[0]=Oop [8]=Oop [16]=Oop }
+                      ;*invokestatic glBindBuffer {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.opengl.GL15::glBindBuffer@2 (line 129)
+                      ; - com.jme3.renderer.lwjgl.LwjglGL::glBindBuffer@2 (line 76)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@185 (line 3088)
+  0x000000011fe6c84c: 886c f3ff | 4c8b 1424 | 458b 5250 | 448b 4424 | 1c47 8944 | d410 4c8b | 4424 1045 | 8b50 1844 
+  0x000000011fe6c86c: 8b5c 2418 | 4183 fb01 | 0f8f 0602 | 0000 418b 
+
+  0x000000011fe6c87c: ;   {oop(a 'com/jme3/scene/Mesh$Mode'{0x000000090d2107c8})}
+  0x000000011fe6c87c: 5848 81fb | f920 04c0 | 0f84 1e02 | 0000 458b | 44dc 0c4c | 8b1c 2441 | 8b4b 6c41 | 83f8 090f 
+  0x000000011fe6c89c: 833f 0100 
+
+  0x000000011fe6c8a0: ;   {oop([I{0x000000031010af40})}
+  0x000000011fe6c8a0: 0049 bb40 | af10 1003 | 0000 0043 | 8b6c 8310 | 83fd 050f | 8567 0100 | 004c 8b5c | 2408 458b 
+  0x000000011fe6c8c0: 4338 478b | 44c4 1c45 | 8b4b 4443 | 8b6c cc0c | 83fd 090f | 832f 0100 
+
+  0x000000011fe6c8d8: ;   {oop([I{0x000000031010af78})}
+  0x000000011fe6c8d8: 0049 bb78 | af10 1003 | 0000 0041 | 8b6c ab10 | 83fd 0775 | 3e41 b906 | 1400 0041 | 8b5c cc08 
+  0x000000011fe6c8f8: ;   {metadata('com/jme3/renderer/lwjgl/LwjglGL')}
+  0x000000011fe6c8f8: 81fb 0020 | 622c 0f85 | 3401 0000 | 33ff be04 | 0000 0033 | d241 8bca 
+
+  0x000000011fe6c910: ;   {static_call}
+  0x000000011fe6c910: 6666 90e8 
+
+  0x000000011fe6c914: ; ImmutableOopMap {}
+                      ;*invokestatic nglDrawRangeElements {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.opengl.GL12C::glDrawRangeElements@8 (line 465)
+                      ; - org.lwjgl.opengl.GL12::glDrawRangeElements@8 (line 486)
+                      ; - com.jme3.renderer.lwjgl.LwjglGL::glDrawRangeElements@9 (line 270)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@494 (line 3142)
+  0x000000011fe6c914: c0d4 f6ff | 4883 c440 
+
+  0x000000011fe6c91c: ;   {poll_return}
+  0x000000011fe6c91c: 5d49 3ba7 | 4803 0000 | 0f87 8a02 | 0000 c383 | fd04 7508 | 41b9 0314 | 0000 ebbb | 83fd 0274 
+  0x000000011fe6c93c: 1944 8bdd | 4183 c3fa | 4183 fb01 | 0f87 8601 | 0000 41b9 | 0514 0000 | eb9d 41b9 | 0114 0000 
+  0x000000011fe6c95c: eb95 83fd | 060f 8585 | 0100 008b | 6e58 458b 
+
+  0x000000011fe6c96c: ;   {metadata('java/util/JumboEnumSet')}
+  0x000000011fe6c96c: 5cec 0841 | 81fb 3792 | 622c 0f85 | 7c01 0000 | 498d 34ec 
+
+  0x000000011fe6c980: ;   {oop(a 'com/jme3/renderer/Caps'{0x000000090d06e920})}
+  0x000000011fe6c980: 48ba 20e9 | 060d 0900 | 0000 488b 
+
+  0x000000011fe6c98c: ;   {optimized virtual_call}
+  0x000000011fe6c98c: 2c24 90e8 
+
+  0x000000011fe6c990: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop [16]=Oop }
+                      ;*invokevirtual contains {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@78 (line 3071)
+  0x000000011fe6c990: ecd6 7eff | 85c0 0f85 | 5efe ffff | be45 ffff | ff48 ff74 | 2408 488f | 0424 4c8b | 5424 104c 
+  0x000000011fe6c9b0: 8954 2408 | 8944 2414 
+
+  0x000000011fe6c9b8: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6c9b8: 6666 90e8 
+
+  0x000000011fe6c9bc: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop }
+                      ;*ifne {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::drawTriangleList@81 (line 3071)
+  0x000000011fe6c9bc: 402c 7fff | 488b 3424 | 498b d248 
+
+  0x000000011fe6c9c8: ;   {optimized virtual_call}
+  0x000000011fe6c9c8: 8bee 90e8 
+
+  0x000000011fe6c9cc: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop [16]=Oop }
+                      ;*invokevirtual updateBufferData {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@135 (line 3081)
+  0x000000011fe6c9cc: f061 84f8 | e938 feff | ffbe e4ff 
+
+  0x000000011fe6c9d8: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6c9d8: ffff 90e8 
+
+  0x000000011fe6c9dc: ; ImmutableOopMap {[0]=Oop [8]=Oop [16]=Oop }
+                      ;*iaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@31 (line 3064)
+  0x000000011fe6c9dc: 202c 7fff | bee4 ffff | ff49 8beb | 48ff 7424 | 0848 8f04 | 2444 8954 | 2408 894c | 240c 895c 
+  0x000000011fe6c9fc: 2410 4489 
+
+  0x000000011fe6ca00: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6ca00: 4424 14e8 
+
+  0x000000011fe6ca04: ; ImmutableOopMap {rbp=Oop [0]=Oop [12]=NarrowOop [16]=NarrowOop }
+                      ;*iaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::convertElementMode@7 (line 3163)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@472 (line 3142)
+  0x000000011fe6ca04: f82b 7fff | bee4 ffff | ff89 0c24 | 4489 5424 | 0444 8944 
+
+  0x000000011fe6ca18: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6ca18: 2408 90e8 
+
+  0x000000011fe6ca1c: ; ImmutableOopMap {[0]=NarrowOop }
+                      ;*iaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::convertFormat@7 (line 2750)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@490 (line 3146)
+  0x000000011fe6ca1c: e02b 7fff | be45 ffff | ff44 8954 | 2410 894c | 2414 895c 
+
+  0x000000011fe6ca30: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6ca30: 2418 90e8 
+
+  0x000000011fe6ca34: ; ImmutableOopMap {[0]=Oop [8]=Oop [20]=NarrowOop [24]=NarrowOop }
+                      ;*tableswitch {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::convertElementMode@8 (line 3163)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@472 (line 3142)
+  0x000000011fe6ca34: c82b 7fff | bede ffff | ff8b e944 | 8914 2444 | 8944 2404 | 4489 4c24 
+
+  0x000000011fe6ca4c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6ca4c: 0866 90e8 
+
+  0x000000011fe6ca50: ; ImmutableOopMap {rbp=NarrowOop }
+                      ;*invokeinterface glDrawRangeElements {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@494 (line 3142)
+  0x000000011fe6ca50: ac2b 7fff | bede ffff | ff89 5424 
+
+  0x000000011fe6ca5c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6ca5c: 2066 90e8 
+
+  0x000000011fe6ca60: ; ImmutableOopMap {rbp=NarrowOop [0]=Oop [8]=Oop [16]=Oop }
+                      ;*invokeinterface glBindBuffer {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@185 (line 3088)
+  0x000000011fe6ca60: 9c2b 7fff | be45 ffff | ff48 8b2c | 2448 8914 | 2448 894c | 2408 4489 
+
+  0x000000011fe6ca78: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6ca78: 5c24 14e8 
+
+  0x000000011fe6ca7c: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop [20]=NarrowOop }
+                      ;*if_acmpeq {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::drawTriangleList@7 (line 3060)
+  0x000000011fe6ca7c: 802b 7fff | be45 ffff | ff48 8b2c | 2448 ff74 | 2408 488f | 0424 4c89 | 4424 0844 | 895c 2414 
+  0x000000011fe6ca9c: 4489 5424 
+
+  0x000000011fe6caa0: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6caa0: 1866 90e8 
+
+  0x000000011fe6caa4: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop }
+                      ;*if_icmple {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::drawTriangleList@207 (line 3096)
+  0x000000011fe6caa4: 582b 7fff | be45 ffff | ff48 8b2c | 2448 ff74 | 2408 488f | 0424 4c89 | 4424 0844 | 895c 2410 
+  0x000000011fe6cac4: 4489 5424 | 1489 5c24 
+
+  0x000000011fe6cacc: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cacc: 1866 90e8 
+
+  0x000000011fe6cad0: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop [24]=NarrowOop }
+                      ;*if_acmpne {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::drawTriangleList@237 (line 3098)
+  0x000000011fe6cad0: 2c2b 7fff | be45 ffff | ff89 0c24 | 4489 5424 | 0444 8944 
+
+  0x000000011fe6cae4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cae4: 2408 90e8 
+
+  0x000000011fe6cae8: ; ImmutableOopMap {[0]=NarrowOop }
+                      ;*tableswitch {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::convertFormat@8 (line 2750)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@490 (line 3146)
+  0x000000011fe6cae8: 142b 7fff | be45 ffff 
+
+  0x000000011fe6caf0: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6caf0: ff66 90e8 
+
+  0x000000011fe6caf4: ; ImmutableOopMap {[0]=Oop [8]=Oop [16]=Oop }
+                      ;*tableswitch {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::drawTriangleList@32 (line 3064)
+  0x000000011fe6caf4: 082b 7fff | bede ffff 
+
+  0x000000011fe6cafc: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cafc: ff66 90e8 
+
+  0x000000011fe6cb00: ; ImmutableOopMap {rbp=NarrowOop [0]=Oop [8]=Oop [16]=Oop }
+                      ;*invokevirtual contains {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@78 (line 3071)
+  0x000000011fe6cb00: fc2a 7fff | bef6 ffff 
+
+  0x000000011fe6cb08: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb08: ff66 90e8 
+
+  0x000000011fe6cb0c: ; ImmutableOopMap {}
+                      ;*invokevirtual getBufferType {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@1 (line 3060)
+  0x000000011fe6cb0c: f02a 7fff | bef6 ffff 
+
+  0x000000011fe6cb14: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb14: ff66 90e8 
+
+  0x000000011fe6cb18: ; ImmutableOopMap {}
+                      ;*invokevirtual ordinal {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@28 (line 3064)
+  0x000000011fe6cb18: e42a 7fff | bef6 ffff 
+
+  0x000000011fe6cb20: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb20: ff66 90e8 
+
+  0x000000011fe6cb24: ; ImmutableOopMap {}
+                      ;*getfield boundElementArrayVBO {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::drawTriangleList@168 (line 3087)
+  0x000000011fe6cb24: d82a 7fff | bef6 ffff 
+
+  0x000000011fe6cb2c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb2c: ff66 90e8 
+
+  0x000000011fe6cb30: ; ImmutableOopMap {}
+                      ;*invokevirtual getVertexCount {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@200 (line 3095)
+  0x000000011fe6cb30: cc2a 7fff | bef6 ffff 
+
+  0x000000011fe6cb38: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb38: ff66 90e8 
+
+  0x000000011fe6cb3c: ; ImmutableOopMap {}
+                      ;*invokevirtual ordinal {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::convertElementMode@4 (line 3163)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@472 (line 3142)
+  0x000000011fe6cb3c: c02a 7fff | bef6 ffff 
+
+  0x000000011fe6cb44: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb44: ff66 90e8 
+
+  0x000000011fe6cb48: ; ImmutableOopMap {}
+                      ;*invokevirtual limit {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@482 (line 3145)
+  0x000000011fe6cb48: b42a 7fff | bef6 ffff 
+
+  0x000000011fe6cb50: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb50: ff66 90e8 
+
+  0x000000011fe6cb54: ; ImmutableOopMap {}
+                      ;*invokevirtual ordinal {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::convertFormat@4 (line 2750)
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@490 (line 3146)
+  0x000000011fe6cb54: a82a 7fff | bef6 ffff | ff41 8bea | 4489 0424 | 4489 4c24 
+
+  0x000000011fe6cb68: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb68: 0466 90e8 
+
+  0x000000011fe6cb6c: ; ImmutableOopMap {}
+                      ;*invokeinterface glDrawRangeElements {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@494 (line 3142)
+  0x000000011fe6cb6c: 902a 7fff | bef6 ffff 
+
+  0x000000011fe6cb74: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb74: ff8b eae8 
+
+  0x000000011fe6cb78: ; ImmutableOopMap {}
+                      ;*invokeinterface glBindBuffer {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@185 (line 3088)
+  0x000000011fe6cb78: 842a 7fff | bef6 ffff | ff41 8be8 
+
+  0x000000011fe6cb84: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cb84: 6666 90e8 
+
+  0x000000011fe6cb88: ; ImmutableOopMap {}
+                      ;*putfield boundElementArrayVBO {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::drawTriangleList@196 (line 3089)
+  0x000000011fe6cb88: 742a 7fff | 488b f0eb | 0d48 8bf0 | eb08 488b | f0eb 0348 | 8bf0 4883 
+
+  0x000000011fe6cba0: ;   {runtime_call _rethrow_Java}
+  0x000000011fe6cba0: c440 5de9 | d8a6 89ff | bef6 ffff 
+
+  0x000000011fe6cbac: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe6cbac: ff66 90e8 
+
+  0x000000011fe6cbb0: ; ImmutableOopMap {}
+                      ;*invokevirtual contains {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::drawTriangleList@78 (line 3071)
+  0x000000011fe6cbb0: 4c2a 7fff 
+
+  0x000000011fe6cbb4: ;   {internal_word}
+  0x000000011fe6cbb4: 49ba 1dc9 | e61f 0100 | 0000 4d89 | 9760 0300 
+
+  0x000000011fe6cbc4: ;   {runtime_call SafepointBlob}
+  0x000000011fe6cbc4: 00e9 b636 | 7fff f4f4 | f4f4 f4f4 | f4f4 f4f4 | f4f4 f4f4 | f4f4 f4f4 | f4f4 f4f4 
+[Stub Code]
+  0x000000011fe6cbe0: ;   {no_reloc}
+  0x000000011fe6cbe0: 48bb 0000 | 0000 0000 
+
+  0x000000011fe6cbe8: ;   {runtime_call}
+  0x000000011fe6cbe8: 0000 e9fb 
+
+  0x000000011fe6cbec: ;   {static_stub}
+  0x000000011fe6cbec: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x000000011fe6cbf8: ;   {runtime_call}
+  0x000000011fe6cbf8: 00e9 fbff 
+
+  0x000000011fe6cbfc: ;   {static_stub}
+  0x000000011fe6cbfc: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x000000011fe6cc08: ;   {runtime_call}
+  0x000000011fe6cc08: e9fb ffff 
+
+  0x000000011fe6cc0c: ;   {static_stub}
+  0x000000011fe6cc0c: ff48 bb00 | 0000 0000 
+
+  0x000000011fe6cc14: ;   {runtime_call}
+  0x000000011fe6cc14: 0000 00e9 | fbff ffff 
+[Exception Handler]
+  0x000000011fe6cc1c: ;   {runtime_call ExceptionBlob}
+  0x000000011fe6cc1c: e95f 0280 | ffe8 0000 | 0000 4883 
+
+  0x000000011fe6cc28: ;   {runtime_call DeoptimizationBlob}
+  0x000000011fe6cc28: 2c24 05e9 | 702f 7fff 
+[/MachCode]
+
+
+Compiled method (c2)    6342 3723       4       com.jme3.renderer.opengl.GLRenderer::renderMeshDefault (242 bytes)
+ total in heap  [0x000000011fe2e710,0x000000011fe30a40] = 9008
+ relocation     [0x000000011fe2e870,0x000000011fe2e948] = 216
+ main code      [0x000000011fe2e960,0x000000011fe2fba0] = 4672
+ stub code      [0x000000011fe2fba0,0x000000011fe2fbe8] = 72
+ oops           [0x000000011fe2fbe8,0x000000011fe2fc08] = 32
+ metadata       [0x000000011fe2fc08,0x000000011fe2fcf8] = 240
+ scopes data    [0x000000011fe2fcf8,0x000000011fe304a0] = 1960
+ scopes pcs     [0x000000011fe304a0,0x000000011fe308a0] = 1024
+ dependencies   [0x000000011fe308a0,0x000000011fe308d8] = 56
+ handler table  [0x000000011fe308d8,0x000000011fe30980] = 168
+ nul chk table  [0x000000011fe30980,0x000000011fe30a40] = 192
+
+[Constant Pool (empty)]
+
+[MachCode]
+[Entry Point]
+  # {method} {0x00000001a3c40398} 'renderMeshDefault' '(Lcom/jme3/scene/Mesh;II[Lcom/jme3/scene/VertexBuffer;)V' in 'com/jme3/renderer/opengl/GLRenderer'
+  # this:     rsi:rsi   = 'com/jme3/renderer/opengl/GLRenderer'
+  # parm0:    rdx:rdx   = 'com/jme3/scene/Mesh'
+  # parm1:    rcx       = int
+  # parm2:    r8        = int
+  # parm3:    r9:r9     = '[Lcom/jme3/scene/VertexBuffer;'
+  #           [sp+0x90]  (sp of caller)
+  0x000000011fe2e960: 448b 5608 | 49c1 e203 
+
+  0x000000011fe2e968: ;   {runtime_call ic_miss_stub}
+  0x000000011fe2e968: 493b c20f | 850f b482 | ff66 6690 | 0f1f 8400 | 0000 0000 | 6666 6690 
+[Verified Entry Point]
+  0x000000011fe2e980: 8984 2400 | c0fe ff55 | 4881 ec80 | 0000 0048 | 8934 2448 | 8954 2448 
+
+  0x000000011fe2e998: ; implicit exception: dispatches to 0x000000011fe2f9e8
+  0x000000011fe2e998: 448b 5a38 
+
+  0x000000011fe2e99c: ; implicit exception: dispatches to 0x000000011fe2f9f4
+  0x000000011fe2e99c: 438b 54dc | 2043 8b7c | dc14 8bdf | 83e3 0745 | 8b54 d40c | 4c8b 5c24 | 4841 8b73 | 2041 3bf0 
+  0x000000011fe2e9bc: 410f 4cf0 | 8974 2450 | 413b da0f | 837c 0b00 | 0049 8d04 | d444 8b44 | 9810 4585 | c00f 854d 
+  0x000000011fe2e9dc: 0400 004c | 8b5c 2448 | 418b 6b3c | 85ed 0f85 | 950c 0000 | 83e7 0941 | 3bfa 0f83 | c00b 0000 
+  0x000000011fe2e9fc: 448b 54b8 | 1045 85d2 | 743a 49c1 | e203 4d03 | d445 8b42 | 0c41 83f8 | 090f 8568 | 0700 0041 
+  0x000000011fe2ea1c: 8b6a 1085 | ed74 1d45 | 8b54 ec08 
+
+  0x000000011fe2ea28: ;   {metadata('com/jme3/scene/VertexBuffer')}
+  0x000000011fe2ea28: 4181 fa42 | 2562 2c0f | 8597 0f00 | 004d 8d14 | ec4c 8954 | 2458 eb08 | 4533 d24c | 8954 2458 
+  0x000000011fe2ea48: 4d85 c90f | 854f 0c00 | 004c 8b54 | 2448 458b | 6a34 438b | 6cec 1885 | ed0f 8589 | 0300 0047 
+  0x000000011fe2ea68: 8b44 ec14 | 478b 54ec | 104f 8d1c | ec4c 895c | 2460 4585 | c00f 8518 | 0100 004f | 8b44 d418 
+  0x000000011fe2ea88: ; implicit exception: dispatches to 0x000000011fe2faa4
+  0x000000011fe2ea88: 458b 5808 | 4181 fb02 | 0c10 800f | 8587 0d00 | 0049 8b9f | 0801 0000 | 4c8b d349 | 83c2 104d 
+  0x000000011fe2eaa8: 3b97 1801 | 0000 0f83 | 090a 0000 | 4d89 9708 | 0100 0041 | 0f18 8200 | 0100 0048 | c703 0100 
+  0x000000011fe2eac8: 0000 410f | 1882 4001 | 0000 410f | 1882 8001 | 0000 4d8b | d049 c1ea | 0344 8953 | 08c7 430c 
+  0x000000011fe2eae8: 0000 0000 | 4d8b 5038 
+
+  0x000000011fe2eaf0: ;   {metadata('java/lang/Object'[])}
+  0x000000011fe2eaf0: 49bb 107b | 0563 0100 | 0000 4d3b | d30f 8535 | 0d00 0041 | 807f 3800 | 0f85 9708 | 0000 4c8b 
+  0x000000011fe2eb10: 5424 604c | 8bc3 4d2b | c449 c1e8 | 0347 8944 | ec18 4c8b | db4d 33da | 49c1 eb18 | 4d85 db0f 
+  0x000000011fe2eb30: 84a4 0200 | 0049 c1ea | 0949 b800 | 2086 2801 | 0000 004d | 03c2 4180 | 3804 0f84 | 8902 0000 
+  0x000000011fe2eb50: 4d8b 5750 | 4d8b 5f40 | f083 4424 | c000 4180 | 3800 0f84 | 7102 0000 | 41c6 0000 | 4d85 db75 
+  0x000000011fe2eb70: 1849 8bf8 | 498b f749 | ba10 3300 | 0e01 0000 | 0041 ffd2 | e950 0200 | 004f 8944 | 1af8 4983 
+  0x000000011fe2eb90: c3f8 4d89 | 5f40 e93e | 0200 0047 | 8b5c c408 
+
+  0x000000011fe2eba0: ;   {metadata('java/util/ArrayList')}
+  0x000000011fe2eba0: 4181 fb98 | a760 2c0f | 851f 0b00 | 004f 8d1c | c445 8b4b | 104b 8b54 | d418 8b4a | 0881 f902 
+  0x000000011fe2ebc0: 0c10 800f | 8523 0b00 | 0049 63f1 | 4181 f900 | 0004 000f | 87eb 0a00 | 0049 63c9 | 4181 f900 
+  0x000000011fe2ebe0: 0004 000f | 876d 0800 | 0049 8b9f | 0801 0000 | 48c1 e102 | 4883 c117 | 4c8b d149 | 83e2 f84c 
+  0x000000011fe2ec00: 8bc3 4d03 | c24d 3b87 | 1801 0000 | 0f83 4408 | 0000 4d89 | 8708 0100 | 0041 0f18 | 8000 0100 
+  0x000000011fe2ec20: 0048 c703 | 0100 0000 | 410f 1880 | 4001 0000 | 488b fb48 | 83c7 1041 | 0f18 8080 | 0100 0048 
+  0x000000011fe2ec40: c1e9 0348 | 83c1 fe4c | 8bd2 49c1 | ea03 4489 | 5308 4489 | 4b0c 4833 | c048 83f9 | 087f 1048 
+  0x000000011fe2ec60: ffc9 780e | 4889 04cf | 48ff c97d | f7eb 03f3 | 48ab 4c8b 
+
+  0x000000011fe2ec74: ;   {metadata('java/lang/Object'[])}
+  0x000000011fe2ec74: 5238 49b8 | 107b 0563 | 0100 0000 | 4d3b d00f | 8587 0a00 | 0045 8b43 | 1444 8b53 | 088b 7b0c 
+  0x000000011fe2ec94: 4833 d24a | 8d14 d28b | 4a14 4863 | e941 3bf9 | 0f8c 0205 | 0000 438b | 44c4 0c4f | 8d34 c441 
+  0x000000011fe2ecb4: 3bc1 0f82 | 6d0a 0000 | 413b f90f | 8264 0a00 | 0045 85c9 | 0f8e 520a | 0000 4c89 | 7424 4048 
+  0x000000011fe2ecd4: 8bc2 897c | 2438 488b | d645 8bf1 | 4c89 5c24 | 2848 ff74 | 2460 488f | 4424 2044 | 896c 2414 
+  0x000000011fe2ecf4: 48ff 7424 | 5848 8f44 | 2418 4889 | 4424 f88b | 4424 5089 | 4424 1048 | 8b44 24f8 | 48ff 7424 
+  0x000000011fe2ed14: 4848 8f44 | 2408 4c8b | db49 83c3 | 104d 8beb | 4889 5c24 | 304f 8d5c | c410 498b | db47 8b44 
+  0x000000011fe2ed34: c408 4833 | f64a 8d34 | c64c 8b1c | 2e49 3bc3 | 0f85 cd03 | 0000 488b | fb49 8bf5 | 49ba 4011 
+  0x000000011fe2ed54: 641f 0100 | 0000 41ff | d244 8b6c | 2414 4c8b | 5c24 2848 | 8b5c 2430 | 8b7c 2438 | 418b 6b10 
+  0x000000011fe2ed74: 3bfd 0f8f | 860a 0000 | 4180 7f38 | 000f 8559 | 0500 004c | 8b54 2460 | 4c8b db4d | 2bdc 49c1 
+  0x000000011fe2ed94: eb03 4789 | 5cec 184c | 8bdb 4d33 | da49 c1eb | 184d 85db | 741b 49c1 | ea09 49b8 | 0020 8628 
+  0x000000011fe2edb4: 0100 0000 | 4d03 c241 | 8038 040f | 8595 0500 | 0041 807f | 3800 0f85 | 4d05 0000 | 43c7 44ec 
+  0x000000011fe2edd4: 1400 0000 | 0043 8b6c | ec18 85ed | 750e bef4 | ffff ff48 
+
+  0x000000011fe2ede8: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2ede8: 8b2c 24e8 
+
+  0x000000011fe2edec: ; ImmutableOopMap {rbp=Oop [72]=Oop [88]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@114 (line 3249)
+  0x000000011fe2edec: 1008 83ff | 458b 54ec 
+
+  0x000000011fe2edf4: ;   {metadata('com/jme3/scene/VertexBuffer'[])}
+  0x000000011fe2edf4: 0841 81fa | 0b0d 632c | 0f85 960b | 0000 4d8d | 0cec 458b | 590c 4585 | db0f 86f9 | 0000 0045 
+  0x000000011fe2ee14: 8bd3 41ff | ca45 3bd3 | 0f83 d207 | 0000 33ed | 4533 c0e9 | 8a00 0000 | 4f8d 1cc4 | 458b 430c 
+  0x000000011fe2ee34: 4183 f807 | 0f85 ae02 | 0000 418b | 6b10 85ed | 0f84 95fb | ffff 458b 
+
+  0x000000011fe2ee4c: ;   {metadata('com/jme3/scene/VertexBuffer')}
+  0x000000011fe2ee4c: 5cec 0841 | 81fb 4225 | 622c 0f85 | 4c07 0000 | 48c1 e503 | 4903 ecbe | 45ff ffff | 894c 2410 
+  0x000000011fe2ee6c: 4c89 4c24 
+
+  0x000000011fe2ee70: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2ee70: 1866 90e8 
+
+  0x000000011fe2ee74: ; ImmutableOopMap {rbp=Oop [0]=Oop [24]=Oop [72]=Oop }
+                      ;*ifnull {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@20 (line 3232)
+  0x000000011fe2ee74: 8807 83ff | 0f1f 8400 | 0000 0000 | 4489 5c24 | 0c4c 894c | 2410 4489 | 4424 084b | 8d14 d448 
+  0x000000011fe2ee94: 8b34 2433 
+
+  0x000000011fe2ee98: ;   {optimized virtual_call}
+  0x000000011fe2ee98: c966 90e8 
+
+  0x000000011fe2ee9c: ; ImmutableOopMap {[0]=Oop [16]=Oop [72]=Oop [88]=Oop }
+                      ;*invokevirtual setVertexAttrib {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::setVertexAttrib@3 (line 3046)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@188 (line 3258)
+  0x000000011fe2ee9c: e032 fdff | 448b 4424 | 084c 8b4c | 2410 448b | 5c24 0cff | c541 3beb | 7d59 458b | 54a9 1043 
+  0x000000011fe2eebc: 8b4c d440 
+
+  0x000000011fe2eec0: ;   {oop(a 'com/jme3/scene/VertexBuffer$Type'{0x000000090d0916d8})}
+  0x000000011fe2eec0: 81f9 db22 | 01c0 0f84 | 9c06 0000 | 438b 5cd4 
+
+  0x000000011fe2eed0: ;   {oop(a 'com/jme3/scene/VertexBuffer$Usage'{0x000000090d218e38})}
+  0x000000011fe2eed0: 3c81 fbc7 | 3104 c00f | 84ab 0600 
+
+  0x000000011fe2eedc: ;   {oop(a 'com/jme3/scene/VertexBuffer$Type'{0x000000090d091678})}
+  0x000000011fe2eedc: 0081 f9cf | 2201 c074 | ca43 8b5c | d428 85db | 7492 be45 | ffff ff4c | 894c 2420 | 4489 5c24 
+  0x000000011fe2eefc: 1444 8954 | 2428 895c 
+
+  0x000000011fe2ef04: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2ef04: 242c 90e8 
+
+  0x000000011fe2ef08: ; ImmutableOopMap {[0]=Oop [32]=Oop [40]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*ifne {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@182 (line 3256)
+  0x000000011fe2ef08: f406 83ff | 4533 c04c | 8b2c 2445 | 8b5d 5043 | 8b9c dca4 | 0000 0045 | 8b54 dc10 | 4585 d20f 
+  0x000000011fe2ef28: 8fa9 0000 | 0045 8b4c | dc14 458b | 44dc 1841 | 8b6c dc0c 
+
+  0x000000011fe2ef3c: ; implicit exception: dispatches to 0x000000011fe2fa30
+  0x000000011fe2ef3c: 478b 5ccc | 0c47 8b54 | c40c 443b | dd0f 8289 | 0600 0044 | 3bd5 0f82 | 8006 0000 | 85ed 0f8c 
+  0x000000011fe2ef5c: 7806 0000 | 85ed 7422 | 4f8d 14c4 | 4b8d 74c4 | 1048 63d5 | 4f8d 14cc | 4b8d 7ccc | 1049 ba20 
+  0x000000011fe2ef7c: 0f64 1f01 | 0000 0041 | ffd2 458b | 5cdc 0c45 | 895c dc10 | 41c7 44dc | 0c00 0000 | 004c 8b54 
+  0x000000011fe2ef9c: 2458 4d85 | d20f 840d | 0700 0049 | 8bf5 488b | 5424 5848 | 8b4c 2448 | 448b 4424 
+
+  0x000000011fe2efb8: ;   {optimized virtual_call}
+  0x000000011fe2efb8: 5066 90e8 
+
+  0x000000011fe2efbc: ; ImmutableOopMap {}
+                      ;*invokevirtual drawTriangleList {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@222 (line 3268)
+  0x000000011fe2efbc: e0d7 0300 | 4881 c480 | 0000 005d 
+
+  0x000000011fe2efc8: ;   {poll_return}
+  0x000000011fe2efc8: 493b a748 | 0300 000f | 87b4 0b00 | 00c3 4d8d | 0cdc 660f | 1f44 0000 | 418b 4cdc | 1845 8b5c 
+  0x000000011fe2efe8: cc0c 453b | c30f 8355 | 0800 0041 | 8b6d 6c4d | 8d14 cc47 | 8b54 8210 
+
+  0x000000011fe2f000: ; implicit exception: dispatches to 0x000000011fe2facc
+  0x000000011fe2f000: 458b 5cec 
+
+  0x000000011fe2f004: ;   {metadata('com/jme3/renderer/lwjgl/LwjglGL')}
+  0x000000011fe2f004: 0841 81fb | 0020 622c | 0f85 a208 | 0000 4489 | 5424 144c | 890c 2489 | 5c24 2c44 | 8944 2428 
+  0x000000011fe2f024: 498b ed41 
+
+  0x000000011fe2f028: ;   {static_call}
+  0x000000011fe2f028: 8bf2 90e8 
+
+  0x000000011fe2f02c: ; ImmutableOopMap {rbp=Oop [0]=Oop [44]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*invokestatic glDisableVertexAttribArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - org.lwjgl.opengl.GL20::glDisableVertexAttribArray@1 (line 1948)
+                      ; - com.jme3.renderer.lwjgl.LwjglGL::glDisableVertexAttribArray@1 (line 254)
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@30 (line 2924)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f02c: 28c6 ffff | 4c8b ed45 | 8b55 5043 | 8bac d4a0 | 0000 0045 | 8b5c ec0c | 8b5c 2414 | 413b db0f 
+  0x000000011fe2f04c: 8313 0800 | 004d 8d14 | ec45 8b54 | 9a10 438b | 6cd4 0c41 | 807f 3800 | 0f85 7803 | 0000 458b 
+  0x000000011fe2f06c: ;   {metadata('com/jme3/scene/VertexBuffer')}
+  0x000000011fe2f06c: 5cec 0841 | 81fb 4225 | 622c 0f85 | 2809 0000 | 4d8d 14ec | 418b 6a34 | 85ed 0f8f | 8708 0000 
+  0x000000011fe2f08c: 458b 5d50 
+
+  0x000000011fe2f090: ; implicit exception: dispatches to 0x000000011fe2fb0c
+  0x000000011fe2f090: 438b acdc | a000 0000 
+
+  0x000000011fe2f098: ; implicit exception: dispatches to 0x000000011fe2fb18
+  0x000000011fe2f098: 458b 54ec | 0c41 3bda | 0f83 e607 | 0000 48c1 | e503 4903 | ec41 807f | 3800 0f85 | 6103 0000 
+  0x000000011fe2f0b8: c744 9d10 | 0000 0000 | 498b 8f50 | 0300 0044 | 8b44 2428 
+
+  0x000000011fe2f0cc: ; ImmutableOopMap {r13=Oop [0]=Oop [44]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*goto {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@98 (line 2922)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+                      ;   {poll}
+  0x000000011fe2f0cc: 41ff c085 | 018b 5c24 | 2c45 8b5c | dc10 453b | c30f 8d4a | feff ff4c | 8b0c 24e9 | f4fe ffff 
+  0x000000011fe2f0ec: 498b 9f50 | 0300 0045 | 8b5b 144c | 8b44 2448 
+
+  0x000000011fe2f0fc: ; ImmutableOopMap {r11=NarrowOop r8=Oop r9=Oop rdx=NarrowOop rax=Oop [0]=Oop [72]=Oop }
+                      ;*goto {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.util.IntMap::get@36 (line 144)
+                      ; - com.jme3.scene.Mesh::getBuffer@8 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@13 (line 3231)
+  0x000000011fe2f0fc: 8b74 2450 
+
+  0x000000011fe2f100: ;   {poll}
+  0x000000011fe2f100: 8503 4585 | db0f 84d4 | f8ff ff49 | c1e3 034d | 03dc e919 | fdff ff83 | f920 7529 | 453b c20f 
+  0x000000011fe2f120: 8425 fcff | ff48 8b7e | 288b 0f48 | 83c7 0848 | 85c0 f248 | af0f 8504 | 0000 0048 | 8946 200f 
+  0x000000011fe2f140: 8405 fcff | ff4c 8b80 | e000 0000 | 4963 4814 | 488b fb49 | 8bf5 49ba | a018 641f | 0100 0000 
+  0x000000011fe2f160: 41ff d285 | c00f 85d1 | 0700 0044 | 8b6c 2414 | 4c8b 5c24 | 2848 8b5c | 2430 8b7c | 2438 e9ed 
+  0x000000011fe2f180: fbff ff4d | 8b87 5003 | 0000 418b | 4a14 4c8b | 5424 4844 
+
+  0x000000011fe2f194: ; ImmutableOopMap {r10=Oop r9=Oop rcx=NarrowOop [0]=Oop [72]=Oop }
+                      ;*goto {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.util.IntMap::get@36 (line 144)
+                      ; - com.jme3.scene.Mesh::getBuffer@8 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@58 (line 3240)
+  0x000000011fe2f194: 8b5c 2450 
+
+  0x000000011fe2f198: ;   {poll}
+  0x000000011fe2f198: 4185 0085 | c90f 849d | f8ff ff4d | 8d14 cce9 | 61f8 ffff | 4c8b 5a70 | 4d8b 1b43 | 8b5c c408 
+  0x000000011fe2f1b8: 4585 c90f | 8cb3 0700 | 0048 33f6 | 488d 34de | 488b 3c2e | 483b d70f | 85b5 0000 | 0041 8bc9 
+  0x000000011fe2f1d8: 4b8d 2cc4 | 4863 f148 | c1e6 0248 | 83c6 1781 | f900 0004 | 000f 8719 | 0400 0049 | 8b9f 0801 
+  0x000000011fe2f1f8: 0000 488b | fe48 83e7 | f848 8bc3 | 4803 c749 | 3b87 1801 | 0000 0f83 | f803 0000 | 4989 8708 
+  0x000000011fe2f218: 0100 000f | 1880 0001 | 0000 48c7 | 0301 0000 | 0044 8953 | 0889 4b0c | 0f18 8040 | 0100 000f 
+  0x000000011fe2f238: 1880 8001 | 0000 478b | 54c4 0c4c | 8bcb 4983 | c110 443b | d144 8bd9 | 450f 4cda | 48c1 ee03 
+  0x000000011fe2f258: 4585 db0f | 84e8 0600 | 004f 8d44 | c410 4963 | d344 3bd9 | 0f8c 9402 | 0000 498b | f849 8bf1 
+  0x000000011fe2f278: 49ba 200f | 641f 0100 | 0000 41ff | d2e9 f2fa | ffff 83f9 | 2075 2c41 | 3bda 0f84 | 3dff ffff 
+  0x000000011fe2f298: 488b c248 | 8b7e 288b | 0f48 83c7 | 0848 85c0 | f248 af0f | 8504 0000 | 0048 8946 | 200f 841a 
+  0x000000011fe2f2b8: ffff ffbe | dcff ffff | 488b 2c24 | 4489 6c24 | 1844 8944 | 241c 4489 | 4c24 204c | 895c 2428 
+  0x000000011fe2f2d8: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f2d8: 6666 90e8 
+
+  0x000000011fe2f2dc: ; ImmutableOopMap {rbp=Oop [24]=NarrowOop [28]=NarrowOop [40]=Oop [72]=Oop [88]=Oop }
+                      ;*invokestatic copyOf {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList::toArray@21 (line 400)
+                      ; - com.jme3.util.SafeArrayList::getArray@49 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f2dc: 2003 83ff | 478b 5cec | 1845 85db | 0f84 99fa | ffff 4d8b | 5720 498b | fb48 c1e7 | 0374 0349 
+  0x000000011fe2f2fc: 03fc 4d85 | d20f 84e6 | 0400 004d | 8b5f 304b | 897c 13f8 | 4983 c2f8 | 4d89 5720 | e96a faff 
+  0x000000011fe2f31c: ff47 8b5c | ec14 4585 | db0f 84a5 | faff ff4d | 8b57 2049 | 8bfb 48c1 | e703 7403 | 4903 fc4d 
+  0x000000011fe2f33c: 85d2 0f84 | 9404 0000 | 4d8b 5f30 | 4b89 7c13 | f849 83c2 | f84d 8957 | 20e9 76fa | ffff 4d8b 
+  0x000000011fe2f35c: 5740 4d8b | 5f50 f083 | 4424 c000 | 4180 3800 | 0f84 53fa | ffff 41c6 | 0000 4d85 | d275 1849 
+  0x000000011fe2f37c: 8bf8 498b | f749 ba10 | 3300 0e01 | 0000 0041 | ffd2 e932 | faff ff4f | 8944 13f8 | 4983 c2f8 
+  0x000000011fe2f39c: 4d89 5740 | e920 faff | ff47 8b54 | ec18 4585 | d20f 845b | f7ff ff4d | 8b5f 2049 | 8bfa 48c1 
+  0x000000011fe2f3bc: e703 7403 | 4903 fc4d | 85db 0f84 | 0805 0000 | 4d8b 5730 | 4b89 7c1a | f849 83c3 | f84d 895f 
+  0x000000011fe2f3dc: 20e9 2cf7 | ffff 85ed | 0f84 80fc | ffff 4d8b | 5720 488b | fd48 c1e7 | 0374 0349 | 03fc 4d85 
+  0x000000011fe2f3fc: d20f 84e6 | 0400 004d | 8b5f 304b | 897c 13f8 | 4983 c2f8 | 4d89 5720 | e951 fcff | ff44 8b54 
+  0x000000011fe2f41c: 9d10 4585 | d20f 8491 | fcff ff4d | 8b5f 2049 | 8bfa 48c1 | e703 7403 | 4903 fc4d | 85db 0f84 
+  0x000000011fe2f43c: be04 0000 | 4d8b 5730 | 4b89 7c1a | f849 83c3 | f84d 895f | 20e9 62fc | ffff 4889 | 7424 3848 
+  0x000000011fe2f45c: 8954 2430 | 4489 4c24 | 284c 895c | 2420 48ff | 7424 6048 | 8f44 2418 | 4489 6c24 | 0c48 8944 
+  0x000000011fe2f47c: 24f8 8b44 | 2450 8944 | 2408 488b | 4424 f848 | 8b6c 2448 | 488b f241 
+
+  0x000000011fe2f494: ;   {runtime_call _new_array_Java}
+  0x000000011fe2f494: 8bd1 90e8 
+
+  0x000000011fe2f498: ; ImmutableOopMap {rbp=Oop [0]=Oop [12]=NarrowOop [24]=Oop [32]=Oop [72]=Oop [88]=Oop [96]=Oop }
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@46 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f498: 6432 8dff | 448b 6c24 | 0c4c 8b5c | 2420 448b | 4c24 2848 | 8b54 2430 | 488b 7424 | 3848 8bd8 
+  0x000000011fe2f4b8: e9b5 f7ff | ff4c 8944 | 2420 48ff | 7424 6048 | 8f44 2418 | 4489 6c24 | 0c48 8944 | 24f8 8b44 
+  0x000000011fe2f4d8: 2450 8944 | 2408 488b | 4424 f848 | 8b6c 2448 | 498b f033 
+
+  0x000000011fe2f4ec: ;   {runtime_call _new_array_Java}
+  0x000000011fe2f4ec: d266 90e8 
+
+  0x000000011fe2f4f0: ; ImmutableOopMap {rbp=Oop [0]=Oop [12]=NarrowOop [24]=Oop [72]=Oop [88]=Oop [96]=Oop }
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=1}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@22 (line 148)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f4f0: 0c32 8dff | 448b 6c24 | 0c4c 8b44 | 2420 488b | d8e9 e6f5 | ffff 4c8b | d249 c1e2 | 0249 83c2 
+  0x000000011fe2f510: 104d 8bda | 4983 e3fb | 488b fb49 | 03fb 49c1 | ea03 492b | f248 8bce | 4833 c048 | 83f9 087f 
+  0x000000011fe2f530: 1048 ffc9 | 780e 4889 | 04cf 48ff | c97d f7eb | 03f3 48ab | e929 fdff | ffbe e4ff | ffff 488b 
+  0x000000011fe2f550: 2c24 894c | 2408 4c89 | 4c24 1089 | 5424 1889 
+
+  0x000000011fe2f560: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f560: 5c24 1ce8 
+
+  0x000000011fe2f564: ; ImmutableOopMap {rbp=Oop [16]=Oop [24]=NarrowOop [72]=Oop }
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.util.IntMap::get@12 (line 144)
+                      ; - com.jme3.scene.Mesh::getBuffer@8 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@13 (line 3231)
+  0x000000011fe2f564: 9800 83ff | be45 ffff | ff4c 894c | 2420 4489 | 5c24 1444 | 8954 2428 | 894c 242c 
+
+  0x000000011fe2f580: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f580: 6666 90e8 
+
+  0x000000011fe2f584: ; ImmutableOopMap {[0]=Oop [32]=Oop [40]=NarrowOop [44]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*if_acmpeq {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@149 (line 3250)
+  0x000000011fe2f584: 7800 83ff | be45 ffff | ff4c 894c | 2420 4489 | 5c24 1444 | 8954 2428 | 895c 242c 
+
+  0x000000011fe2f5a0: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f5a0: 6666 90e8 
+
+  0x000000011fe2f5a4: ; ImmutableOopMap {[0]=Oop [32]=Oop [40]=NarrowOop [44]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*if_acmpeq {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@160 (line 3251)
+  0x000000011fe2f5a4: 5800 83ff | bede ffff | ff89 4c24 | 104c 894c 
+
+  0x000000011fe2f5b4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f5b4: 2418 90e8 
+
+  0x000000011fe2f5b8: ; ImmutableOopMap {rbp=NarrowOop [0]=Oop [24]=Oop [72]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.scene.Mesh::getBuffer@11 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@13 (line 3231)
+  0x000000011fe2f5b8: 4400 83ff | bee4 ffff | ff48 8b2c | 244c 894c | 2410 8954 | 240c 897c 
+
+  0x000000011fe2f5d0: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f5d0: 2418 90e8 
+
+  0x000000011fe2f5d4: ; ImmutableOopMap {rbp=Oop [12]=NarrowOop [16]=Oop [72]=Oop }
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.util.IntMap::get@12 (line 144)
+                      ; - com.jme3.scene.Mesh::getBuffer@8 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@58 (line 3240)
+  0x000000011fe2f5d4: 2800 83ff | becc ffff | ff4c 892c | 2489 5c24 | 1444 894c | 2420 4489 
+
+  0x000000011fe2f5ec: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f5ec: 4424 24e8 
+
+  0x000000011fe2f5f0: ; ImmutableOopMap {[0]=Oop [20]=NarrowOop [32]=NarrowOop [36]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*invokestatic arraycopy {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.IDList::copyNewToOld@14 (line 104)
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@102 (line 2934)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f5f0: 0c00 83ff | be76 ffff | ff48 8b2c | 244c 894c | 2418 4489 
+
+  0x000000011fe2f604: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f604: 5c24 20e8 
+
+  0x000000011fe2f608: ; ImmutableOopMap {rbp=Oop [24]=Oop [72]=Oop [88]=Oop }
+                      ;*if_icmpge {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@131 (line 3249)
+  0x000000011fe2f608: f4ff 82ff | 4889 7424 | 3089 4c24 | 2c49 8bcb | 4489 4424 | 2848 ff74 | 2460 488f | 4424 2044 
+  0x000000011fe2f628: 896c 2414 | 4889 4424 | f88b 4424 | 5089 4424 | 1048 8b44 | 24f8 48ff | 7424 4848 | 8f44 2408 
+  0x000000011fe2f648: 488b f28b | 5424 2c44 | 894c 2440 | 4889 4c24 
+
+  0x000000011fe2f658: ;   {runtime_call _new_array_Java}
+  0x000000011fe2f658: 4866 90e8 
+
+  0x000000011fe2f65c: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop [20]=NarrowOop [32]=Oop [40]=NarrowOop [72]=Oop [88]=Oop [96]=Oop }
+                      ;*invokestatic copyOf {reexecute=1 rethrow=0 return_oop=1}
+                      ; - (reexecute) java.util.ArrayList::toArray@21 (line 400)
+                      ; - com.jme3.util.SafeArrayList::getArray@49 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f65c: a030 8dff | 48ff 7424 | 0848 8f44 | 2448 448b | 6c24 1448 | 8bd8 448b | 4424 288b | 4c24 2c48 
+  0x000000011fe2f67c: 8b74 2430 | e9b9 fbff | ffbe 45ff | ffff 894c | 2410 4c89 | 4c24 184c | 895c 2420 
+
+  0x000000011fe2f698: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f698: 6666 90e8 
+
+  0x000000011fe2f69c: ; ImmutableOopMap {rbp=NarrowOop [0]=Oop [24]=Oop [32]=Oop [72]=Oop }
+                      ;*ifnull {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.scene.Mesh::getNumLodLevels@4 (line 511)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@38 (line 3237)
+  0x000000011fe2f69c: 60ff 82ff | be45 ffff | ff48 8b2c | 244c 894c 
+
+  0x000000011fe2f6ac: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f6ac: 2420 90e8 
+
+  0x000000011fe2f6b0: ; ImmutableOopMap {rbp=Oop [32]=Oop [72]=Oop [88]=Oop }
+                      ;*ifnull {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@65 (line 3243)
+  0x000000011fe2f6b0: 4cff 82ff | be45 ffff | ff49 8bed 
+
+  0x000000011fe2f6bc: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f6bc: 6666 90e8 
+
+  0x000000011fe2f6c0: ; ImmutableOopMap {rbp=Oop [72]=Oop [88]=Oop }
+                      ;*ifnull {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@214 (line 3267)
+  0x000000011fe2f6c0: 3cff 82ff | 488b cee9 | 10f5 ffff | bede ffff | ff48 8b2c | 2444 896c | 2418 4489 | 6c24 2044 
+  0x000000011fe2f6e0: 8944 2424 
+
+  0x000000011fe2f6e4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f6e4: 6666 90e8 
+
+  0x000000011fe2f6e8: ; ImmutableOopMap {rbp=Oop [24]=NarrowOop [32]=NarrowOop [36]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*invokeinterface size {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.util.SafeArrayList::getArray@41 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f6e8: 14ff 82ff | bede ffff | ff48 8b2c | 2444 896c | 2418 4c89 | 5c24 2044 | 8954 241c | 4489 4c24 
+  0x000000011fe2f708: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f708: 2866 90e8 
+
+  0x000000011fe2f70c: ; ImmutableOopMap {rbp=Oop [24]=NarrowOop [28]=NarrowOop [32]=Oop [72]=Oop [88]=Oop }
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@46 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f70c: f0fe 82ff | bede ffff | ff48 8beb 
+
+  0x000000011fe2f718: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f718: 6666 90e8 
+
+  0x000000011fe2f71c: ; ImmutableOopMap {rbp=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.util.SafeArrayList::createArray@5 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@46 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f71c: e0fe 82ff | 4585 c90f | 8d47 f6ff | ff45 33c0 | 48ff 7424 | 4848 8f44 | 2408 4889 | 4424 f88b 
+  0x000000011fe2f73c: 4424 5089 | 4424 1048 | 8b44 24f8 | 48ff 7424 | 5848 8f44 | 2418 4489 | 6c24 1448 | ff74 2460 
+  0x000000011fe2f75c: 488f 4424 | 204c 895c | 2428 4889 | 5c24 3089 | 7c24 384c | 8974 2440 | 452b c848 | 8b74 2440 
+  0x000000011fe2f77c: 418b d048 | 8b4c 2430 | 488b 2c24 
+
+  0x000000011fe2f788: ;   {runtime_call _slow_arraycopy_Java}
+  0x000000011fe2f788: 6666 90e8 
+
+  0x000000011fe2f78c: ; ImmutableOopMap {rbp=Oop [0]=Oop [8]=Oop [20]=NarrowOop [24]=Oop [32]=Oop [40]=Oop [48]=Oop }
+                      ;*invokestatic arraycopy {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.ArrayList::toArray@36 (line 401)
+                      ; - com.jme3.util.SafeArrayList::getArray@49 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f78c: f080 8dff | 48ff 7424 | 0848 8f44 | 2448 4889 | 4424 f88b | 4424 1089 | 4424 5048 | 8b44 24f8 
+  0x000000011fe2f7ac: 48ff 7424 | 1848 8f44 | 2458 448b | 6c24 1448 | ff74 2420 | 488f 4424 | 604c 8b5c | 2428 488b 
+  0x000000011fe2f7cc: 5c24 308b | 7c24 38e9 | 98f5 ffff | 498b f749 | bae0 3200 | 0e01 0000 | 0041 ffd2 | e9e3 f5ff 
+  0x000000011fe2f7ec: ff49 8bf7 | 49ba e032 | 000e 0100 | 0000 41ff | d2e9 85f5 | ffff be45 | ffff ff44 | 896c 2420 
+  0x000000011fe2f80c: 4c89 5c24 | 2848 895c | 2430 897c 
+
+  0x000000011fe2f818: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f818: 2424 90e8 
+
+  0x000000011fe2f81c: ; ImmutableOopMap {[0]=Oop [32]=NarrowOop [40]=Oop [48]=Oop [72]=Oop [88]=Oop }
+                      ;*if_icmple {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList::toArray@45 (line 402)
+                      ; - com.jme3.util.SafeArrayList::getArray@49 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f81c: e0fd 82ff | bede ffff | ff48 8b2c | 2444 896c | 2418 4489 
+
+  0x000000011fe2f830: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f830: 5424 1ce8 
+
+  0x000000011fe2f834: ; ImmutableOopMap {rbp=Oop [24]=NarrowOop [28]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@22 (line 148)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f834: c8fd 82ff | bede ffff | ff48 8beb 
+
+  0x000000011fe2f840: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f840: 6666 90e8 
+
+  0x000000011fe2f844: ; ImmutableOopMap {rbp=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.util.SafeArrayList::createArray@5 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@22 (line 148)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f844: b8fd 82ff | bee4 ffff | ff4c 896c | 2418 4489 | 4424 2089 | 5c24 2489 
+
+  0x000000011fe2f85c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f85c: 4c24 28e8 
+
+  0x000000011fe2f860: ; ImmutableOopMap {[24]=Oop [36]=NarrowOop [40]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*iaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@23 (line 2923)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f860: 9cfd 82ff | bee4 ffff | ff4c 896c | 2420 448b | 5424 2844 | 8954 2414 | 448b 5c24 | 2c44 895c 
+  0x000000011fe2f880: 2428 895c 
+
+  0x000000011fe2f884: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f884: 2430 90e8 
+
+  0x000000011fe2f888: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@43 (line 2925)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f888: 74fd 82ff | bee4 ffff | ff4c 896c | 2420 448b | 5c24 2844 | 895c 2414 | 448b 5c24 | 2c44 895c 
+  0x000000011fe2f8a8: 2428 895c 
+
+  0x000000011fe2f8ac: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f8ac: 242c 90e8 
+
+  0x000000011fe2f8b0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*aastore {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@94 (line 2931)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f8b0: 4cfd 82ff | bede ffff | ff4c 896c | 2420 4489 | 4424 1489 | 5c24 2844 | 8954 2430 
+
+  0x000000011fe2f8cc: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f8cc: 6666 90e8 
+
+  0x000000011fe2f8d0: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*invokeinterface glDisableVertexAttribArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@30 (line 2924)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f8d0: 2cfd 82ff | 498b f749 | bae0 3200 | 0e01 0000 | 0041 ffd2 | e925 f2ff | ff49 8bf7 | 49ba e032 
+  0x000000011fe2f8f0: 000e 0100 | 0000 41ff | d2e9 6cf7 | ffff 498b | f749 bae0 | 3200 0e01 | 0000 0041 | ffd2 e9a5 
+  0x000000011fe2f910: f7ff ffbe | 45ff ffff | 4c89 6c24 | 2044 8b54 | 2428 4489 | 5424 1444 | 8b54 242c | 4489 5424 
+  0x000000011fe2f930: 2889 5c24 
+
+  0x000000011fe2f934: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f934: 2c66 90e8 
+
+  0x000000011fe2f938: ; ImmutableOopMap {[32]=Oop [40]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*ifle {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.scene.VertexBuffer::isInstanced@4 (line 565)
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@68 (line 2928)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f938: c4fc 82ff | f7d0 458b | ce44 8bc0 | e92b feff | ff48 83c6 | fe48 8bce | 498b f948 | 33c0 4883 
+  0x000000011fe2f958: f908 7f10 | 48ff c978 | 0e48 8904 | cf48 ffc9 | 7df7 eb03 | f348 abe9 | 11f9 ffff | bece ffff 
+  0x000000011fe2f978: ff48 8b2c | 2444 896c | 2418 4489 | 4424 1c44 | 894c 2420 | 4c89 5c24 
+
+  0x000000011fe2f990: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f990: 2866 90e8 
+
+  0x000000011fe2f994: ; ImmutableOopMap {rbp=Oop [24]=NarrowOop [28]=NarrowOop [40]=Oop [72]=Oop [88]=Oop }
+                      ;*invokestatic copyOf {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList::toArray@21 (line 400)
+                      ; - com.jme3.util.SafeArrayList::getArray@49 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2f994: 68fc 82ff | bede ffff 
+
+  0x000000011fe2f99c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f99c: ff66 90e8 
+
+  0x000000011fe2f9a0: ; ImmutableOopMap {rbp=NarrowOop [0]=Oop [72]=Oop [88]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@114 (line 3249)
+  0x000000011fe2f9a0: 5cfc 82ff | bede ffff | ff4c 896c | 2420 448b | 5c24 2844 | 895c 2414 | 448b 5c24 | 2c44 895c 
+  0x000000011fe2f9c0: 2428 895c 
+
+  0x000000011fe2f9c4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f9c4: 242c 90e8 
+
+  0x000000011fe2f9c8: ; ImmutableOopMap {rbp=NarrowOop [32]=Oop [40]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@56 (line 2927)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2f9c8: 34fc 82ff | bede ffff | ff4c 894c 
+
+  0x000000011fe2f9d4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f9d4: 2418 90e8 
+
+  0x000000011fe2f9d8: ; ImmutableOopMap {rbp=NarrowOop [0]=Oop [24]=Oop [72]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.scene.Mesh::getBuffer@11 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@58 (line 3240)
+  0x000000011fe2f9d8: 24fc 82ff | bef6 ffff 
+
+  0x000000011fe2f9e0: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f9e0: ff66 90e8 
+
+  0x000000011fe2f9e4: ; ImmutableOopMap {}
+                      ;*invokevirtual getBufferType {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@143 (line 3250)
+  0x000000011fe2f9e4: 18fc 82ff | bef6 ffff 
+
+  0x000000011fe2f9ec: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f9ec: ff66 90e8 
+
+  0x000000011fe2f9f0: ; ImmutableOopMap {}
+                      ;*invokevirtual getInstanceCount {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@1 (line 3229)
+  0x000000011fe2f9f0: 0cfc 82ff | bef6 ffff 
+
+  0x000000011fe2f9f8: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2f9f8: ff66 90e8 
+
+  0x000000011fe2f9fc: ; ImmutableOopMap {}
+                      ;*invokevirtual get {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.scene.Mesh::getBuffer@8 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@13 (line 3231)
+  0x000000011fe2f9fc: 00fc 82ff | bef6 ffff 
+
+  0x000000011fe2fa04: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa04: ff8b ebe8 
+
+  0x000000011fe2fa08: ; ImmutableOopMap {}
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.util.IntMap::get@12 (line 144)
+                      ; - com.jme3.scene.Mesh::getBuffer@8 (line 1151)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@13 (line 3231)
+  0x000000011fe2fa08: f4fb 82ff | bef6 ffff 
+
+  0x000000011fe2fa10: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa10: ff66 90e8 
+
+  0x000000011fe2fa14: ; ImmutableOopMap {}
+                      ;*invokevirtual getArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2fa14: e8fb 82ff | bef6 ffff 
+
+  0x000000011fe2fa1c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa1c: ff66 90e8 
+
+  0x000000011fe2fa20: ; ImmutableOopMap {}
+                      ;*getfield attribIndexList {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@4 (line 2921)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fa20: dcfb 82ff | bef6 ffff 
+
+  0x000000011fe2fa28: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa28: ff66 90e8 
+
+  0x000000011fe2fa2c: ; ImmutableOopMap {}
+                      ;*getfield oldLen {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@12 (line 2922)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fa2c: d0fb 82ff | bef6 ffff | ff44 8904 
+
+  0x000000011fe2fa38: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa38: 2466 90e8 
+
+  0x000000011fe2fa3c: ; ImmutableOopMap {[0]=NarrowOop }
+                      ;*invokestatic arraycopy {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.IDList::copyNewToOld@14 (line 104)
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@102 (line 2934)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fa3c: c0fb 82ff | bef6 ffff | ff44 890c 
+
+  0x000000011fe2fa48: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa48: 2466 90e8 
+
+  0x000000011fe2fa4c: ; ImmutableOopMap {[0]=NarrowOop }
+                      ;*invokestatic arraycopy {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.IDList::copyNewToOld@14 (line 104)
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@102 (line 2934)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fa4c: b0fb 82ff | bef6 ffff | ff41 8be9 
+
+  0x000000011fe2fa58: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa58: 6666 90e8 
+
+  0x000000011fe2fa5c: ; ImmutableOopMap {}
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@46 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2fa5c: a0fb 82ff | bef4 ffff | ff48 8b2c | 2444 896c | 2418 4c89 | 5c24 2044 | 8954 241c | 4489 4c24 
+  0x000000011fe2fa7c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa7c: 2866 90e8 
+
+  0x000000011fe2fa80: ; ImmutableOopMap {rbp=Oop [24]=NarrowOop [28]=NarrowOop [32]=Oop [72]=Oop [88]=Oop }
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@46 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2fa80: 7cfb 82ff | bef6 ffff | ff48 8beb | 4489 0c24 
+
+  0x000000011fe2fa90: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa90: 6666 90e8 
+
+  0x000000011fe2fa94: ; ImmutableOopMap {rbp=Oop }
+                      ;*invokestatic arraycopy {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.util.ArrayList::toArray@36 (line 401)
+                      ; - com.jme3.util.SafeArrayList::getArray@49 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2fa94: 68fb 82ff | bef6 ffff 
+
+  0x000000011fe2fa9c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fa9c: ff66 90e8 
+
+  0x000000011fe2faa0: ; ImmutableOopMap {}
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@22 (line 148)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2faa0: 5cfb 82ff | bef4 ffff | ff48 8b2c | 2444 896c | 2418 4489 
+
+  0x000000011fe2fab4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fab4: 5424 1ce8 
+
+  0x000000011fe2fab8: ; ImmutableOopMap {rbp=Oop [24]=NarrowOop [28]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*invokestatic newArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - java.lang.reflect.Array::newInstance@2 (line 78)
+                      ; - com.jme3.util.SafeArrayList::createArray@2 (line 128)
+                      ; - com.jme3.util.SafeArrayList::createArray@6 (line 132)
+                      ; - com.jme3.util.SafeArrayList::getArray@22 (line 148)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2fab8: 44fb 82ff | bef6 ffff | ff41 8be8 
+
+  0x000000011fe2fac4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fac4: 6666 90e8 
+
+  0x000000011fe2fac8: ; ImmutableOopMap {}
+                      ;*iaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@23 (line 2923)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fac8: 34fb 82ff | bef6 ffff | ff41 8bea 
+
+  0x000000011fe2fad4: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fad4: 6666 90e8 
+
+  0x000000011fe2fad8: ; ImmutableOopMap {}
+                      ;*invokeinterface glDisableVertexAttribArray {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@30 (line 2924)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fad8: 24fb 82ff | bef6 ffff 
+
+  0x000000011fe2fae0: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fae0: ff66 90e8 
+
+  0x000000011fe2fae4: ; ImmutableOopMap {}
+                      ;*getfield boundAttribs {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@39 (line 2925)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fae4: 18fb 82ff | bef6 ffff | ff8b 6c24 
+
+  0x000000011fe2faf0: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2faf0: 1466 90e8 
+
+  0x000000011fe2faf4: ; ImmutableOopMap {}
+                      ;*aaload {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@43 (line 2925)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2faf4: 08fb 82ff | bef4 ffff | ff4c 896c | 2418 895c 
+
+  0x000000011fe2fb04: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fb04: 2424 90e8 
+
+  0x000000011fe2fb08: ; ImmutableOopMap {[24]=Oop [44]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*checkcast {reexecute=0 rethrow=0 return_oop=0}
+                      ; - com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@56 (line 2927)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fb08: f4fa 82ff | bef6 ffff 
+
+  0x000000011fe2fb10: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fb10: ff66 90e8 
+
+  0x000000011fe2fb14: ; ImmutableOopMap {}
+                      ;*getfield boundAttribs {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@89 (line 2931)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fb14: e8fa 82ff | bef6 ffff 
+
+  0x000000011fe2fb1c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fb1c: ff8b ebe8 
+
+  0x000000011fe2fb20: ; ImmutableOopMap {}
+                      ;*aastore {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@94 (line 2931)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fb20: dcfa 82ff | be45 ffff | ff4c 896c | 2418 448b | 4424 2844 | 8944 240c | 448b 5c24 | 2c44 895c 
+  0x000000011fe2fb40: 2420 895c | 2424 4489 
+
+  0x000000011fe2fb48: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fb48: 5424 2ce8 
+
+  0x000000011fe2fb4c: ; ImmutableOopMap {[24]=Oop [32]=NarrowOop [44]=NarrowOop [72]=Oop [88]=Oop }
+                      ;*ifnull {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) com.jme3.renderer.opengl.GLRenderer::clearVertexAttribs@48 (line 2926)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@209 (line 3265)
+  0x000000011fe2fb4c: b0fa 82ff | bef6 ffff | ff41 8be9 | 4c89 1c24 
+
+  0x000000011fe2fb5c: ;   {runtime_call UncommonTrapBlob}
+  0x000000011fe2fb5c: 6666 90e8 
+
+  0x000000011fe2fb60: ; ImmutableOopMap {[0]=Oop }
+                      ;*invokestatic copyOf {reexecute=1 rethrow=0 return_oop=0}
+                      ; - (reexecute) java.util.ArrayList::toArray@21 (line 400)
+                      ; - com.jme3.util.SafeArrayList::getArray@49 (line 153)
+                      ; - com.jme3.renderer.opengl.GLRenderer::renderMeshDefault@111 (line 3249)
+  0x000000011fe2fb60: 9cfa 82ff | eb04 eb02 | eb00 488b | f0eb 0d48 | 8bf0 eb08 | 488b f0eb | 0348 8bf0 | 4881 c480 
+  0x000000011fe2fb80: 0000 005d 
+
+  0x000000011fe2fb84: ;   {runtime_call _rethrow_Java}
+  0x000000011fe2fb84: e9f7 768d 
+
+  0x000000011fe2fb88: ;   {internal_word}
+  0x000000011fe2fb88: ff49 bac8 | efe2 1f01 | 0000 004d | 8997 6003 
+
+  0x000000011fe2fb98: ;   {runtime_call SafepointBlob}
+  0x000000011fe2fb98: 0000 e9e1 | 0683 fff4 
+[Stub Code]
+  0x000000011fe2fba0: ;   {no_reloc}
+  0x000000011fe2fba0: 48bb 0000 | 0000 0000 
+
+  0x000000011fe2fba8: ;   {runtime_call}
+  0x000000011fe2fba8: 0000 e9fb 
+
+  0x000000011fe2fbac: ;   {static_stub}
+  0x000000011fe2fbac: ffff ff48 | bb00 0000 | 0000 0000 
+
+  0x000000011fe2fbb8: ;   {runtime_call}
+  0x000000011fe2fbb8: 00e9 fbff 
+
+  0x000000011fe2fbbc: ;   {static_stub}
+  0x000000011fe2fbbc: ffff 48bb | 0000 0000 | 0000 0000 
+
+  0x000000011fe2fbc8: ;   {runtime_call}
+  0x000000011fe2fbc8: e9fb ffff 
+
+  0x000000011fe2fbcc: ;   {runtime_call ExceptionBlob}
+  0x000000011fe2fbcc: ffe9 aed2 | 83ff e800 | 0000 0048 | 832c 2405 
+
+  0x000000011fe2fbdc: ;   {runtime_call DeoptimizationBlob}
+  0x000000011fe2fbdc: e9bf ff82 | fff4 f4f4 | f4f4 f4f4 
+[/MachCode]
+
+
+---------------  P R O C E S S  ---------------
+
+Threads class SMR info:
+_java_thread_list=0x00006000038d96e0, length=23, elements={
+0x00007fcad080be00, 0x00007fcad081a400, 0x00007fcad0819600, 0x00007fcacf83f600,
+0x00007fcacf841e00, 0x00007fcacf842400, 0x00007fcacf842a00, 0x00007fcad081c000,
+0x00007fcaa801a000, 0x00007fcaa8024800, 0x00007fcad081ee00, 0x00007fcad0a5e000,
+0x00007fca9f934600, 0x00007fca9fb45400, 0x00007fcacfd88000, 0x00007fca883df200,
+0x00007fcad0b70800, 0x00007fcacfd8f000, 0x00007fcad0b6ce00, 0x00007fcaa8152e00,
+0x00007fcad0b6d400, 0x00007fcaa8473c00, 0x00007fcaa874cc00
+}
+
+Java Threads: ( => current thread )
+=>0x00007fcad080be00 JavaThread "jME3 Main" [_thread_in_native, id=259, stack(0x000000030c5bf000,0x000000030cdbf000)]
+  0x00007fcad081a400 JavaThread "Reference Handler" daemon [_thread_blocked, id=22087, stack(0x000000090e510000,0x000000090e610000)]
+  0x00007fcad0819600 JavaThread "Finalizer" daemon [_thread_blocked, id=32003, stack(0x000000090e613000,0x000000090e713000)]
+  0x00007fcacf83f600 JavaThread "Signal Dispatcher" daemon [_thread_blocked, id=25091, stack(0x000000090e827000,0x000000090e927000)]
+  0x00007fcacf841e00 JavaThread "Service Thread" daemon [_thread_blocked, id=25603, stack(0x000000090e92a000,0x000000090ea2a000)]
+  0x00007fcacf842400 JavaThread "Monitor Deflation Thread" daemon [_thread_blocked, id=30467, stack(0x000000090ea2d000,0x000000090eb2d000)]
+  0x00007fcacf842a00 JavaThread "C2 CompilerThread0" daemon [_thread_blocked, id=26371, stack(0x000000090eb30000,0x000000090ec30000)]
+  0x00007fcad081c000 JavaThread "C1 CompilerThread0" daemon [_thread_blocked, id=26883, stack(0x000000090ec33000,0x000000090ed33000)]
+  0x00007fcaa801a000 JavaThread "Sweeper thread" daemon [_thread_blocked, id=27139, stack(0x000000090ed36000,0x000000090ee36000)]
+  0x00007fcaa8024800 JavaThread "Notification Thread" daemon [_thread_blocked, id=29699, stack(0x000000090ee39000,0x000000090ef39000)]
+  0x00007fcad081ee00 JavaThread "Common-Cleaner" daemon [_thread_blocked, id=27967, stack(0x000000090f03f000,0x000000090f13f000)]
+  0x00007fcad0a5e000 JavaThread "LWJGL Deallocator" daemon [_thread_blocked, id=70735, stack(0x000000090f1c5000,0x000000090f2c5000)]
+  0x00007fca9f934600 JavaThread "jME3 Audio Decoder" daemon [_thread_blocked, id=136095, stack(0x000000090f451000,0x000000090f551000)]
+  0x00007fca9fb45400 JavaThread "Java2D Disposer" daemon [_thread_blocked, id=136891, stack(0x000000090f554000,0x000000090f654000)]
+  0x00007fcacfd88000 JavaThread "pool-1-thread-1" [_thread_blocked, id=163863, stack(0x0000000910ad3000,0x0000000910bd3000)]
+  0x00007fca883df200 JavaThread "pool-1-thread-2" [_thread_blocked, id=146187, stack(0x0000000910bd6000,0x0000000910cd6000)]
+  0x00007fcad0b70800 JavaThread "pool-1-thread-3" [_thread_blocked, id=146707, stack(0x0000000910cd9000,0x0000000910dd9000)]
+  0x00007fcacfd8f000 JavaThread "pool-1-thread-4" [_thread_blocked, id=163587, stack(0x0000000910ddc000,0x0000000910edc000)]
+  0x00007fcad0b6ce00 JavaThread "pool-1-thread-5" [_thread_blocked, id=163075, stack(0x0000000910edf000,0x0000000910fdf000)]
+  0x00007fcaa8152e00 JavaThread "pool-1-thread-6" [_thread_blocked, id=162851, stack(0x0000000910fe2000,0x00000009110e2000)]
+  0x00007fcad0b6d400 JavaThread "pool-1-thread-7" [_thread_blocked, id=162051, stack(0x00000009110e5000,0x00000009111e5000)]
+  0x00007fcaa8473c00 JavaThread "jME3 Audio Decoder" daemon [_thread_blocked, id=158507, stack(0x000000091126b000,0x000000091136b000)]
+  0x00007fcaa874cc00 JavaThread "C2 CompilerThread1" daemon [_thread_blocked, id=158095, stack(0x00000009106af000,0x00000009107af000)]
+
+Other Threads:
+  0x00007fca9f707720 VMThread "VM Thread" [stack: 0x000000090e40d000,0x000000090e50d000] [id=19971]
+  0x00007fcaa88080d0 WatcherThread [stack: 0x000000090ef3c000,0x000000090f03c000] [id=28931]
+  0x00007fcacf707200 GCTaskThread "GC Thread#0" [stack: 0x000000030ce43000,0x000000030cf43000] [id=13059]
+  0x00007fcad008b580 GCTaskThread "GC Thread#1" [stack: 0x000000090f75a000,0x000000090f85a000] [id=137903]
+  0x00007fcad008ba00 GCTaskThread "GC Thread#2" [stack: 0x000000090f85d000,0x000000090f95d000] [id=170499]
+  0x00007fcad008be80 GCTaskThread "GC Thread#3" [stack: 0x000000090f960000,0x000000090fa60000] [id=137987]
+  0x00007fcad008c300 GCTaskThread "GC Thread#4" [stack: 0x000000090fa63000,0x000000090fb63000] [id=138243]
+  0x00007fca9f735ba0 GCTaskThread "GC Thread#5" [stack: 0x000000090fb66000,0x000000090fc66000] [id=138755]
+  0x00007fca9f736020 GCTaskThread "GC Thread#6" [stack: 0x000000090fc69000,0x000000090fd69000] [id=139267]
+  0x00007fca9f7364a0 GCTaskThread "GC Thread#7" [stack: 0x000000090fd6c000,0x000000090fe6c000] [id=169731]
+  0x00007fca9f736920 GCTaskThread "GC Thread#8" [stack: 0x000000090fe6f000,0x000000090ff6f000] [id=140035]
+  0x00007fcabf7175b0 GCTaskThread "GC Thread#9" [stack: 0x000000090ff72000,0x0000000910072000] [id=140291]
+  0x00007fcacf7078b0 ConcurrentGCThread "G1 Main Marker" [stack: 0x000000090e001000,0x000000090e101000] [id=16387]
+  0x00007fcacf708140 ConcurrentGCThread "G1 Conc#0" [stack: 0x000000090e104000,0x000000090e204000] [id=17411]
+  0x00007fca78014500 ConcurrentGCThread "G1 Conc#1" [stack: 0x0000000910178000,0x0000000910278000] [id=142771]
+  0x00007fca7f709d90 ConcurrentGCThread "G1 Conc#2" [stack: 0x000000091027b000,0x000000091037b000] [id=142851]
+  0x00007fca9f704080 ConcurrentGCThread "G1 Refine#0" [stack: 0x000000090e207000,0x000000090e307000] [id=21251]
+  0x00007fca9f704920 ConcurrentGCThread "G1 Service" [stack: 0x000000090e30a000,0x000000090e40a000] [id=18179]
+
+Threads with active compile tasks:
+
+VM state: not at safepoint (normal execution)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+Heap address: 0x000000030e000000, size: 24576 MB, Compressed Oops mode: Non-zero based: 0x000000030d000000, Oop shift amount: 3
+
+CDS archive(s) not mapped
+Compressed class space mapped at: 0x0000000163000000-0x00000001a3000000, reserved size: 1073741824
+Narrow klass base: 0x0000000000000000, Narrow klass shift: 3, Narrow klass range: 0x1a3000000
+
+GC Precious Log:
+ CPUs: 12 total, 12 available
+ Memory: 98304M
+ Large Page Support: Disabled
+ NUMA Support: Disabled
+ Compressed Oops: Enabled (Non-zero based)
+ Heap Region Size: 16M
+ Heap Min Capacity: 16M
+ Heap Initial Capacity: 1536M
+ Heap Max Capacity: 24G
+ Pre-touch: Disabled
+ Parallel Workers: 10
+ Concurrent Workers: 3
+ Concurrent Refinement Workers: 10
+ Periodic GC: Disabled
+
+Heap:
+ garbage-first heap   total 851968K, used 321314K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 15 young (245760K), 1 survivors (16384K)
+ Metaspace       used 23303K, committed 23552K, reserved 1114112K
+  class space    used 1951K, committed 2048K, reserved 1048576K
+
+Heap Regions: E=young(eden), S=young(survivor), O=old, HS=humongous(starts), HC=humongous(continues), CS=collection set, F=free, OA=open archive, CA=closed archive, TAMS=top-at-mark-start (previous, next)
+|   0|0x000000030e000000, 0x000000030f000000, 0x000000030f000000|100%|HS|  |TAMS 0x000000030e000000, 0x000000030e000000| Complete 
+|   1|0x000000030f000000, 0x0000000310000000, 0x0000000310000000|100%|HC|  |TAMS 0x000000030f000000, 0x000000030f000000| Complete 
+|   2|0x0000000310000000, 0x0000000310520810, 0x0000000311000000| 32%| S|CS|TAMS 0x0000000310000000, 0x0000000310000000| Complete 
+|   3|0x0000000311000000, 0x0000000312000000, 0x0000000312000000|100%|HS|  |TAMS 0x0000000311000000, 0x0000000311000000| Complete 
+|   4|0x0000000312000000, 0x0000000313000000, 0x0000000313000000|100%|HC|  |TAMS 0x0000000312000000, 0x0000000312000000| Complete 
+|   5|0x0000000313000000, 0x0000000314000000, 0x0000000314000000|100%|HS|  |TAMS 0x0000000313000000, 0x0000000313000000| Complete 
+|   6|0x0000000314000000, 0x0000000315000000, 0x0000000315000000|100%|HC|  |TAMS 0x0000000314000000, 0x0000000314000000| Complete 
+|   7|0x0000000315000000, 0x0000000315000000, 0x0000000316000000|  0%| F|  |TAMS 0x0000000315000000, 0x0000000315000000| Untracked 
+|   8|0x0000000316000000, 0x0000000316000000, 0x0000000317000000|  0%| F|  |TAMS 0x0000000316000000, 0x0000000316000000| Untracked 
+|   9|0x0000000317000000, 0x0000000317000000, 0x0000000318000000|  0%| F|  |TAMS 0x0000000317000000, 0x0000000317000000| Untracked 
+|  10|0x0000000318000000, 0x0000000318000000, 0x0000000319000000|  0%| F|  |TAMS 0x0000000318000000, 0x0000000318000000| Untracked 
+|  11|0x0000000319000000, 0x0000000319000000, 0x000000031a000000|  0%| F|  |TAMS 0x0000000319000000, 0x0000000319000000| Untracked 
+|  12|0x000000031a000000, 0x000000031a000000, 0x000000031b000000|  0%| F|  |TAMS 0x000000031a000000, 0x000000031a000000| Untracked 
+|  13|0x000000031b000000, 0x000000031b000000, 0x000000031c000000|  0%| F|  |TAMS 0x000000031b000000, 0x000000031b000000| Untracked 
+|  14|0x000000031c000000, 0x000000031c000000, 0x000000031d000000|  0%| F|  |TAMS 0x000000031c000000, 0x000000031c000000| Untracked 
+|  15|0x000000031d000000, 0x000000031d000000, 0x000000031e000000|  0%| F|  |TAMS 0x000000031d000000, 0x000000031d000000| Untracked 
+|  16|0x000000031e000000, 0x000000031e000000, 0x000000031f000000|  0%| F|  |TAMS 0x000000031e000000, 0x000000031e000000| Untracked 
+|  17|0x000000031f000000, 0x000000031f000000, 0x0000000320000000|  0%| F|  |TAMS 0x000000031f000000, 0x000000031f000000| Untracked 
+|  18|0x0000000320000000, 0x0000000320000000, 0x0000000321000000|  0%| F|  |TAMS 0x0000000320000000, 0x0000000320000000| Untracked 
+|  19|0x0000000321000000, 0x0000000321000000, 0x0000000322000000|  0%| F|  |TAMS 0x0000000321000000, 0x0000000321000000| Untracked 
+|  20|0x0000000322000000, 0x0000000322000000, 0x0000000323000000|  0%| F|  |TAMS 0x0000000322000000, 0x0000000322000000| Untracked 
+|  21|0x0000000323000000, 0x0000000323000000, 0x0000000324000000|  0%| F|  |TAMS 0x0000000323000000, 0x0000000323000000| Untracked 
+|  22|0x0000000324000000, 0x0000000324000000, 0x0000000325000000|  0%| F|  |TAMS 0x0000000324000000, 0x0000000324000000| Untracked 
+|  23|0x0000000325000000, 0x0000000325000000, 0x0000000326000000|  0%| F|  |TAMS 0x0000000325000000, 0x0000000325000000| Untracked 
+|  24|0x0000000326000000, 0x0000000326000000, 0x0000000327000000|  0%| F|  |TAMS 0x0000000326000000, 0x0000000326000000| Untracked 
+|  25|0x0000000327000000, 0x0000000327000000, 0x0000000328000000|  0%| F|  |TAMS 0x0000000327000000, 0x0000000327000000| Untracked 
+|  26|0x0000000328000000, 0x0000000328000000, 0x0000000329000000|  0%| F|  |TAMS 0x0000000328000000, 0x0000000328000000| Untracked 
+|  27|0x0000000329000000, 0x0000000329000000, 0x000000032a000000|  0%| F|  |TAMS 0x0000000329000000, 0x0000000329000000| Untracked 
+|  28|0x000000032a000000, 0x000000032a000000, 0x000000032b000000|  0%| F|  |TAMS 0x000000032a000000, 0x000000032a000000| Untracked 
+|  29|0x000000032b000000, 0x000000032b000000, 0x000000032c000000|  0%| F|  |TAMS 0x000000032b000000, 0x000000032b000000| Untracked 
+|  30|0x000000032c000000, 0x000000032c000000, 0x000000032d000000|  0%| F|  |TAMS 0x000000032c000000, 0x000000032c000000| Untracked 
+|  31|0x000000032d000000, 0x000000032d000000, 0x000000032e000000|  0%| F|  |TAMS 0x000000032d000000, 0x000000032d000000| Untracked 
+|  32|0x000000032e000000, 0x000000032e000000, 0x000000032f000000|  0%| F|  |TAMS 0x000000032e000000, 0x000000032e000000| Untracked 
+|  33|0x000000032f000000, 0x000000032f000000, 0x0000000330000000|  0%| F|  |TAMS 0x000000032f000000, 0x000000032f000000| Untracked 
+|  34|0x0000000330000000, 0x0000000330000000, 0x0000000331000000|  0%| F|  |TAMS 0x0000000330000000, 0x0000000330000000| Untracked 
+|  35|0x0000000331000000, 0x0000000331000000, 0x0000000332000000|  0%| F|  |TAMS 0x0000000331000000, 0x0000000331000000| Untracked 
+|  36|0x0000000332000000, 0x0000000332000000, 0x0000000333000000|  0%| F|  |TAMS 0x0000000332000000, 0x0000000332000000| Untracked 
+|  37|0x0000000333000000, 0x0000000333800800, 0x0000000334000000| 50%| E|  |TAMS 0x0000000333000000, 0x0000000333000000| Complete 
+|  38|0x0000000334000000, 0x0000000335000000, 0x0000000335000000|100%| E|CS|TAMS 0x0000000334000000, 0x0000000334000000| Complete 
+|  39|0x0000000335000000, 0x0000000336000000, 0x0000000336000000|100%| E|CS|TAMS 0x0000000335000000, 0x0000000335000000| Complete 
+|  40|0x0000000336000000, 0x0000000337000000, 0x0000000337000000|100%| E|CS|TAMS 0x0000000336000000, 0x0000000336000000| Complete 
+|  41|0x0000000337000000, 0x0000000338000000, 0x0000000338000000|100%| E|CS|TAMS 0x0000000337000000, 0x0000000337000000| Complete 
+|  42|0x0000000338000000, 0x0000000339000000, 0x0000000339000000|100%| E|CS|TAMS 0x0000000338000000, 0x0000000338000000| Complete 
+|  43|0x0000000339000000, 0x000000033a000000, 0x000000033a000000|100%| E|CS|TAMS 0x0000000339000000, 0x0000000339000000| Complete 
+|  44|0x000000033a000000, 0x000000033b000000, 0x000000033b000000|100%| E|CS|TAMS 0x000000033a000000, 0x000000033a000000| Complete 
+|  45|0x000000033b000000, 0x000000033c000000, 0x000000033c000000|100%| E|CS|TAMS 0x000000033b000000, 0x000000033b000000| Complete 
+|  46|0x000000033c000000, 0x000000033d000000, 0x000000033d000000|100%| E|CS|TAMS 0x000000033c000000, 0x000000033c000000| Complete 
+|  47|0x000000033d000000, 0x000000033e000000, 0x000000033e000000|100%| E|CS|TAMS 0x000000033d000000, 0x000000033d000000| Complete 
+|  48|0x000000033e000000, 0x000000033f000000, 0x000000033f000000|100%| E|CS|TAMS 0x000000033e000000, 0x000000033e000000| Complete 
+|  89|0x0000000367000000, 0x0000000368000000, 0x0000000368000000|100%| E|CS|TAMS 0x0000000367000000, 0x0000000367000000| Complete 
+|  95|0x000000036d000000, 0x000000036e000000, 0x000000036e000000|100%| E|CS|TAMS 0x000000036d000000, 0x000000036d000000| Complete 
+|1535|0x000000090d000000, 0x000000090d4a8000, 0x000000090e000000| 29%| O|  |TAMS 0x000000090d000000, 0x000000090d000000| Untracked 
+
+Card table byte_map: [0x000000012a0d2000,0x000000012d0d2000] _byte_map_base: 0x0000000128862000
+
+Marking Bits (Prev, Next): (CMBitMap*) 0x00007fcacf82a450, (CMBitMap*) 0x00007fcacf82a410
+ Prev Bits: [0x00000001480d2000, 0x00000001600d2000)
+ Next Bits: [0x00000001300d2000, 0x00000001480d2000)
+
+Polling page: 0x000000010ca17000
+
+Metaspace:
+
+Usage:
+  Non-class:     20.85 MB used.
+      Class:      1.91 MB used.
+       Both:     22.76 MB used.
+
+Virtual space:
+  Non-class space:       64.00 MB reserved,      21.00 MB ( 33%) committed,  1 nodes.
+      Class space:        1.00 GB reserved,       2.00 MB ( <1%) committed,  1 nodes.
+             Both:        1.06 GB reserved,      23.00 MB (  2%) committed. 
+
+Chunk freelists:
+   Non-Class:  10.60 MB
+       Class:  13.94 MB
+        Both:  24.54 MB
+
+MaxMetaspaceSize: unlimited
+CompressedClassSpaceSize: 1.00 GB
+Initial GC threshold: 21.00 MB
+Current GC threshold: 35.12 MB
+CDS: off
+MetaspaceReclaimPolicy: balanced
+ - commit_granule_bytes: 65536.
+ - commit_granule_words: 8192.
+ - virtual_space_node_default_size: 8388608.
+ - enlarge_chunks_in_place: 1.
+ - new_chunks_are_fully_committed: 0.
+ - uncommit_free_chunks: 1.
+ - use_allocation_guard: 0.
+ - handle_deallocations: 1.
+
+
+Internal statistics:
+
+num_allocs_failed_limit: 3.
+num_arena_births: 190.
+num_arena_deaths: 0.
+num_vsnodes_births: 2.
+num_vsnodes_deaths: 0.
+num_space_committed: 366.
+num_space_uncommitted: 0.
+num_chunks_returned_to_freelist: 3.
+num_chunks_taken_from_freelist: 618.
+num_chunk_merges: 3.
+num_chunk_splits: 431.
+num_chunks_enlarged: 315.
+num_inconsistent_stats: 0.
+
+CodeHeap 'non-profiled nmethods': size=120028Kb used=3178Kb max_used=3229Kb free=116849Kb
+ bounds [0x000000011fb9b000, 0x000000011feeb000, 0x00000001270d2000]
+CodeHeap 'profiled nmethods': size=120028Kb used=5725Kb max_used=7514Kb free=114302Kb
+ bounds [0x00000001180d2000, 0x0000000118832000, 0x000000011f609000]
+CodeHeap 'non-nmethods': size=5704Kb used=1703Kb max_used=1775Kb free=4000Kb
+ bounds [0x000000011f609000, 0x000000011f879000, 0x000000011fb9b000]
+ total_blobs=4689 nmethods=3513 adapters=1090
+ compilation: enabled
+              stopped_count=0, restarted_count=0
+ full_count=0
+
+Compilation events (20 events):
+Event: 6.217 Thread 0x00007fcad081c000 nmethod 4349 0x00000001186b9c90 code [0x00000001186b9e60, 0x00000001186ba200]
+Event: 6.217 Thread 0x00007fcad081c000 4350       1       com.jme3.audio.AudioStream::getUnqueuedBufferBytes (5 bytes)
+Event: 6.218 Thread 0x00007fcad081c000 nmethod 4350 0x000000011fd0c710 code [0x000000011fd0c8a0, 0x000000011fd0c970]
+Event: 6.218 Thread 0x00007fcad081c000 4351       1       com.jme3.audio.AudioStream::setUnqueuedBufferBytes (6 bytes)
+Event: 6.218 Thread 0x00007fcad081c000 nmethod 4351 0x000000011fdd3090 code [0x000000011fdd3220, 0x000000011fdd32f0]
+Event: 6.235 Thread 0x00007fcaa874cc00 nmethod 4328 0x000000011fedbe10 code [0x000000011fedc420, 0x000000011fee1738]
+Event: 6.291 Thread 0x00007fcad081c000 4352       3       com.jme3.renderer.RenderManager::renderGeometry (264 bytes)
+Event: 6.291 Thread 0x00007fcacf842a00 4353       4       com.jme3.material.Technique::makeCurrent (84 bytes)
+Event: 6.292 Thread 0x00007fcaa874cc00 4355       4       java.util.ArrayList::isEmpty (13 bytes)
+Event: 6.292 Thread 0x00007fcaa874cc00 nmethod 4355 0x000000011fdd2d90 code [0x000000011fdd2f00, 0x000000011fdd2f98]
+Event: 6.292 Thread 0x00007fcad081c000 nmethod 4352 0x0000000118125590 code [0x00000001181258a0, 0x0000000118126cc0]
+Event: 6.292 Thread 0x00007fcad081c000 4354       3       com.jme3.material.Technique::render (24 bytes)
+Event: 6.292 Thread 0x00007fcad081c000 nmethod 4354 0x0000000118623710 code [0x00000001186238c0, 0x0000000118623ac0]
+Event: 6.307 Thread 0x00007fcacf842a00 nmethod 4353 0x000000011fdcc210 code [0x000000011fdcc420, 0x000000011fdcd150]
+Event: 6.314 Thread 0x00007fcaa874cc00 4356       4       com.jme3.light.LightProbe::intersectsBox (12 bytes)
+Event: 6.314 Thread 0x00007fcacf842a00 4357       4       com.jme3.light.PointLight::intersectsBox (24 bytes)
+Event: 6.315 Thread 0x00007fcacf842a00 nmethod 4357 0x000000011fc42110 code [0x000000011fc422c0, 0x000000011fc424b8]
+Event: 6.315 Thread 0x00007fcaa874cc00 nmethod 4356 0x000000011fc41b90 code [0x000000011fc41d40, 0x000000011fc41f58]
+Event: 6.315 Thread 0x00007fcad081c000 4358       3       org.lwjgl.opengl.GL15C::glBufferData (19 bytes)
+Event: 6.315 Thread 0x00007fcad081c000 nmethod 4358 0x0000000118146910 code [0x0000000118146b00, 0x0000000118146f10]
+
+GC Heap History (12 events):
+Event: 1.435 GC heap before
+{Heap before GC invocations=0 (full 0):
+ garbage-first heap   total 1572864K, used 98304K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 4 young (65536K), 0 survivors (0K)
+ Metaspace       used 19735K, committed 19904K, reserved 1114112K
+  class space    used 1716K, committed 1792K, reserved 1048576K
+}
+Event: 1.450 GC heap after
+{Heap after GC invocations=1 (full 0):
+ garbage-first heap   total 1572864K, used 39033K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 1 young (16384K), 1 survivors (16384K)
+ Metaspace       used 19735K, committed 19904K, reserved 1114112K
+  class space    used 1716K, committed 1792K, reserved 1048576K
+}
+Event: 1.853 GC heap before
+{Heap before GC invocations=1 (full 0):
+ garbage-first heap   total 1572864K, used 88185K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 4 young (65536K), 1 survivors (16384K)
+ Metaspace       used 20288K, committed 20480K, reserved 1114112K
+  class space    used 1724K, committed 1792K, reserved 1048576K
+}
+Event: 1.864 GC heap after
+{Heap after GC invocations=2 (full 0):
+ garbage-first heap   total 1572864K, used 5754K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 1 young (16384K), 1 survivors (16384K)
+ Metaspace       used 20288K, committed 20480K, reserved 1114112K
+  class space    used 1724K, committed 1792K, reserved 1048576K
+}
+Event: 2.304 GC heap before
+{Heap before GC invocations=2 (full 0):
+ garbage-first heap   total 1572864K, used 104058K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 6 young (98304K), 1 survivors (16384K)
+ Metaspace       used 21253K, committed 21504K, reserved 1114112K
+  class space    used 1820K, committed 1920K, reserved 1048576K
+}
+Event: 2.330 GC heap after
+{Heap after GC invocations=3 (full 0):
+ garbage-first heap   total 1572864K, used 5813K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 1 young (16384K), 1 survivors (16384K)
+ Metaspace       used 21253K, committed 21504K, reserved 1114112K
+  class space    used 1820K, committed 1920K, reserved 1048576K
+}
+Event: 3.076 GC heap before
+{Heap before GC invocations=4 (full 0):
+ garbage-first heap   total 114688K, used 54965K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 4 young (65536K), 1 survivors (16384K)
+ Metaspace       used 21940K, committed 22208K, reserved 1114112K
+  class space    used 1886K, committed 2048K, reserved 1048576K
+}
+Event: 3.097 GC heap after
+{Heap after GC invocations=5 (full 0):
+ garbage-first heap   total 114688K, used 39667K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 1 young (16384K), 1 survivors (16384K)
+ Metaspace       used 21940K, committed 22208K, reserved 1114112K
+  class space    used 1886K, committed 2048K, reserved 1048576K
+}
+Event: 3.241 GC heap before
+{Heap before GC invocations=5 (full 0):
+ garbage-first heap   total 114688K, used 72435K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 3 young (49152K), 1 survivors (16384K)
+ Metaspace       used 21960K, committed 22208K, reserved 1114112K
+  class space    used 1887K, committed 2048K, reserved 1048576K
+}
+Event: 3.254 GC heap after
+{Heap after GC invocations=6 (full 0):
+ garbage-first heap   total 114688K, used 9664K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 1 young (16384K), 1 survivors (16384K)
+ Metaspace       used 21960K, committed 22208K, reserved 1114112K
+  class space    used 1887K, committed 2048K, reserved 1048576K
+}
+Event: 4.904 GC heap before
+{Heap before GC invocations=6 (full 0):
+ garbage-first heap   total 114688K, used 75200K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 4 young (65536K), 1 survivors (16384K)
+ Metaspace       used 23105K, committed 23360K, reserved 1114112K
+  class space    used 1945K, committed 2048K, reserved 1048576K
+}
+Event: 4.950 GC heap after
+{Heap after GC invocations=7 (full 0):
+ garbage-first heap   total 851968K, used 42786K [0x000000030e000000, 0x000000090e000000)
+  region size 16384K, 1 young (16384K), 1 survivors (16384K)
+ Metaspace       used 23105K, committed 23360K, reserved 1114112K
+  class space    used 1945K, committed 2048K, reserved 1048576K
+}
+
+Dll operation events (11 events):
+Event: 0.004 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libjava.dylib
+Event: 0.082 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libnio.dylib
+Event: 0.088 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libzip.dylib
+Event: 0.141 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libjimage.dylib
+Event: 0.385 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libnet.dylib
+Event: 0.394 Loaded shared library /private/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/lwjgl_encore/3.3.2+13/x64/liblwjgl.dylib
+Event: 0.666 Loaded shared library /private/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/lwjgl_encore/3.3.2+13/x64/liblwjgl_opengl.dylib
+Event: 0.809 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libawt.dylib
+Event: 0.812 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libawt_lwawt.dylib
+Event: 1.327 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libjavajpeg.dylib
+Event: 2.135 Loaded shared library /Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libverify.dylib
+
+Deoptimization events (20 events):
+Event: 5.678 Thread 0x00007fcad080be00 DEOPT PACKING pc=0x000000011fe4e5e4 sp=0x000000030cdb8ed0
+Event: 5.678 Thread 0x00007fcad080be00 DEOPT UNPACKING pc=0x000000011f65f693 sp=0x000000030cdb8ea0 mode 2
+Event: 5.739 Thread 0x00007fcad080be00 Uncommon trap: trap_request=0xffffff45 fr.pc=0x000000011fe1bf68 relative=0x0000000000004f88
+Event: 5.739 Thread 0x00007fcad080be00 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011fe1bf68 method=com.jme3.renderer.opengl.GLRenderer.updateUniform(Lcom/jme3/shader/Shader;Lcom/jme3/shader/Uniform;)V @ 127 c2
+Event: 5.739 Thread 0x00007fcad080be00 DEOPT PACKING pc=0x000000011fe1bf68 sp=0x000000030cdb8e60
+Event: 5.739 Thread 0x00007fcad080be00 DEOPT UNPACKING pc=0x000000011f65f693 sp=0x000000030cdb8e88 mode 2
+Event: 6.062 Thread 0x00007fcad080be00 Uncommon trap: trap_request=0xffffffde fr.pc=0x000000011fc0c7fc relative=0x0000000000000fdc
+Event: 6.062 Thread 0x00007fcad080be00 Uncommon trap: reason=class_check action=maybe_recompile pc=0x000000011fc0c7fc method=java.io.BufferedInputStream.read1([BII)I @ 39 c2
+Event: 6.062 Thread 0x00007fcad080be00 DEOPT PACKING pc=0x000000011fc0c7fc sp=0x000000030cdb8f40
+Event: 6.062 Thread 0x00007fcad080be00 DEOPT UNPACKING pc=0x000000011f65f693 sp=0x000000030cdb8e88 mode 2
+Event: 6.080 Thread 0x00007fcad080be00 Uncommon trap: trap_request=0xffffff45 fr.pc=0x000000011fe4b2c4 relative=0x00000000000037c4
+Event: 6.080 Thread 0x00007fcad080be00 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011fe4b2c4 method=java.util.concurrent.ConcurrentHashMap.transfer([Ljava/util/concurrent/ConcurrentHashMap$Node;[Ljava/util/concurrent/ConcurrentHashMap$Node;)V @ 26 c2
+Event: 6.080 Thread 0x00007fcad080be00 DEOPT PACKING pc=0x000000011fe4b2c4 sp=0x000000030cdb8e60
+Event: 6.080 Thread 0x00007fcad080be00 DEOPT UNPACKING pc=0x000000011f65f693 sp=0x000000030cdb8df0 mode 2
+Event: 6.136 Thread 0x00007fcad080be00 DEOPT PACKING pc=0x00000001187d518b sp=0x000000030cdb8a90
+Event: 6.136 Thread 0x00007fcad080be00 DEOPT UNPACKING pc=0x000000011f65fe10 sp=0x000000030cdb7f70 mode 0
+Event: 6.207 Thread 0x00007fcad080be00 Uncommon trap: trap_request=0xffffff45 fr.pc=0x000000011fe120d0 relative=0x0000000000000e10
+Event: 6.207 Thread 0x00007fcad080be00 Uncommon trap: reason=unstable_if action=reinterpret pc=0x000000011fe120d0 method=com.jme3.renderer.queue.GeometryList.add(Lcom/jme3/scene/Geometry;)V @ 9 c2
+Event: 6.207 Thread 0x00007fcad080be00 DEOPT PACKING pc=0x000000011fe120d0 sp=0x000000030cdb91c0
+Event: 6.207 Thread 0x00007fcad080be00 DEOPT UNPACKING pc=0x000000011f65f693 sp=0x000000030cdb9020 mode 2
+
+Classes unloaded (0 events):
+No events
+
+Classes redefined (0 events):
+No events
+
+Internal exceptions (20 events):
+Event: 0.440 Thread 0x00007fcad080be00 Exception <a 'java/lang/NoSuchMethodError'{0x000000036dc9eef0}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(java.lang.Object, java.lang.Object, long, long)'> (0x000000036dc9eef0) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 759]
+Event: 0.442 Thread 0x00007fcad080be00 Exception <a 'java/lang/NoSuchMethodError'{0x000000036dca4c78}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.newInvokeSpecial(java.lang.Object, java.lang.Object, long)'> (0x000000036dca4c78) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 759]
+Event: 0.444 Thread 0x00007fcad080be00 Exception <a 'java/lang/NoSuchMethodError'{0x000000036dca87e8}: 'java.lang.Object java.lang.invoke.Invokers$Holder.linkToTargetMethod(java.lang.Object, long, java.lang.Object)'> (0x000000036dca87e8) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 759]
+Event: 0.444 Thread 0x00007fcad080be00 Exception <a 'java/lang/NoSuchMethodError'{0x000000036dcafde8}: 'int java.lang.invoke.DirectMethodHandle$Holder.invokeStaticInit(java.lang.Object, java.lang.Object, java.lang.Object, long)'> (0x000000036dcafde8) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 759]
+Event: 0.465 Thread 0x00007fcad080be00 Exception <a 'sun/nio/fs/UnixException'{0x000000036dd47a88}> (0x000000036dd47a88) 
+thrown [src/hotspot/share/prims/jni.cpp, line 516]
+Event: 0.498 Thread 0x00007fcad080be00 Exception <a 'sun/nio/fs/UnixException'{0x000000036ddef1e8}> (0x000000036ddef1e8) 
+thrown [src/hotspot/share/prims/jni.cpp, line 516]
+Event: 0.509 Thread 0x00007fcad080be00 Exception <a 'sun/nio/fs/UnixException'{0x000000036de340d8}> (0x000000036de340d8) 
+thrown [src/hotspot/share/prims/jni.cpp, line 516]
+Event: 0.665 Thread 0x00007fcad080be00 Exception <a 'sun/nio/fs/UnixException'{0x000000036deacba8}> (0x000000036deacba8) 
+thrown [src/hotspot/share/prims/jni.cpp, line 516]
+Event: 0.861 Thread 0x00007fcad080be00 Exception <a 'sun/nio/fs/UnixException'{0x000000036c591a60}> (0x000000036c591a60) 
+thrown [src/hotspot/share/prims/jni.cpp, line 516]
+Event: 1.024 Thread 0x00007fcad080be00 Exception <a 'java/lang/NoSuchMethodError'{0x000000036c5c3ab8}: 'java.lang.Object java.lang.invoke.DirectMethodHandle$Holder.newInvokeSpecial(java.lang.Object, long)'> (0x000000036c5c3ab8) 
+thrown [src/hotspot/share/interpreter/linkResolver.cpp, line 759]
+Event: 1.069 Thread 0x00007fcad080be00 Exception <a 'java/lang/ClassNotFoundException'{0x000000036c7999b0}: sun/awt/resources/spi/awtProvider> (0x000000036c7999b0) 
+thrown [src/hotspot/share/classfile/systemDictionary.cpp, line 256]
+Event: 1.072 Thread 0x00007fcad080be00 Exception <a 'java/io/FileNotFoundException'{0x000000036c79fb28}> (0x000000036c79fb28) 
+thrown [src/hotspot/share/prims/jni.cpp, line 516]
+Event: 1.083 Thread 0x00007fcad080be00 Exception <a 'java/io/FileNotFoundException'{0x000000036c7cce98}> (0x000000036c7cce98) 
+thrown [src/hotspot/share/prims/jni.cpp, line 516]
+Event: 4.003 Thread 0x00007fcad080be00 Implicit null exception at 0x000000011fdd33c1 to 0x000000011fdd5100
+Event: 4.470 Thread 0x00007fcad080be00 Implicit null exception at 0x000000011fe47ff1 to 0x000000011fe4a9f0
+Event: 4.706 Thread 0x00007fcad080be00 Implicit null exception at 0x000000011fcbdc69 to 0x000000011fcbdd54
+Event: 5.512 Thread 0x00007fcad080be00 Implicit null exception at 0x000000011fe71133 to 0x000000011fe74440
+Event: 5.515 Thread 0x00007fcad080be00 Implicit null exception at 0x000000011fe65ff1 to 0x000000011fe663a0
+Event: 5.520 Thread 0x00007fcad080be00 Implicit null exception at 0x000000011fe4724c to 0x000000011fe472c0
+Event: 5.531 Thread 0x00007fcad080be00 Implicit null exception at 0x000000011fe68b99 to 0x000000011fe68eb0
+
+VM Operations (20 events):
+Event: 2.343 Executing VM operation: G1PauseCleanup
+Event: 2.343 Executing VM operation: G1PauseCleanup done
+Event: 2.535 Executing VM operation: HandshakeAllThreads
+Event: 2.537 Executing VM operation: HandshakeAllThreads done
+Event: 3.075 Executing VM operation: G1CollectForAllocation
+Event: 3.097 Executing VM operation: G1CollectForAllocation done
+Event: 3.241 Executing VM operation: G1CollectForAllocation
+Event: 3.254 Executing VM operation: G1CollectForAllocation done
+Event: 3.391 Executing VM operation: HandshakeAllThreads
+Event: 3.391 Executing VM operation: HandshakeAllThreads done
+Event: 4.392 Executing VM operation: Cleanup
+Event: 4.395 Executing VM operation: Cleanup done
+Event: 4.902 Executing VM operation: G1CollectForAllocation
+Event: 4.950 Executing VM operation: G1CollectForAllocation done
+Event: 5.206 Executing VM operation: HandshakeAllThreads
+Event: 5.214 Executing VM operation: HandshakeAllThreads done
+Event: 5.305 Executing VM operation: HandshakeAllThreads
+Event: 5.308 Executing VM operation: HandshakeAllThreads done
+Event: 5.331 Executing VM operation: HandshakeAllThreads
+Event: 5.337 Executing VM operation: HandshakeAllThreads done
+
+Events (20 events):
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x0000000118728610
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x000000011872e990
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x000000011873a090
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x000000011873f790
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x0000000118740490
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x0000000118741210
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x0000000118741b90
+Event: 5.386 Thread 0x00007fcaa801a000 flushing nmethod 0x0000000118742090
+Event: 5.390 Thread 0x00007fcaa801a000 flushing nmethod 0x000000011878e310
+Event: 5.392 Thread 0x00007fcaa801a000 flushing nmethod 0x00000001187f2310
+Event: 5.392 Thread 0x00007fcaa801a000 flushing nmethod 0x00000001187f4190
+Event: 5.393 Thread 0x00007fcaa801a000 flushing nmethod 0x000000011880d290
+Event: 5.395 Thread 0x00007fcaa801a000 flushing nmethod 0x0000000118821790
+Event: 5.395 Thread 0x00007fcaa801a000 flushing nmethod 0x0000000118825490
+Event: 5.602 Protecting memory [0x00000009107b2000,0x00000009107b6000] with protection modes 3
+Event: 5.602 Thread 0x00007fca9fe7ac00 Thread exited: 0x00007fca9fe7ac00
+Event: 6.028 Protecting memory [0x00000009106af000,0x00000009106b3000] with protection modes 3
+Event: 6.028 Thread 0x00007fca9fe8a400 Thread exited: 0x00007fca9fe8a400
+Event: 6.087 Thread 0x00007fcaa874cc00 Thread added: 0x00007fcaa874cc00
+Event: 6.088 Protecting memory [0x00000009106af000,0x00000009106b3000] with protection modes 0
+
+
+Dynamic libraries:
+0x000000010ca19000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libjli.dylib
+0x00007ff820fe0000 	/System/Library/Frameworks/Cocoa.framework/Versions/A/Cocoa
+0x00007ff80a609000 	/System/Library/Frameworks/AppKit.framework/Versions/C/AppKit
+0x00007ff80d312000 	/System/Library/Frameworks/CoreData.framework/Versions/A/CoreData
+0x00007ff8083d7000 	/System/Library/Frameworks/Foundation.framework/Versions/C/Foundation
+0x00007ff813a7e000 	/usr/lib/libSystem.B.dylib
+0x00007ff80b612000 	/System/Library/PrivateFrameworks/UIFoundation.framework/Versions/A/UIFoundation
+0x00007ffb0ce32000 	/System/Library/PrivateFrameworks/CollectionViewCore.framework/Versions/A/CollectionViewCore
+0x00007ff81aeeb000 	/System/Library/PrivateFrameworks/RemoteViewServices.framework/Versions/A/RemoteViewServices
+0x00007ff811875000 	/System/Library/PrivateFrameworks/XCTTargetBootstrap.framework/Versions/A/XCTTargetBootstrap
+0x00007ff8169c4000 	/System/Library/PrivateFrameworks/InternationalSupport.framework/Versions/A/InternationalSupport
+0x00007ff816a4d000 	/System/Library/PrivateFrameworks/UserActivity.framework/Versions/A/UserActivity
+0x00007ffb23d83000 	/System/Library/PrivateFrameworks/WindowManagement.framework/Versions/A/WindowManagement
+0x00007ff8080c6000 	/System/Library/Frameworks/SystemConfiguration.framework/Versions/A/SystemConfiguration
+0x00007ff815da2000 	/usr/lib/libspindump.dylib
+0x00007ff80b7e0000 	/System/Library/Frameworks/UniformTypeIdentifiers.framework/Versions/A/UniformTypeIdentifiers
+0x00007ff80fa2f000 	/usr/lib/libapp_launch_measurement.dylib
+0x00007ff80e795000 	/System/Library/PrivateFrameworks/CoreAnalytics.framework/Versions/A/CoreAnalytics
+0x00007ff80fa32000 	/System/Library/PrivateFrameworks/CoreAutoLayout.framework/Versions/A/CoreAutoLayout
+0x00007ff8110e0000 	/System/Library/Frameworks/Metal.framework/Versions/A/Metal
+0x00007ff811fff000 	/usr/lib/liblangid.dylib
+0x00007ff81187a000 	/System/Library/PrivateFrameworks/CoreSVG.framework/Versions/A/CoreSVG
+0x00007ff80c148000 	/System/Library/PrivateFrameworks/SkyLight.framework/Versions/A/SkyLight
+0x00007ff80c53b000 	/System/Library/Frameworks/CoreGraphics.framework/Versions/A/CoreGraphics
+0x00007ff81b5d1000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Accelerate
+0x00007ff815813000 	/System/Library/PrivateFrameworks/IconServices.framework/Versions/A/IconServices
+0x00007ff8110c1000 	/System/Library/Frameworks/IOSurface.framework/Versions/A/IOSurface
+0x00007ff80e7c0000 	/usr/lib/libDiagnosticMessagesClient.dylib
+0x00007ff81398f000 	/usr/lib/libz.1.dylib
+0x00007ff81eca0000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/ApplicationServices
+0x00007ff811861000 	/System/Library/PrivateFrameworks/DFRFoundation.framework/Versions/A/DFRFoundation
+0x00007ff809ed3000 	/usr/lib/libicucore.A.dylib
+0x00007ff817863000 	/System/Library/Frameworks/AudioToolbox.framework/Versions/A/AudioToolbox
+0x00007ff8169cf000 	/System/Library/PrivateFrameworks/DataDetectorsCore.framework/Versions/A/DataDetectorsCore
+0x00007ff90efbd000 	/System/Library/PrivateFrameworks/TextInput.framework/Versions/A/TextInput
+0x00007ff80c0b1000 	/usr/lib/libMobileGestalt.dylib
+0x00007ff811569000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/HIToolbox
+0x00007ff80f3ba000 	/System/Library/Frameworks/QuartzCore.framework/Versions/A/QuartzCore
+0x00007ff809b41000 	/System/Library/Frameworks/Security.framework/Versions/A/Security
+0x00007ff81af23000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SpeechRecognition.framework/Versions/A/SpeechRecognition
+0x00007ff80f76d000 	/System/Library/PrivateFrameworks/CoreUI.framework/Versions/A/CoreUI
+0x00007ff80948f000 	/System/Library/Frameworks/CoreAudio.framework/Versions/A/CoreAudio
+0x00007ff80e899000 	/System/Library/Frameworks/DiskArbitration.framework/Versions/A/DiskArbitration
+0x00007ff8161be000 	/System/Library/PrivateFrameworks/MultitouchSupport.framework/Versions/A/MultitouchSupport
+0x00007ff80c0b0000 	/usr/lib/libenergytrace.dylib
+0x00007ff80a4e9000 	/System/Library/Frameworks/IOKit.framework/Versions/A/IOKit
+0x00007ff81b320000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/CoreServices
+0x00007ff80f9c6000 	/System/Library/PrivateFrameworks/PerformanceAnalysis.framework/Versions/A/PerformanceAnalysis
+0x00007ffa200aa000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/OpenGL
+0x00007ff80fa7a000 	/usr/lib/libxml2.2.dylib
+0x00007ff812e28000 	/System/Library/PrivateFrameworks/MobileKeyBag.framework/Versions/A/MobileKeyBag
+0x00007ff8071d4000 	/usr/lib/libobjc.A.dylib
+0x00007ff80749f000 	/usr/lib/libc++.1.dylib
+0x00007ff80cd48000 	/System/Library/Frameworks/ColorSync.framework/Versions/A/ColorSync
+0x00007ff8075cf000 	/System/Library/Frameworks/CoreFoundation.framework/Versions/A/CoreFoundation
+0x00007ff811bcb000 	/System/Library/Frameworks/CoreImage.framework/Versions/A/CoreImage
+0x00007ff80929d000 	/System/Library/Frameworks/CoreText.framework/Versions/A/CoreText
+0x00007ff8118b1000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/ImageIO
+0x00007ff813a84000 	/System/Library/PrivateFrameworks/SoftLinking.framework/Versions/A/SoftLinking
+0x00007ff813d05000 	/usr/lib/libcompression.dylib
+0x00007ff8168fd000 	/System/Library/PrivateFrameworks/TextureIO.framework/Versions/A/TextureIO
+0x00007ff81543d000 	/usr/lib/libate.dylib
+0x00007ff813a78000 	/usr/lib/system/libcache.dylib
+0x00007ff813a2f000 	/usr/lib/system/libcommonCrypto.dylib
+0x00007ff813a5c000 	/usr/lib/system/libcompiler_rt.dylib
+0x00007ff813a4e000 	/usr/lib/system/libcopyfile.dylib
+0x00007ff807307000 	/usr/lib/system/libcorecrypto.dylib
+0x00007ff8073cc000 	/usr/lib/system/libdispatch.dylib
+0x00007ff807576000 	/usr/lib/system/libdyld.dylib
+0x00007ff813a6e000 	/usr/lib/system/libkeymgr.dylib
+0x00007ff813a0e000 	/usr/lib/system/libmacho.dylib
+0x00007ff812f16000 	/usr/lib/system/libquarantine.dylib
+0x00007ff813a6c000 	/usr/lib/system/libremovefile.dylib
+0x00007ff80c116000 	/usr/lib/system/libsystem_asl.dylib
+0x00007ff8072a8000 	/usr/lib/system/libsystem_blocks.dylib
+0x00007ff807417000 	/usr/lib/system/libsystem_c.dylib
+0x00007ff813a64000 	/usr/lib/system/libsystem_collections.dylib
+0x00007ff811ff0000 	/usr/lib/system/libsystem_configuration.dylib
+0x00007ff811092000 	/usr/lib/system/libsystem_containermanager.dylib
+0x00007ff8136c2000 	/usr/lib/system/libsystem_coreservices.dylib
+0x00007ff80a164000 	/usr/lib/system/libsystem_darwin.dylib
+0x00007ff813a6f000 	/usr/lib/system/libsystem_dnssd.dylib
+0x00007ff807414000 	/usr/lib/system/libsystem_featureflags.dylib
+0x00007ff8075a4000 	/usr/lib/system/libsystem_info.dylib
+0x00007ff8139a2000 	/usr/lib/system/libsystem_m.dylib
+0x00007ff80739f000 	/usr/lib/system/libsystem_malloc.dylib
+0x00007ff80c099000 	/usr/lib/system/libsystem_networkextension.dylib
+0x00007ff80a5a7000 	/usr/lib/system/libsystem_notify.dylib
+0x00007ff811ff4000 	/usr/lib/system/libsystem_sandbox.dylib
+0x00007ff813a69000 	/usr/lib/system/libsystem_secinit.dylib
+0x00007ff807530000 	/usr/lib/system/libsystem_kernel.dylib
+0x00007ff80759a000 	/usr/lib/system/libsystem_platform.dylib
+0x00007ff80756a000 	/usr/lib/system/libsystem_pthread.dylib
+0x00007ff80db57000 	/usr/lib/system/libsystem_symptoms.dylib
+0x00007ff8072ed000 	/usr/lib/system/libsystem_trace.dylib
+0x00007ff813a3b000 	/usr/lib/system/libunwind.dylib
+0x00007ff8072ac000 	/usr/lib/system/libxpc.dylib
+0x00007ff80751b000 	/usr/lib/libc++abi.dylib
+0x00007ff813a46000 	/usr/lib/liboah.dylib
+0x00007ff8151ca000 	/usr/lib/liblzma.5.dylib
+0x00007ff813a80000 	/usr/lib/libfakelink.dylib
+0x00007ff80bcf8000 	/System/Library/Frameworks/CFNetwork.framework/Versions/A/CFNetwork
+0x00007ff813bbd000 	/usr/lib/libarchive.2.dylib
+0x00007ff8191b9000 	/System/Library/Frameworks/Combine.framework/Versions/A/Combine
+0x00007ff8172ff000 	/usr/lib/swift/libswiftCore.dylib
+0x00007ff90bf87000 	/usr/lib/swift/libswiftCoreFoundation.dylib
+0x00007ff90a017000 	/usr/lib/swift/libswiftDarwin.dylib
+0x00007ff81cb72000 	/usr/lib/swift/libswiftDispatch.dylib
+0x00007ff90bfa3000 	/usr/lib/swift/libswiftIOKit.dylib
+0x00007ff81f0df000 	/usr/lib/swift/libswiftObjectiveC.dylib
+0x00007ff90bf98000 	/usr/lib/swift/libswiftXPC.dylib
+0x00007ffc0c93d000 	/usr/lib/swift/libswift_Concurrency.dylib
+0x00007ffc0ca7a000 	/usr/lib/swift/libswift_StringProcessing.dylib
+0x00007ff81f0e3000 	/usr/lib/swift/libswiftos.dylib
+0x00007ff80a46b000 	/System/Library/PrivateFrameworks/CoreServicesInternal.framework/Versions/A/CoreServicesInternal
+0x00007ff812f3d000 	/usr/lib/libbsm.0.dylib
+0x00007ff813a13000 	/usr/lib/system/libkxld.dylib
+0x00007ff80f9fa000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/FSEvents.framework/Versions/A/FSEvents
+0x00007ff80a16f000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/CarbonCore.framework/Versions/A/CarbonCore
+0x00007ff80e803000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/Metadata.framework/Versions/A/Metadata
+0x00007ff8136c8000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/OSServices.framework/Versions/A/OSServices
+0x00007ff813c45000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SearchKit.framework/Versions/A/SearchKit
+0x00007ff80dadf000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/AE.framework/Versions/A/AE
+0x00007ff807a6a000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/LaunchServices.framework/Versions/A/LaunchServices
+0x00007ff81517b000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/DictionaryServices.framework/Versions/A/DictionaryServices
+0x00007ff80fa07000 	/System/Library/Frameworks/CoreServices.framework/Versions/A/Frameworks/SharedFileList.framework/Versions/A/SharedFileList
+0x00007ff813ccf000 	/usr/lib/libapple_nghttp2.dylib
+0x00007ff80bcf4000 	/usr/lib/libnetwork.dylib
+0x00007ff80d791000 	/usr/lib/libsqlite3.dylib
+0x00007ff80db5f000 	/System/Library/Frameworks/Network.framework/Versions/A/Network
+0x00007ffc0b8a8000 	/usr/lib/libCoreEntitlements.dylib
+0x00007ffb168af000 	/System/Library/PrivateFrameworks/MessageSecurity.framework/Versions/A/MessageSecurity
+0x00007ff80d778000 	/System/Library/PrivateFrameworks/ProtocolBuffer.framework/Versions/A/ProtocolBuffer
+0x00007ff8135e4000 	/System/Library/PrivateFrameworks/AppleFSCompression.framework/Versions/A/AppleFSCompression
+0x00007ff812f25000 	/usr/lib/libcoretls.dylib
+0x00007ff8151e3000 	/usr/lib/libcoretls_cfhelpers.dylib
+0x00007ff813cff000 	/usr/lib/libpam.2.dylib
+0x00007ff815256000 	/usr/lib/libxar.1.dylib
+0x00007ff8157ef000 	/usr/lib/libheimdal-asn1.dylib
+0x00007ff813a85000 	/usr/lib/libpcap.A.dylib
+0x00007ff80db4e000 	/usr/lib/libdns_services.dylib
+0x00007ff811ffb000 	/System/Library/PrivateFrameworks/AppleSystemInfo.framework/Versions/A/AppleSystemInfo
+0x00007ff812c2f000 	/System/Library/PrivateFrameworks/IOMobileFramebuffer.framework/Versions/A/IOMobileFramebuffer
+0x00007ff8136b3000 	/usr/lib/libbz2.1.0.dylib
+0x00007ff812f19000 	/usr/lib/libCheckFix.dylib
+0x00007ff80c12d000 	/System/Library/PrivateFrameworks/TCC.framework/Versions/A/TCC
+0x00007ff812001000 	/System/Library/PrivateFrameworks/CoreNLP.framework/Versions/A/CoreNLP
+0x00007ff80e7c2000 	/System/Library/PrivateFrameworks/MetadataUtilities.framework/Versions/A/MetadataUtilities
+0x00007ff812f4e000 	/usr/lib/libmecab.dylib
+0x00007ff808146000 	/usr/lib/libCRFSuite.dylib
+0x00007ff812fa7000 	/usr/lib/libgermantok.dylib
+0x00007ff813cab000 	/usr/lib/libThaiTokenizer.dylib
+0x00007ff80e8a1000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/vImage
+0x00007ff81b2f3000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/vecLib
+0x00007ff815298000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvMisc.dylib
+0x00007ff812a2a000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libvDSP.dylib
+0x00007ff807e29000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib
+0x00007ff813de3000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLAPACK.dylib
+0x00007ff812faa000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libLinearAlgebra.dylib
+0x00007ff813cea000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparseBLAS.dylib
+0x00007ff813ddd000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libQuadrature.dylib
+0x00007ff8120e7000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBNNS.dylib
+0x00007ff80804f000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libSparse.dylib
+0x00007ffb15ae9000 	/System/Library/PrivateFrameworks/MIL.framework/Versions/A/MIL
+0x00007ff813aba000 	/usr/lib/libiconv.2.dylib
+0x00007ff813a0d000 	/usr/lib/libcharset.1.dylib
+0x00007ff80f9de000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/Frameworks/CFOpenDirectory.framework/Versions/A/CFOpenDirectory
+0x00007ff80f9d2000 	/System/Library/Frameworks/OpenDirectory.framework/Versions/A/OpenDirectory
+0x00007ff8151e5000 	/System/Library/PrivateFrameworks/APFS.framework/Versions/A/APFS
+0x00007ff812e5b000 	/System/Library/Frameworks/SecurityFoundation.framework/Versions/A/SecurityFoundation
+0x00007ff815264000 	/usr/lib/libutil.dylib
+0x00007ffb14a84000 	/System/Library/PrivateFrameworks/InstalledContentLibrary.framework/Versions/A/InstalledContentLibrary
+0x00007ff80a4ac000 	/System/Library/PrivateFrameworks/CoreServicesStore.framework/Versions/A/CoreServicesStore
+0x00007ffb0b9b6000 	/System/Library/PrivateFrameworks/AppleMobileFileIntegrity.framework/Versions/A/AppleMobileFileIntegrity
+0x00007ff90bf69000 	/usr/lib/libmis.dylib
+0x00007ff91a83d000 	/System/Library/PrivateFrameworks/MobileSystemServices.framework/Versions/A/MobileSystemServices
+0x00007ffa16554000 	/System/Library/PrivateFrameworks/ConfigProfileHelper.framework/Versions/A/ConfigProfileHelper
+0x00007ff813cad000 	/System/Library/PrivateFrameworks/AppleSauce.framework/Versions/A/AppleSauce
+0x00007ff808d60000 	/System/Library/PrivateFrameworks/LanguageModeling.framework/Versions/A/LanguageModeling
+0x00007ff815268000 	/usr/lib/libxslt.1.dylib
+0x00007ff813bac000 	/usr/lib/libcmph.dylib
+0x00007ff812c1c000 	/System/Library/PrivateFrameworks/CoreEmoji.framework/Versions/A/CoreEmoji
+0x00007ff8120e2000 	/System/Library/PrivateFrameworks/LinguisticData.framework/Versions/A/LinguisticData
+0x00007ff808006000 	/System/Library/PrivateFrameworks/Lexicon.framework/Versions/A/Lexicon
+0x00007ff812ee9000 	/System/Library/PrivateFrameworks/BackgroundTaskManagement.framework/Versions/A/BackgroundTaskManagement
+0x00007ffc0b9ea000 	/usr/lib/libTLE.dylib
+0x00007ffc0c9c3000 	/usr/lib/swift/libswift_RegexParser.dylib
+0x00007ff816088000 	/System/Library/PrivateFrameworks/AppleJPEG.framework/Versions/A/AppleJPEG
+0x00007ff8157d4000 	/usr/lib/libexpat.1.dylib
+0x00007ff816758000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libPng.dylib
+0x00007ff816785000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libTIFF.dylib
+0x00007ff816877000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libGIF.dylib
+0x00007ff8160d3000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJP2.dylib
+0x00007ff816817000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libJPEG.dylib
+0x00007ff81680e000 	/System/Library/Frameworks/ImageIO.framework/Versions/A/Resources/libRadiance.dylib
+0x00007ff811402000 	/System/Library/PrivateFrameworks/FontServices.framework/libFontParser.dylib
+0x00007ff80da84000 	/System/Library/PrivateFrameworks/RunningBoardServices.framework/Versions/A/RunningBoardServices
+0x00007ff82168d000 	/System/Library/PrivateFrameworks/IOSurfaceAccelerator.framework/Versions/A/IOSurfaceAccelerator
+0x00007ff8161ba000 	/System/Library/PrivateFrameworks/WatchdogClient.framework/Versions/A/WatchdogClient
+0x00007ff808ec6000 	/System/Library/Frameworks/CoreDisplay.framework/Versions/A/CoreDisplay
+0x00007ff8112f1000 	/System/Library/Frameworks/CoreMedia.framework/Versions/A/CoreMedia
+0x00007ff8110d7000 	/System/Library/PrivateFrameworks/IOAccelerator.framework/Versions/A/IOAccelerator
+0x00007ff80fb59000 	/System/Library/Frameworks/CoreVideo.framework/Versions/A/CoreVideo
+0x00007ff813cfd000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/MetalPerformanceShaders
+0x00007ff8161f9000 	/System/Library/Frameworks/VideoToolbox.framework/Versions/A/VideoToolbox
+0x00007ff80d9c2000 	/System/Library/PrivateFrameworks/BaseBoard.framework/Versions/A/BaseBoard
+0x00007ff816807000 	/System/Library/PrivateFrameworks/GPUWrangler.framework/Versions/A/GPUWrangler
+0x00007ff8167eb000 	/System/Library/PrivateFrameworks/IOPresentment.framework/Versions/A/IOPresentment
+0x00007ff816811000 	/System/Library/PrivateFrameworks/DSExternalDisplay.framework/Versions/A/DSExternalDisplay
+0x00007ffb10f57000 	/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/31001/Libraries/libllvm-flatbuffers.dylib
+0x00007ffa2009e000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreFSCache.dylib
+0x00007ffb10f53000 	/System/Library/PrivateFrameworks/GPUCompiler.framework/Versions/31001/Libraries/libGPUCompilerUtils.dylib
+0x00007ff81687d000 	/System/Library/PrivateFrameworks/CMCaptureCore.framework/Versions/A/CMCaptureCore
+0x00007ffa2507a000 	/System/Library/Frameworks/ExtensionFoundation.framework/Versions/A/ExtensionFoundation
+0x00007ff81d30a000 	/System/Library/PrivateFrameworks/CoreTime.framework/Versions/A/CoreTime
+0x00007ff815d8d000 	/System/Library/PrivateFrameworks/AppServerSupport.framework/Versions/A/AppServerSupport
+0x00007ff81811d000 	/System/Library/PrivateFrameworks/perfdata.framework/Versions/A/perfdata
+0x00007ff808ff2000 	/System/Library/PrivateFrameworks/AudioToolboxCore.framework/Versions/A/AudioToolboxCore
+0x00007ff8112cc000 	/System/Library/PrivateFrameworks/caulk.framework/Versions/A/caulk
+0x00007ff8179f8000 	/usr/lib/libAudioStatistics.dylib
+0x00007ff90b3d7000 	/System/Library/PrivateFrameworks/SystemPolicy.framework/Versions/A/SystemPolicy
+0x00007ff817c93000 	/usr/lib/libSMC.dylib
+0x00007ff820e7e000 	/System/Library/Frameworks/CoreMIDI.framework/Versions/A/CoreMIDI
+0x00007ff816726000 	/usr/lib/libAudioToolboxUtility.dylib
+0x00007ff826808000 	/System/Library/PrivateFrameworks/OSAServicesClient.framework/Versions/A/OSAServicesClient
+0x00007ff81812a000 	/usr/lib/libperfcheck.dylib
+0x00007ff8156b4000 	/System/Library/PrivateFrameworks/PlugInKit.framework/Versions/A/PlugInKit
+0x00007ff812e4e000 	/System/Library/PrivateFrameworks/AssertionServices.framework/Versions/A/AssertionServices
+0x00007ffa200fb000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+0x00007ffa200bd000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGFXShared.dylib
+0x00007ffa202bc000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGL.dylib
+0x00007ffa200c6000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLImage.dylib
+0x00007ffa200ba000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCVMSPluginSupport.dylib
+0x00007ffc0b9c9000 	/usr/lib/libRosetta.dylib
+0x00007ffa200a5000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libCoreVMClient.dylib
+0x00007ff811f70000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSCore.framework/Versions/A/MPSCore
+0x00007ff81354e000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSImage.framework/Versions/A/MPSImage
+0x00007ff812fc0000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSNeuralNetwork.framework/Versions/A/MPSNeuralNetwork
+0x00007ff813431000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSMatrix.framework/Versions/A/MPSMatrix
+0x00007ff8131ed000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSRayIntersector.framework/Versions/A/MPSRayIntersector
+0x00007ff81346d000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSNDArray.framework/Versions/A/MPSNDArray
+0x00007ffa26462000 	/System/Library/Frameworks/MetalPerformanceShaders.framework/Versions/A/Frameworks/MPSFunctions.framework/Versions/A/MPSFunctions
+0x00007ff807ce9000 	/System/Library/PrivateFrameworks/MetalTools.framework/Versions/A/MetalTools
+0x00007ff811ffa000 	/System/Library/PrivateFrameworks/AggregateDictionary.framework/Versions/A/AggregateDictionary
+0x00007ff81556a000 	/usr/lib/libIOReport.dylib
+0x00007ffb193e4000 	/System/Library/PrivateFrameworks/PhotosensitivityProcessing.framework/Versions/A/PhotosensitivityProcessing
+0x00007ffa20d81000 	/System/Library/Frameworks/OpenCL.framework/Versions/A/OpenCL
+0x00007ff81591c000 	/System/Library/PrivateFrameworks/GraphVisualizer.framework/Versions/A/GraphVisualizer
+0x00007ffb10e6c000 	/System/Library/PrivateFrameworks/FontServices.framework/Versions/A/FontServices
+0x00007ff815d48000 	/System/Library/PrivateFrameworks/OTSVG.framework/Versions/A/OTSVG
+0x00007ff80f721000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/Resources/libFontRegistry.dylib
+0x00007ff815d97000 	/System/Library/PrivateFrameworks/FontServices.framework/libhvf.dylib
+0x00007ffb10e6d000 	/System/Library/PrivateFrameworks/FontServices.framework/libXTFontStaticRegistryData.dylib
+0x00007ff916e3a000 	/usr/lib/swift/libswiftMetal.dylib
+0x00007ff90ef1e000 	/usr/lib/swift/libswiftsimd.dylib
+0x00007ffb22aca000 	/System/Library/PrivateFrameworks/VideoToolboxParavirtualizationSupport.framework/Versions/A/VideoToolboxParavirtualizationSupport
+0x00007ff815784000 	/System/Library/PrivateFrameworks/AppleVA.framework/Versions/A/AppleVA
+0x00007ff817a38000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATS.framework/Versions/A/ATS
+0x00007ff80ce38000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/HIServices.framework/Versions/A/HIServices
+0x00007ff816889000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/PrintCore.framework/Versions/A/PrintCore
+0x00007ff817de9000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/QD.framework/Versions/A/QD
+0x00007ff817de1000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ColorSyncLegacy.framework/Versions/A/ColorSyncLegacy
+0x00007ff817a0c000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/SpeechSynthesis.framework/Versions/A/SpeechSynthesis
+0x00007ff816847000 	/System/Library/Frameworks/ApplicationServices.framework/Versions/A/Frameworks/ATSUI.framework/Versions/A/ATSUI
+0x00007ff817d73000 	/usr/lib/libcups.2.dylib
+0x00007ff818139000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Kerberos
+0x00007ff818148000 	/System/Library/Frameworks/GSS.framework/Versions/A/GSS
+0x00007ff817aa6000 	/usr/lib/libresolv.9.dylib
+0x00007ff815da7000 	/System/Library/PrivateFrameworks/Heimdal.framework/Versions/A/Heimdal
+0x00007ff81f061000 	/System/Library/Frameworks/Kerberos.framework/Versions/A/Libraries/libHeimdalProxy.dylib
+0x00007ff818193000 	/System/Library/PrivateFrameworks/CommonAuth.framework/Versions/A/CommonAuth
+0x00007ffa24329000 	/System/Library/Frameworks/AVFAudio.framework/Versions/A/AVFAudio
+0x00007ff826851000 	/System/Library/PrivateFrameworks/AXCoreUtilities.framework/Versions/A/AXCoreUtilities
+0x00007ff817986000 	/System/Library/PrivateFrameworks/AudioSession.framework/Versions/A/AudioSession
+0x00007ff818f8b000 	/System/Library/Frameworks/IOBluetooth.framework/Versions/A/IOBluetooth
+0x00007ff81588a000 	/System/Library/PrivateFrameworks/MediaExperience.framework/Versions/A/MediaExperience
+0x00007ff817830000 	/System/Library/PrivateFrameworks/AudioSession.framework/libSessionUtility.dylib
+0x00007ff817df5000 	/System/Library/PrivateFrameworks/AudioResourceArbitration.framework/Versions/A/AudioResourceArbitration
+0x00007ff81bf1d000 	/System/Library/PrivateFrameworks/PowerLog.framework/Versions/A/PowerLog
+0x00007ff81be5b000 	/System/Library/Frameworks/CoreBluetooth.framework/Versions/A/CoreBluetooth
+0x00007ff81f062000 	/System/Library/Frameworks/AudioUnit.framework/Versions/A/AudioUnit
+0x00007ff812cb8000 	/System/Library/PrivateFrameworks/CoreUtils.framework/Versions/A/CoreUtils
+0x00007ffb0f93a000 	/System/Library/PrivateFrameworks/CoreUtilsExtras.framework/Versions/A/CoreUtilsExtras
+0x00007ffb14913000 	/System/Library/PrivateFrameworks/IO80211.framework/Versions/A/IO80211
+0x00007ff8157f8000 	/System/Library/PrivateFrameworks/IconFoundation.framework/Versions/A/IconFoundation
+0x00007ff81af13000 	/System/Library/PrivateFrameworks/SpeechRecognitionCore.framework/Versions/A/SpeechRecognitionCore
+0x000000010dbf6000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/server/libjvm.dylib
+0x000000010cb26000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libjimage.dylib
+0x000000010cb73000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libjava.dylib
+0x000000010cf46000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libnio.dylib
+0x000000010cf9e000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libnet.dylib
+0x000000010d00b000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libzip.dylib
+0x000000010d265000 	/private/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/lwjgl_encore/3.3.2+13/x64/liblwjgl.dylib
+0x000000010d390000 	/private/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/lwjgl_encore/3.3.2+13/x64/libjemalloc.dylib
+0x000000010d67a000 	/private/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/lwjgl_encore/3.3.2+13/x64/libglfw.dylib
+0x00007ff81c50b000 	/System/Library/Frameworks/FileProvider.framework/Versions/A/FileProvider
+0x00007ff80d92d000 	/System/Library/Frameworks/Accounts.framework/Versions/A/Accounts
+0x00007ff80fbe8000 	/System/Library/PrivateFrameworks/UserManagement.framework/Versions/A/UserManagement
+0x00007ff81c6a5000 	/System/Library/PrivateFrameworks/GenerationalStorage.framework/Versions/A/GenerationalStorage
+0x00007ff81d226000 	/System/Library/PrivateFrameworks/CoreSymbolication.framework/Versions/A/CoreSymbolication
+0x00007ff81bf12000 	/System/Library/PrivateFrameworks/SymptomDiagnosticReporter.framework/Versions/A/SymptomDiagnosticReporter
+0x00007ff80b7f6000 	/System/Library/PrivateFrameworks/DesktopServicesPriv.framework/Versions/A/DesktopServicesPriv
+0x00007ff80a5b7000 	/usr/lib/libsandbox.1.dylib
+0x00007ff81d1e7000 	/System/Library/PrivateFrameworks/DebugSymbols.framework/Versions/A/DebugSymbols
+0x00007ff817dd6000 	/System/Library/PrivateFrameworks/NetAuth.framework/Versions/A/NetAuth
+0x00007ff818e0a000 	/System/Library/PrivateFrameworks/Sharing.framework/Versions/A/Sharing
+0x00007ff80fbae000 	/System/Library/PrivateFrameworks/login.framework/Versions/A/Frameworks/loginsupport.framework/Versions/A/loginsupport
+0x00007ff81e528000 	/System/Library/PrivateFrameworks/Apple80211.framework/Versions/A/Apple80211
+0x00007ff8136f5000 	/System/Library/PrivateFrameworks/AuthKit.framework/Versions/A/AuthKit
+0x00007ff812c3d000 	/System/Library/Frameworks/CoreWLAN.framework/Versions/A/CoreWLAN
+0x00007ff81e52c000 	/System/Library/PrivateFrameworks/CoreWiFi.framework/Versions/A/CoreWiFi
+0x00007ffa10163000 	/System/Library/PrivateFrameworks/WiFiPeerToPeer.framework/Versions/A/WiFiPeerToPeer
+0x00007ff81cd8e000 	/System/Library/PrivateFrameworks/FrontBoardServices.framework/Versions/A/FrontBoardServices
+0x00007ff81ce27000 	/System/Library/PrivateFrameworks/BoardServices.framework/Versions/A/BoardServices
+0x00007ff81e6c8000 	/System/Library/PrivateFrameworks/BackBoardServices.framework/Versions/A/BackBoardServices
+0x00007ff81386e000 	/System/Library/Frameworks/UserNotifications.framework/Versions/A/UserNotifications
+0x00007ff81828c000 	/System/Library/PrivateFrameworks/CorePhoneNumbers.framework/Versions/A/CorePhoneNumbers
+0x00007ff817ad3000 	/System/Library/PrivateFrameworks/MultiverseSupport.framework/Versions/A/MultiverseSupport
+0x00007ff81e943000 	/System/Library/PrivateFrameworks/RemoteServiceDiscovery.framework/Versions/A/RemoteServiceDiscovery
+0x00007ff81c02c000 	/System/Library/PrivateFrameworks/DiskManagement.framework/Versions/A/DiskManagement
+0x00007ff81bf44000 	/System/Library/PrivateFrameworks/AppleIDAuthSupport.framework/Versions/A/AppleIDAuthSupport
+0x00007ffb09f86000 	/System/Library/PrivateFrameworks/AAAFoundation.framework/Versions/A/AAAFoundation
+0x00007ff818265000 	/System/Library/PrivateFrameworks/KeychainCircle.framework/Versions/A/KeychainCircle
+0x00007ff81e957000 	/System/Library/PrivateFrameworks/RemoteXPC.framework/Versions/A/RemoteXPC
+0x00007ff81bff8000 	/System/Library/PrivateFrameworks/MediaKit.framework/Versions/A/MediaKit
+0x00007ff81bf50000 	/System/Library/Frameworks/DiscRecording.framework/Versions/A/DiscRecording
+0x00007ff8156f8000 	/usr/lib/libCoreStorage.dylib
+0x00007ff81e9c2000 	/usr/lib/libcsfde.dylib
+0x00007ff819060000 	/System/Library/PrivateFrameworks/ProtectedCloudStorage.framework/Versions/A/ProtectedCloudStorage
+0x00007ff81e9be000 	/System/Library/PrivateFrameworks/EFILogin.framework/Versions/A/EFILogin
+0x00007ff81c6cb000 	/System/Library/PrivateFrameworks/OctagonTrust.framework/Versions/A/OctagonTrust
+0x00007ff8156f0000 	/usr/lib/libMatch.1.dylib
+0x00007ffc0b77a000 	/usr/lib/libAccessibilityBaseImplementations.dylib
+0x00007ff80f8c6000 	/System/Library/PrivateFrameworks/ViewBridge.framework/Versions/A/ViewBridge
+0x000000016236e000 	/usr/lib/libobjc-trampolines.dylib
+0x00007ff910d85000 	/System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vImage.framework/Versions/A/Libraries/libCGInterfaces.dylib
+0x00007ff815e5f000 	/System/Library/PrivateFrameworks/login.framework/Versions/A/login
+0x00007ffa202c7000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Resources/GLEngine.bundle/GLEngine
+0x00007ffa20138000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLProgrammability.dylib
+0x00000001aae09000 	/System/Library/Extensions/AppleMetalOpenGLRenderer.bundle/Contents/MacOS/AppleMetalOpenGLRenderer
+0x00007ffa20449000 	/System/Library/Frameworks/OpenGL.framework/Versions/A/Resources/GLRendererFloat.bundle/GLRendererFloat
+0x00007ffa22592000 	/System/Library/Extensions/AGXMetalG14X.bundle/Contents/MacOS/AGXMetalG14X
+0x00007ff90bf7b000 	/System/Library/PrivateFrameworks/GPURawCounter.framework/Versions/A/GPURawCounter
+0x00007ff825823000 	/System/Library/PrivateFrameworks/IOGPU.framework/Versions/A/IOGPU
+0x00000001b45a6000 	/private/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/lwjgl_encore/3.3.2+13/x64/liblwjgl_opengl.dylib
+0x00000001b46fa000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libawt.dylib
+0x00000001b4888000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libmlib_image.dylib
+0x00007ffa2564c000 	/System/Library/Frameworks/JavaRuntimeSupport.framework/Versions/A/JavaRuntimeSupport
+0x00007ff90ade4000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Carbon
+0x00007ff822bd7000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/CommonPanels.framework/Versions/A/CommonPanels
+0x00007ff81e9ba000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Help.framework/Versions/A/Help
+0x00007ff822bdb000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/ImageCapture.framework/Versions/A/ImageCapture
+0x00007ff822bb3000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/OpenScripting.framework/Versions/A/OpenScripting
+0x00007ff822bd3000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Ink.framework/Versions/A/Ink
+0x00007ff90ade0000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/Print.framework/Versions/A/Print
+0x00007ff822bcf000 	/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/SecurityHI.framework/Versions/A/SecurityHI
+0x00000001b4b0e000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libawt_lwawt.dylib
+0x00000001b4684000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libosxapp.dylib
+0x00007ff90a089000 	/System/Library/Frameworks/ExceptionHandling.framework/Versions/A/ExceptionHandling
+0x00000001b4df7000 	/private/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/lwjgl_encore/3.3.2+13/x64/libopenal.dylib
+0x00007ff90b1db000 	/System/Library/Frameworks/AVFoundation.framework/Versions/A/AVFoundation
+0x00007ff81cb87000 	/System/Library/PrivateFrameworks/AVFCore.framework/Versions/A/AVFCore
+0x00007ff8245ab000 	/System/Library/PrivateFrameworks/AVFCapture.framework/Versions/A/AVFCapture
+0x00007ff909cd4000 	/System/Library/PrivateFrameworks/AirPlaySync.framework/Versions/A/AirPlaySync
+0x00007ff816ab9000 	/System/Library/Frameworks/MediaToolbox.framework/Versions/A/MediaToolbox
+0x00007ff81c4db000 	/System/Library/PrivateFrameworks/CoreAVCHD.framework/Versions/A/CoreAVCHD
+0x00007ff81b619000 	/System/Library/Frameworks/MediaAccessibility.framework/Versions/A/MediaAccessibility
+0x00007ff81c4d7000 	/System/Library/PrivateFrameworks/Mangrove.framework/Versions/A/Mangrove
+0x00007ffb0c4c0000 	/System/Library/PrivateFrameworks/CMPhoto.framework/Versions/A/CMPhoto
+0x00007ff81d0ba000 	/System/Library/PrivateFrameworks/AppleVPA.framework/Versions/A/AppleVPA
+0x00007ff81c11c000 	/System/Library/PrivateFrameworks/CoreAUC.framework/Versions/A/CoreAUC
+0x00007ffb0c492000 	/System/Library/PrivateFrameworks/CMImaging.framework/Versions/A/CMImaging
+0x00007ff82472b000 	/System/Library/PrivateFrameworks/Quagga.framework/Versions/A/Quagga
+0x00007ff824819000 	/System/Library/PrivateFrameworks/CMCapture.framework/Versions/A/CMCapture
+0x00007ff817ba2000 	/System/Library/Frameworks/CoreMediaIO.framework/Versions/A/CoreMediaIO
+0x00007ff90bec8000 	/System/Library/PrivateFrameworks/LoggingSupport.framework/Versions/A/LoggingSupport
+0x00000001b536a000 	/System/Library/Components/CoreAudio.component/Contents/MacOS/CoreAudio
+0x00000001b614a000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libjavajpeg.dylib
+0x00000001bc7f5000 	/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk/lib/libverify.dylib
+0x00007ff81b64d000 	/System/Library/PrivateFrameworks/SystemAdministration.framework/Versions/A/SystemAdministration
+0x00007ff81aedf000 	/System/Library/Frameworks/DirectoryService.framework/Versions/A/DirectoryService
+0x00007ff81e85b000 	/System/Library/PrivateFrameworks/DiskImages.framework/Versions/A/DiskImages
+0x00007ff812f0c000 	/System/Library/Frameworks/ServiceManagement.framework/Versions/A/ServiceManagement
+0x00007ff81ea4e000 	/System/Library/PrivateFrameworks/LoginUIKit.framework/Versions/A/Frameworks/LoginUICore.framework/Versions/A/LoginUICore
+0x00007ff816017000 	/usr/lib/libodfde.dylib
+0x00007ff81e9ce000 	/usr/lib/libcurl.4.dylib
+0x00007ffc0be7e000 	/usr/lib/libcrypto.46.dylib
+0x00007ffc0c572000 	/usr/lib/libssl.48.dylib
+0x00007ff81e6e9000 	/System/Library/Frameworks/LDAP.framework/Versions/A/LDAP
+0x00007ff81e725000 	/System/Library/PrivateFrameworks/TrustEvaluationAgent.framework/Versions/A/TrustEvaluationAgent
+0x00007ff817abf000 	/usr/lib/libsasl2.2.dylib
+
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8 -Duser.country=AU -Duser.language=en -Duser.variant 
+java_command: com.mygame.Main
+java_class_path (initial): /Users/encore/Desktop/GameMaking/FS JS/bestestGame/InteractionBasics_v2/build/classes/java/main:/Users/encore/Desktop/GameMaking/FS JS/bestestGame/InteractionBasics_v2/build/resources/main:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-desktop/3.6.1-stable/a09230b60616779b1f4d8bc2ebf42ddd736c276a/jme3-desktop-3.6.1-stable.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-lwjgl3/3.6.1-stable/deef87277aa4127826741d9c64c413870949a75c/jme3-lwjgl3-3.6.1-stable.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-jogg/3.6.1-stable/4a857f4f1a83f11b586f0c23b0137842b24d1fae/jme3-jogg-3.6.1-stable.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-plugins/3.6.1-stable/3fdd7124715d9afc408addd0a21b49a5f73e0fb6/jme3-plugins-3.6.1-stable.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-jbullet/3.6.1-stable/a9a96ba4c39383ab7e8bef514577f37985d926fa/jme3-jbullet-3.6.1-stable.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-effects/3.6.1-stable/6fc15dc69115f205c9beca230b5b490f3995a1c7/jme3-effects-3.6.1-stable.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-terrain/3.6.1-stable/a9bf890743f3c7b804d748ec3f8fb3bd78654887/jme3-terrain-3.6.1-stable.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.jmonkeyengine/jme3-core/3.6.1-stable/8ebbe54ee193cfe301b625769311e41b61d1def4/jme3-core-3.6.1-stable.jar:/Users/encore/Desktop/GameMaking/FS JS/bestestGame/InteractionBasics_v2/build/assets/libs/assets.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.2/757920418805fb90bfebb3d46b1d9e7669fca2eb/lwjgl-glfw-3.3.2.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.2/1251e3cb7e5d6159334cfb9244f789ce992f03b/lwjgl-glfw-3.3.2-natives-windows.jar:/Users/encore/.gradle/caches/modules-2/files-2.1/org.lwjgl/lwjgl-glfw/3.3.2/17e1f9ec031ef72c
+Launcher Type: SUN_STANDARD
+
+[Global flags]
+     intx CICompilerCount                          = 4                                         {product} {ergonomic}
+     uint ConcGCThreads                            = 3                                         {product} {ergonomic}
+     uint G1ConcRefinementThreads                  = 10                                        {product} {ergonomic}
+   size_t G1HeapRegionSize                         = 16777216                                  {product} {ergonomic}
+    uintx GCDrainStackTargetSize                   = 64                                        {product} {ergonomic}
+   size_t InitialHeapSize                          = 1610612736                                {product} {ergonomic}
+   size_t MarkStackSize                            = 4194304                                   {product} {ergonomic}
+   size_t MaxHeapSize                              = 25769803776                               {product} {ergonomic}
+   size_t MaxNewSize                               = 15451815936                               {product} {ergonomic}
+   size_t MinHeapDeltaBytes                        = 16777216                                  {product} {ergonomic}
+   size_t MinHeapSize                              = 16777216                                  {product} {ergonomic}
+    uintx NonNMethodCodeHeapSize                   = 5839372                                {pd product} {ergonomic}
+    uintx NonProfiledCodeHeapSize                  = 122909434                              {pd product} {ergonomic}
+    uintx ProfiledCodeHeapSize                     = 122909434                              {pd product} {ergonomic}
+    uintx ReservedCodeCacheSize                    = 251658240                              {pd product} {ergonomic}
+     bool SegmentedCodeCache                       = true                                      {product} {ergonomic}
+   size_t SoftMaxHeapSize                          = 25769803776                            {manageable} {ergonomic}
+     bool UseCompressedClassPointers               = true                           {product lp64_product} {ergonomic}
+     bool UseCompressedOops                        = true                           {product lp64_product} {ergonomic}
+     bool UseG1GC                                  = true                                      {product} {ergonomic}
+     bool UseNUMA                                  = false                                     {product} {ergonomic}
+     bool UseNUMAInterleaving                      = false                                     {product} {ergonomic}
+
+Logging:
+Log output configuration:
+ #0: stdout all=warning uptime,level,tags
+ #1: stderr all=off uptime,level,tags
+
+Environment Variables:
+JAVA_HOME=/Applications/jmonkeyplatform.app/Contents/Resources/jmonkeyplatform/jdk
+PATH=/usr/bin:/bin:/usr/sbin:/sbin
+SHELL=/bin/zsh
+LC_CTYPE=UTF-8
+TMPDIR=/var/folders/j6/bk8qnfsj2mnbw8dcjyytn8tw0000gn/T/
+
+Active Locale:
+LC_ALL=C/UTF-8/C/C/C/C
+LC_COLLATE=C
+LC_CTYPE=UTF-8
+LC_MESSAGES=C
+LC_MONETARY=C
+LC_NUMERIC=C
+LC_TIME=C
+
+Signal Handlers:
+   SIGSEGV: crash_handler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+    SIGBUS: crash_handler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+    SIGFPE: crash_handler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+   SIGPIPE: javaSignalHandler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGXFSZ: javaSignalHandler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGILL: crash_handler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+   SIGUSR2: SR_handler in libjvm.dylib, mask=00100000000000000000000000000000, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGHUP: UserHandler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+    SIGINT: SIG_IGN, mask=11111111011111110111111111111111, flags=none, blocked
+   SIGTERM: UserHandler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGQUIT: UserHandler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, blocked
+   SIGTRAP: crash_handler in libjvm.dylib, mask=11100110100111111111111111111111, flags=SA_RESTART|SA_SIGINFO, unblocked
+
+
+Periodic native trim disabled
+
+
+---------------  S Y S T E M  ---------------
+
+OS:
+uname: Darwin 22.6.0 Darwin Kernel Version 22.6.0: Mon Apr 22 20:51:27 PDT 2024; root:xnu-8796.141.3.705.2~1/RELEASE_ARM64_T6020 x86_64
+OS uptime: 13 days 21:18 hours
+rlimit (soft/hard): STACK 8176k/65520k , CORE 0k/infinity , NPROC 10666/16000 , NOFILE 10240/infinity , AS infinity/infinity , CPU infinity/infinity , DATA infinity/infinity , FSIZE infinity/infinity , MEMLOCK infinity/infinity , RSS infinity/infinity
+load average: 4.72 2.90 2.54
+
+CPU: (EMULATED) total 12 (initial active 12) (1 cores per cpu, 1 threads per core) family 6 model 44 stepping 0 microcode 0x0, cx8, cmov, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, tsc, tscinvbit, aes, clmul, clflush
+machdep.cpu.brand_string:Apple M2 Max
+hw.cpufrequency:2400000000
+hw.cpufrequency_min:2400000000
+hw.cpufrequency_max:2400000000
+hw.cachelinesize:64
+hw.l1icachesize:131072
+hw.l1dcachesize:65536
+hw.l2cachesize:4194304
+
+Memory: 4k page, physical 100663296k(511360k free), swap 0k(0k free)
+
+vm_info: OpenJDK 64-Bit Server VM (17.0.9+9) for bsd-amd64 JRE (17.0.9+9), built on Oct 18 2023 08:05:15 by "admin" with clang Apple LLVM 12.0.0 (clang-1200.0.32.29)
+
+END.

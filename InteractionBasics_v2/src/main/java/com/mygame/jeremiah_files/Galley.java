@@ -44,6 +44,7 @@ public class Galley {
         Material tileMat = new Material(assetManager,
         "Common/MatDefs/Misc/Unshaded.j3md");
         tileMat.setColor("Color", ColorRGBA.Brown);
+        tileMat.setTexture("ColorMap", assetManager.loadTexture("Textures/Wood/AT_Wood_01_BUMP.jpg"));
         self.setMaterial(tileMat);
         self.center();
         selfNode.attachChild(self);
@@ -51,7 +52,7 @@ public class Galley {
         makeSlots();
         
         selfNode.center();
-        selfNode.move((-.25f + ((index % 3)) * .25f), .43f, (.3f + ((index / 3) * .5f))); 
+        selfNode.move((-.2f + ((index % 3)) * .2f), .43f, (.2f + ((index / 3) * .6f))); 
         selfNode.scale(.25f);
         parent.getSelfNode().attachChild(selfNode);
     }
@@ -148,12 +149,11 @@ public class Galley {
         return toReturn;
     }
     
-    //Removes all currently played cards from the galley
+    //Removes all currently played cards from thex galley
     public void clear() {
         for (int i = 0; i < slots.size(); i++) {
             if (slots.get(i).getFilled()) {// There is a card
-                slots.get(i).getCard().getSelfNode().removeFromParent();//Remove it from scene
-                slots.get(i).getCard().setParent(null);//Update object
+                parent.discard((index < 3), slots.get(i).getCard());
             }
             //Empty the slots
             slots.get(i).setFilled(false);
@@ -165,7 +165,14 @@ public class Galley {
     }
     
     public void setSunk(boolean sunk) {
-        this.sunk = sunk;
+            this.sunk = sunk;
+    }
+    
+    public void reset() {
+        selfNode.center();
+        selfNode.move((-.2f + ((index % 3)) * .2f), .43f, (.2f + ((index / 3) * .6f))); 
+        selfNode.scale(.25f);
+        parent.getSelfNode().attachChild(selfNode);
     }
     
 }

@@ -148,4 +148,8 @@ public class PlayerManager {
             interactionManager.update(tpf);
         }
     }
+    
+    public void cleanup() {
+        playerNode.removeControl(player);
+    }
 }

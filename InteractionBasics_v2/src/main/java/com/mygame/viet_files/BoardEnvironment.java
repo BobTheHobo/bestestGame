@@ -52,7 +52,7 @@ public class BoardEnvironment {
 		Geometry playMat = (Geometry) rootNode.getChild("PlayMat");
 
 		// Make ocean and attach it to the mesh
-		this.makeBoardOcean(playMat);
+		//this.makeBoardOcean(playMat);
 	}
 
 	public Node getNode() {

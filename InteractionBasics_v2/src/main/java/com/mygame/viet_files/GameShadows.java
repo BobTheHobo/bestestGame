@@ -359,4 +359,8 @@ public class GameShadows {
     public FilterPostProcessor getFPP() {
 	    return fpp;
     }
+    
+    public void reset() {
+        fpp.removeAllFilters();
+    }
 }

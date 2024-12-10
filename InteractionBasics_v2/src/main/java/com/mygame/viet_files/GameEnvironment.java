@@ -98,4 +98,8 @@ public class GameEnvironment {
     public void setFogDensity(float num) {
 	    fog.setFogDensity(num);
     }
+    
+    public void reset() {
+        fpp.removeAllFilters();
+    }
 }
