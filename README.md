@@ -261,6 +261,7 @@ These effects are not implemented and the shadow and ambient occlusion effects a
 
 # Demo
 A recorded demo of our game.
+[![Watch the video](https://raw.githubusercontent.com/BobTheHobo/bestestGame/merge/thumbnail.png)](https://raw.githubusercontent.com/BobTheHobo/bestestGame/merge/MutinyVideoDemo.mp4)
 
 # Download
 Download the game here.
