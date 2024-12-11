@@ -87,7 +87,7 @@ public class GameEnvironment {
 	    fpp.addFilter(fog);
 
 	    setFogDistance(70);
-	    setFogDensity(1);
+	    setFogDensity(1.1f);
     }
 
     public void setFogDistance(float num) {

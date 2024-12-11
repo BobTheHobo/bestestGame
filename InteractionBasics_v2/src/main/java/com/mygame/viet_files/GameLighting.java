@@ -42,7 +42,7 @@ public class GameLighting {
 	// An SL that doesn't cast any light, needed for shadow renderer/filter to work properly 
 	insertSL(rootNode, new Vector3f(0.0f, 5f, 0f), new Vector3f(0f, 1f, 0f));
 	insertMoonlight();
-	insertAL(40f);
+	insertAL(100f);
     }
 
     public void insertLightProbe(Application app, AppStateManager stateManager) {
@@ -84,7 +84,7 @@ public class GameLighting {
     public void insertMoonlight() {
 	DirectionalLight moonlight = new DirectionalLight();
 	// Soft bluish color for moonlight
-	moonlight.setColor(fromRGBA255(6,13,35,255).mult(0.7f));  
+	moonlight.setColor(fromRGBA255(6,13,35,255).mult(1f));  
 
 	// Direction for long shadows
 	moonlight.setDirection(new Vector3f(-0.5f, -1.0f, -0.5f).normalizeLocal());  

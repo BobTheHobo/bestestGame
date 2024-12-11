@@ -156,7 +156,7 @@ public final class TransitionManager {
 
             gui.enqueueDialogue("", 2);
 
-            gui.enqueueDialogue("Let's play a game", 5);
+            gui.enqueueDialogue("Let's play a game", 4);
             
         }, 7);
         

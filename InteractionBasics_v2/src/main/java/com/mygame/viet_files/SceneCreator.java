@@ -93,8 +93,8 @@ public class SceneCreator extends AbstractAppState {
 	// room_node.attachChild(room_model);
 	
 	// Ship hull (with roof)
-	Spatial room_model = insertRoom();
-        //Spatial room_model = insertRoom2();
+	//Spatial room_model = insertRoom();
+        Spatial room_model = insertRoom2();
 	room_node.attachChild(room_model);
 
 	// Main game table
@@ -224,7 +224,14 @@ public class SceneCreator extends AbstractAppState {
     }
     
     private Spatial insertRoom2() {
-        Spatial room_model = assetManager.loadModel("Models/thingy1/thingy1.j3o");
+        Spatial room_model = assetManager.loadModel("Models/mdl_room_main_v5/mdl_room_main_v5.j3o");
+
+	// Add collisions
+	PhysicsHelper.addPhysics(room_model, false, false, bulletAppState);
+
+	// Add shadows
+	shadows.attachShadowCastAndReceive(room_model);
+
 	return room_model;
     }
 
@@ -342,7 +349,7 @@ public class SceneCreator extends AbstractAppState {
 	// Pointlight from candle
 	PointLight candle_light = new PointLight();
 	candle_light.setColor(ColorRGBA.Orange.mult(2f));
-	candle_light.setRadius(4f);
+	candle_light.setRadius(7f);
 	shadows.attachPointLight(candle_light); // Allow this pointlight to cast shadows
 	rootNode.addLight(candle_light);
 
