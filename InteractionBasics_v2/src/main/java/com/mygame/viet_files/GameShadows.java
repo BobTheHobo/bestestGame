@@ -142,6 +142,7 @@ public class GameShadows {
         FogFilter fogFilter = fpp.getFilter(FogFilter.class);
         fpp.removeFilter(fogFilter);
         fpp.addFilter(fogFilter);
+        
     }
 
     // Handlers for directional light shadows

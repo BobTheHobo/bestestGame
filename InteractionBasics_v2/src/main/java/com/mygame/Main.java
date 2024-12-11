@@ -6,7 +6,7 @@ import com.jme3.input.controls.ActionListener;
 import com.jme3.input.controls.KeyTrigger;
 import com.jme3.input.controls.Trigger;
 import com.jme3.system.AppSettings;
-import com.mygame.jeremiah_files.CardGameState;
+import com.mygame.viet_files.CardGameState;
 import com.mygame.viet_files.SceneAppState;
 
 /*
@@ -41,49 +41,12 @@ public class Main extends SimpleApplication {
 
     @Override
     public void simpleInitApp() {
-       	enableSceneSwitching(false); 
-        inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
-        
-        inputManager.addListener(actionListener, MAPPING_SCENE);
+        // Attach just the merged scene
+        sceneState = new SceneAppState();
+        stateManager.attach(sceneState);
     }
     
     @Override
     public void simpleUpdate(float tpf) {
-    }
-    
-    private ActionListener actionListener = new ActionListener() {
-        @Override
-        public void onAction(String name, boolean isPressed, float tpf)
-        { 
-                if (!isPressed && name.equals(MAPPING_SCENE) && !lockout) {
-			    System.out.println("Next scene 1");
-                            app.getRootNode().detachAllChildren();
-                            app.getGuiNode().detachAllChildren();
-			    stateManager.detach(sceneState);
-                            inputManager.clearRawInputListeners();
-			    sceneState = new SceneAppState();
-			    stateManager.attach(sceneState);
-                            
-		}
-    	}
-    };
-
-    private void enableSceneSwitching(boolean enabled) {
-	    if (enabled) {
-		    inputManager.addMapping(MAPPING_SCENE, TRIGGER_P);
-		    inputManager.addListener(actionListener, MAPPING_SCENE);
-		    
-		    // Attach the InteractiveDemoAppState
-		    cardAppState = new CardGameState();
-		    stateManager.attach(cardAppState);
-		    
-		    // Attach the merged scene
-		    sceneState = new SceneAppState();
-		    stateManager.attach(sceneState);
-	    } else {
-		    // Attach just the merged scene
-		    sceneState = new SceneAppState();
-		    stateManager.attach(sceneState);
-	    }
     }
 }

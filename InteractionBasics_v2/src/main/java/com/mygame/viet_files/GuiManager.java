@@ -157,9 +157,20 @@ public class GuiManager {
         if(timer.getTimeInSeconds() > endTime && inProgress) {
             inProgress = false;
             dialogue.setText("");
-            dialogueNode.removeFromParent();
+            try {
+                dialogueNode.removeFromParent();
+            } catch (Exception ex) {}
             System.out.println("Dialogue finished, queue empty: " + diagQ.isEmpty() + " inProgress: " + inProgress);
         }
+    }
+    
+    public void clearQueue() {
+        diagQ.clear();
+        inProgress = false;
+        dialogue.setText("");
+        try {
+            dialogueNode.removeFromParent();
+        } catch (Exception ex) {}
     }
 
 }

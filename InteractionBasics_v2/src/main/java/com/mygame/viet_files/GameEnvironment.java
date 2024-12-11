@@ -86,7 +86,7 @@ public class GameEnvironment {
 	    // Add the FogFilter to the FilterPostProcessor
 	    fpp.addFilter(fog);
 
-	    setFogDistance(100);
+	    setFogDistance(70);
 	    setFogDensity(1);
     }
 

@@ -29,7 +29,7 @@ public class Pirate {
 	public Pirate(String name, Vector3f position, AssetManager assetManager, BulletAppState bulletAppState, GameShadows shadows) {
 		
 		// Invisible node everything is attached to
-		pirate_node = new Node();
+		pirate_node = new Node(name);
 		
 		// Load actual model and attach it to node
 		Spatial pirate = assetManager.loadModel("Models/pirate/pirate.j3o");

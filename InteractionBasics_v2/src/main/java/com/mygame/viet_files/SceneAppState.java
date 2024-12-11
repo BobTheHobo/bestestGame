@@ -129,7 +129,7 @@ public class SceneAppState extends AbstractAppState {
 	environment = new GameEnvironment(rootNode, assetManager, viewPort, shadows);
 	particles = new GameParticles(rootNode, assetManager);
 	boardEnvironment = new BoardEnvironment(rootNode, assetManager, viewPort);
-        transitions = new TransitionManager(assetManager, shadows, lighting, guiManager, crosshairManager, sfxManager, rootNode);
+        transitions = new TransitionManager(assetManager, shadows, lighting, guiManager, crosshairManager, sfxManager, rootNode, interactionManager);
 
 	shadows.setupShadowHandlers();
 	lighting.setupLighting();
@@ -173,7 +173,7 @@ public class SceneAppState extends AbstractAppState {
         
         killPlane = new KillPlane(this.rootNode, this.assetManager, this.playerManager, this.sfxManager);
 
-        state = new CardGameState(playerManager, sceneCreator.getMainTable(), boardEnvironment);
+        state = new CardGameState(playerManager, sceneCreator.getMainTable(), boardEnvironment, transitions);
         stateManager.attach(state);
     }
     
