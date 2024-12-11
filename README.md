@@ -63,18 +63,6 @@ The card game scene is implemented in an appState that creates and moves a table
 <a href="https://imgur.com/TuBu68c"><img src="https://i.imgur.com/TuBu68c.png" title="source: imgur.com" width="250" /></a>
 <a href="https://imgur.com/PSoMY0Y"><img src="https://i.imgur.com/PSoMY0Y.png" title="source: imgur.com" width="250" /></a>
 
-### Set Modeling
-### Basic Card Game Function
-The card game scene is implemented in an appState that creates and moves a table spatial as well as many placeholder boxes to create a playmat, grouped card slots(galleys), individual card slots, and cards.  The card spatials are translated through space to indicate selection and place the selected card on a card slots.  This is handled using triggers, mappings, and an ActionListener.  The ActionListener is also used to implement alternate means of looking around and at the game board as the mouse cursor is used to select and play cards while seated.  Game logic including drawing cards, cards affecting the board state, the opponent drawing and playing cards, progression of turns is handled in a set of java files(Board, Galley, Slot, Card).  These files modify the 3d space by moving cards or changing the text on cards to represent effects while maintaining an internal representation of the game state.
-
-<a href="https://imgur.com/n3Il7YC"><img src="https://i.imgur.com/n3Il7YC.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/NjMkFVE"><img src="https://i.imgur.com/NjMkFVE.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/rRM0AeK"><img src="https://i.imgur.com/rRM0AeK.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/Veo45n2"><img src="https://i.imgur.com/Veo45n2.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/304klXU"><img src="https://i.imgur.com/304klXU.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/TuBu68c"><img src="https://i.imgur.com/TuBu68c.png" title="source: imgur.com" width="250" /></a>
-<a href="https://imgur.com/PSoMY0Y"><img src="https://i.imgur.com/PSoMY0Y.png" title="source: imgur.com" width="250" /></a>
-
 ### First Person Movement and World Interaction
 Movement and free look are controlled through WASD and cursor tracking, respectively, and are implemented through a modified version of JME's built in flyCam. There is also a small crosshair that is on the GUINode.
 <blockquote class="imgur-embed-pub" lang="en" data-id="a/pAj2WXc"  ><a href="//imgur.com/a/pAj2WXc">Movement/Free Look</a></blockquote>
@@ -107,6 +95,188 @@ Right now, the candle acts as the sole lighting for the scene, but sets the atmo
 ### Running Instructions
 Transition from the Card Game "scene" to the interaction demo "scene" using 'S' while sitting.
 Transition from the interaction demo "scene" to the model demo "scene" using 'P'.
+
+## Second Deliverable 
+Our work for this deliverable consists of three main components:
+- Additional Card Game Function 
+- Basic Puzzle Functionality
+- Merging of physics and collision with models
+
+### Card Game Additions
+The card game has two new card types, one that effects the enemy board and one that draws cards.  Enemy cards are now visible across the table in the opponent's "hand", and both player and enemy cards visually move to their slots instead of teleporting.  Additionally, whenever the player triggers a next turn event, after galleys "sink" each other, the galleys visibly slide down to allow further turns to be played out.  The game is able to tell when one side has won and prints a victory or defeat message to the system.
+
+<a href="https://imgur.com/cieKkHJ"><img src="https://i.imgur.com/cieKkHJ.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/OOvOHqN"><img src="https://i.imgur.com/OOvOHqN.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/jKNl9lh"><img src="https://i.imgur.com/jKNl9lh.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/fx8bFTf"><img src="https://i.imgur.com/fx8bFTf.png" title="source: imgur.com" width="500" /></a>
+<a href="https://imgur.com/hkc6nKj"><img src="https://i.imgur.com/hkc6nKj.png" title="source: imgur.com" width="500" /></a>
+
+### Puzzle Fuctionality
+The ability to utilize objects within the scene to solve puzzles is implemented through a proximity system.  This system shows a message on the GUI node alerting the user that they are unable to progress with an aspect of the puzzle until the correct item is brought close enough to the puzzle aspect to allow interaction. 
+
+<img src="https://github.com/user-attachments/assets/8ccf8220-ddc6-476e-be03-5bc4115e3df5" alt="Too dark to read note" width="500"/>
+
+Currently our implementation incorporates a letter that is unreadable until you bring a candle close enough. The letter's contents are required to progress the game since it contains a secret code required to solve the next "puzzle". The note object measures distance to both the player and the candle every frame, so that 1. when the player is close but a candle isn't, the GUI text says the note is too dark to read and is uninteractable and 2. when the player and candle are both close, the GUI text says "Press 'F' to read". Right now 
+
+<img src="https://github.com/user-attachments/assets/e2bf5d21-e38d-4236-9420-d2e08db61bd4" alt="Bringing our candle close to the note" width="500"/>
+
+If 'F' is pressed when prompted, a GUI image of the note is opened and can be closed with another shown key bind on the screen.
+
+<img src="https://github.com/user-attachments/assets/0522fb60-fbf6-4524-b3f4-a2cca15368f5" alt="Opening the note" width="500"/>
+
+### Physics Merging and Misc.
+The ability to move around and interact with objects with the player, scene, and objects having collision shown through placeholders in the previous submission has been merged with the scene containing relevant models. The player is now able to move around and collide with the various objects in the hold. Although the puzzle functionality is not implemented beyond what is mentioned in the previous section, we plan to make the clock interactable to reveal a compartment. However we have had a lot of difficulty importing animations so it currently doesn't function. Below is an image of holding and carrying the candle.
+
+<img src="https://github.com/user-attachments/assets/3c0fd838-d49d-4e6e-9ec6-49c108a9cc29" alt="Picking up the candle" width="500"/>
+
+### Textures, Lighting, Waves, and Shadows
+Additionally, a wood texture has been applied to the hull. The textures are sourced from here: http://www.architwister.com/portfolio/wood-texture-01/
+
+However, we are having issues scaling the textures right now. Waves have also been added that reflect the moonlight, as seen below:
+
+<img src="https://github.com/user-attachments/assets/814ef6ff-6250-458d-b830-3eb00c008939" alt="Bringing our candle close to the note" width="500"/>
+
+We have also begun experimentation with shadow settings using the shadow renderer, shadow filter, ambient occlusion, and other settings. We also made a testing UI that displays the current settings used and keybinds to change the settings:
+
+No shadows:
+<img src="https://github.com/user-attachments/assets/d23d11cb-59e6-49a2-a550-0110889cccde" alt="Shadows using the filtering method" width="300"/>
+Shadows using filtering method:
+<img src="https://github.com/user-attachments/assets/4c5a354e-c1ca-4c0b-8cec-8be114bf7e38" alt="Shadows using the filtering method" width="300"/>
+
+Shadow Testing UI:
+
+<img src="https://github.com/user-attachments/assets/efa437e6-ffd2-4582-9cfc-d54bdd64bfd8" alt="Shadows using the filtering method" width="300"/>
+
+
+## Third Deliverable 
+Our work for this deliverable consisted of:
+- Fully functional card and puzzle aspects
+- Sound
+- Visual effects
+
+### Card Game Additions
+Sources:
+  - Coin: Skull Coin by Quaternius (https://poly.pizza/m/lx1A0s4aoH)
+  - Audio: https://www.findsounds.com/ISAPI/search.dll
+  - Textures: https://texturelabs.org/
+
+The appearances of the cards, playing mat, and galleys have been updated to utize cardstock, cloth, and wood.
+
+<a href="https://imgur.com/scZzmIZ"><img src="https://i.imgur.com/scZzmIZ.png" title="source: imgur.com" width="500" /></a>
+
+The rules have been updated, and a fully playable game loop is possible with the following rules:
+  - You start seated looking across from your opponent and at your hand.
+  - You may press W and S to look at the board or back at your hand, or if you press S while looking at your hand you stand from the table.  Pressing E while walking around will allow you to sit back down.  Additionally, pressing A or D while looking at your hand allows you to turn your head.
+  - At the start of each game, you and your opponent each draw 7 cards.
+  - While looking at your hand, you may left click a card to select it.
+  - While a card is selected, clicking a slot on the near side of the table plays the card on that slot.  Each of these slots belongs to one of 3 near, galleys.  Your opponent then immediately plays a card from their hand into one of the far galleys.
+  - Cards have power and some have effects that trigger on play.  You may right click a card in your hand, on the table, or the top of a discard pile to read its effects.
+  - There is a skull coin in the middle of the board.  If you have played at least one card, you may left click the coin to advance the round.
+  - When the round advances, each galley sums all of the power of the cards in its slots, and if it exceeds the opposite galley’s power, the opposite galley is sunk.  The board updates itself to allow further play.
+  - If both players still have at least one galley, each player draws 2 cards and play continues.  If one player is out of galleys, then that player loses.
+
+<a href="https://imgur.com/asMQ6pT"><img src="https://i.imgur.com/asMQ6pT.png" title="source: imgur.com" width="500" /></a>
+
+<a href="https://imgur.com/pNc5Q9j"><img src="https://i.imgur.com/pNc5Q9j.png" title="source: imgur.com" width="500" /></a>
+
+<a href="https://imgur.com/uroZvZh"><img src="https://i.imgur.com/uroZvZh.png" title="source: imgur.com" width="500" /></a>
+
+Additionally, when you either win against the first opponent or lose to any apponent, a 'dialogue' system is implemented.
+
+<a href="https://imgur.com/k6l0hCw"><img src="https://i.imgur.com/k6l0hCw.png" title="source: imgur.com" width="500" /></a>
+
+The card game is also implemented with the puzzle aspects, allowing you to win the game once you play the kraken card obtained through the puzzles against the second opponent.
+
+<a href="https://imgur.com/pT0VcBl"><img src="https://i.imgur.com/pT0VcBl.png" title="source: imgur.com" width="500" /></a>
+
+
+### Puzzle Additions
+The player can now interact with the clock at any time.
+
+<a href="https://imgur.com/kVDZIV2"><img src="https://i.imgur.com/kVDZIV2.png" title="source: imgur.com" width="500" /></a>
+
+After getting the secret code by using the candle to inspect the note, the player can go interact with the clock to initiate a prompt. By using prompted the 'Z' and 'X' keys, they can set the clock to the time specified on the aforementioned note. As the confirmation mechanism, staying on the correct time for 3 seconds will dispense the chest key.
+
+<a href="https://imgur.com/6FL6Ujw"><img src="https://i.imgur.com/6FL6Ujw.png" title="source: imgur.com" width="500" /></a>
+
+The chest is interactable in this deliverable but has the prompt "locked" when the player is close to it. If the player approaches with the chest key from the clock however, pressing 'F' would unlock the chest and grant the player the "Kraken" card. This card has 99 power and is crucial to winning against the otherwise-impossible second opponent, and eventually trigger the win condition.
+
+<a href="https://imgur.com/QW8PBZ7"><img src="https://i.imgur.com/QW8PBZ7.png" title="source: imgur.com" width="500" /></a>
+
+When the "Kraken" card is played against the second opponent, the screen (and player) will start shaking randomly with increasing intensity for 5 seconds, until the win screen appears with a prompt to exit the game.
+
+<a href="https://imgur.com/eKJiuYr"><img src="https://i.imgur.com/eKJiuYr.png" title="source: imgur.com" width="500" /></a>
+
+### Sound
+For this submission, we created dedicated helper classes SFXManager and MusicManager to streamline audio-playing processes. This allows us to easily do both positional and non-positional audio. 
+
+Some examples of non-positional audio we implemented:
+- Ship creaking ambience. Fades out when the player wins.
+- Ambient low drone. Fades out when the player wins.
+- Ship sinking/rumble sounds when the player wins and the camera starts shaking. Fades out only after the win screen appears.
+- Card noises (Playing, shuffling)
+- Dialogue 'voice'
+- Card game progression triggers (sinking of galleys, triggering of fight sequence)
+
+Some examples of positional audio we implemented:
+- A dynamic footstep system. Plays at parameterized intervals controlled in PlayerManager. Only plays when the player is walking.
+- Treasure chest opening sound for when the key is used on the chest.
+- UI sound for turning the clock hands in the clock puzzle.
+- Key dropping on wood sound for when the key is dispensed after completing the clock puzzle.
+- Note read sound for when the player uses the candle to read the note.
+
+### Effects
+Fully implemented within the game, we have water, shadows, ambient occlusion, screen shake.  Screen shake is not depicted below, but occurs during the sequence triggered by winning the game.
+<a href="https://imgur.com/CdX5BIo"><img src="https://i.imgur.com/CdX5BIo.png" title="source: imgur.com" width="500" /></a>
+
+Also mostly developed, but not integrated into the current submission, we have particle effects(fire) and a skybox.
+<a href="https://imgur.com/UXDr1zO"><img src="https://i.imgur.com/UXDr1zO.png" title="source: imgur.com" width="500" /></a>
+
+<a href="https://imgur.com/mWzWQqw"><img src="https://i.imgur.com/mWzWQqw.png" title="source: imgur.com" width="500" /></a>
+
+These effects are not implemented and the shadow and ambient occlusion effects are in a toggleable testing state as unexpected difficulties prevented testing to resolve bugs and performance issues. These difficulties are also the reason why we do not currently have:
+- a chest key model
+- the opponent's model/animations
+- clock opening animation trigger
+
+
+# Member Contributions
+
+## Shawn
+- Puzzle logic
+- Walking system
+- Object and environment collision
+- Puzzle, and ambient environment sounds
+
+## Jeremiah
+- Puzzle logic
+- Dialogue and game triggers
+- Communication between puzzle and card game
+- Card game and dialogue sounds
+
+## Viet
+- Environment modeling
+- Model sourcing for puzzles
+- Shadows and other vfx
+
+# Demo
+A recorded demo of our game.
+
+# Download
+Download the game here.
+
+# Future Work
+This has only been a vertical slice of our vision for the game. Here are some planned features/changes we're looking to work on:
+- Migration to a more modern game engine, like Unity or Godot, for better feature support
+- Better puzzle replayability in the form of randomized puzzle solutions, so repeat players have a different experience for each playthrough
+- More puzzle variety, leading to a longer quest for the "true" ending overall
+- Have a main menu/title screen
+- Add a tutorial to introduce players to the card game mechanics
+- Add more stages in the form of more than one enemy that you face in the card game
+- More cards and a better enemy AI to improve card game enjoyment
+- Adding additional features through 'event deck' and game items
+- More story aspects through dialogue
+
 
 
   
