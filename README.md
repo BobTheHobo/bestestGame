@@ -244,9 +244,9 @@ These effects are not implemented and the shadow and ambient occlusion effects a
 
 ## Shawn
 - Puzzle logic
-- Walking system
-- Object and environment collision
-- Puzzle, and ambient environment sounds
+- Movement and look systems
+- Object interaction and environment collision
+- Puzzle and ambient environment sounds
 
 ## Jeremiah
 - Puzzle logic
@@ -264,7 +264,7 @@ A recorded demo of our game.
 [![Watch the video](https://raw.githubusercontent.com/BobTheHobo/bestestGame/merge/thumbnail.png)](https://raw.githubusercontent.com/BobTheHobo/bestestGame/merge/MutinyVideoDemo.mp4)
 
 # Download
-Download the game here.
+Download the game [here](https://livejohnshopkins-my.sharepoint.com/:f:/g/personal/sguo37_jh_edu/EiOjc5th0jdMutp0d8JDmYIBvaaLYh3GJI4BoElc2JoRKg?e=Tf6jgC).
 
 # Future Work
 This has only been a vertical slice of our vision for the game. Here are some planned features/changes we're looking to work on:
