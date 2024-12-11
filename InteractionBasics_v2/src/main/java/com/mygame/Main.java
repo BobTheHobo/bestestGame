@@ -48,5 +48,19 @@ public class Main extends SimpleApplication {
     
     @Override
     public void simpleUpdate(float tpf) {
+        /*
+        if (sceneState.lost()) {
+            app.enqueue(() -> {
+                app.getRootNode().detachAllChildren();
+                            app.getGuiNode().detachAllChildren();
+			    stateManager.detach(sceneState);
+                            inputManager.clearRawInputListeners();
+			    sceneState = new SceneAppState();
+			    stateManager.attach(sceneState);
+            
+            });
+             
+        
+        */
     }
 }

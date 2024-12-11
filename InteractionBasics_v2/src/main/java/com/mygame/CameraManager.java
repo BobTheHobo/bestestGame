@@ -106,4 +106,21 @@ public class CameraManager {
         clampedRotation.fromAngles(currentPitch * FastMath.DEG_TO_RAD, angles[1], angles[2]); // Keep other axes as-is
         app.getCamera().setRotation(clampedRotation);
     }
+    
+    public void resetCamera() {
+        // Reapply all camera settings
+        setupCamera();
+
+        // Ensure walking mode is enabled
+        toggleCameraWalking(true);
+
+        // Explicitly re-enable FlyByCamera
+        flyCam.setEnabled(true);
+        flyCam.setDragToRotate(false);
+
+        System.out.println("Camera reset and reinitialized.");
+    }
+
+
+
 }

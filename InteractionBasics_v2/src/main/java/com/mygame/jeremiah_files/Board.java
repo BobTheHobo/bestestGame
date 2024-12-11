@@ -168,7 +168,7 @@ public class Board {
         
         if (hasKraken && opponent == 2 && player) {
             Card card = new Card(assetManager, "Kraken", cards++);
-            Vector3f middle = player ? new Vector3f(0, 0.5f, 1.4f) : new Vector3f(0, 0.5f, -1.4f);//Where the center card is
+            Vector3f middle = player ? new Vector3f(0, 0.5f, 1.4f) : new Vector3f(0, 0.5f, -0.8f);//Where the center card is
             Quaternion angle = new Quaternion();//So we can read the card sitting down
             if (player) {
                 angle.fromAngleAxis(FastMath.HALF_PI, new Vector3f(1,0,0));
@@ -307,7 +307,7 @@ public class Board {
     //Will be added later to attatch enemy cards to 3d scene so you know how many they have
     public void showEnemyHand() {
         int count = enemyHand.size();
-        Vector3f middle = new Vector3f(0, 0.5f, -1.4f);//Where the center card is
+        Vector3f middle = new Vector3f(0, 0.5f, -0.8f);//Where the center card is
         Quaternion angle = new Quaternion();//So we can read the card sitting down
         angle.fromAngleAxis(-FastMath.HALF_PI, new Vector3f(1,0,0));
         for (int i = 0; i < count; i++) {//Get each card
