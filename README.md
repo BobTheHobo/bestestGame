@@ -259,6 +259,24 @@ These effects are not implemented and the shadow and ambient occlusion effects a
 - Model sourcing for puzzles
 - Shadows and other vfx
 
+# Demo
+A recorded demo of our game.
+
+# Download
+Download the game here.
+
+# Future Work
+This has only been a vertical slice of our vision for the game. Here are some planned features/changes we're looking to work on:
+- Migration to a more modern game engine, like Unity or Godot, for better feature support
+- Better puzzle replayability in the form of randomized puzzle solutions, so repeat players have a different experience for each playthrough
+- More puzzle variety, leading to a longer quest for the "true" ending overall
+- Have a main menu/title screen
+- Add a tutorial to introduce players to the card game mechanics
+- Add more stages in the form of more than one enemy that you face in the card game
+- More cards and a better enemy AI to improve card game enjoyment
+- Adding additional features through 'event deck' and game items
+- More story aspects through dialogue
+
 
 
   
