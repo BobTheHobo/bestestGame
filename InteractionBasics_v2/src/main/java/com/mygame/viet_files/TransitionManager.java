@@ -102,7 +102,7 @@ public final class TransitionManager {
         fadef = this.shadows.getFadeFilter();
         
         //Remove crosshair
-        crosshairManager.hideCrosshair();
+        //crosshairManager.hideCrosshair();
         
         //Black everything out on game start
         fadef.setDuration(0);
@@ -179,7 +179,7 @@ public final class TransitionManager {
         transitionInProgress = true;
         clearQueues();
                 
-        crosshairManager.hideCrosshair();
+        //crosshairManager.hideCrosshair();
         
         blowout.setVolume(2);
         // blow out candle
@@ -260,7 +260,7 @@ public final class TransitionManager {
         }, 1f);
         
         enqueueRunnable(()->{
-            crosshairManager.showCrosshair();
+            //crosshairManager.showCrosshair();
             transitionInProgress = false;
         }, 0);
     }
