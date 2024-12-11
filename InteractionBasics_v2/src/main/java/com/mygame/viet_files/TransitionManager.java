@@ -171,7 +171,12 @@ public final class TransitionManager {
             shadows.fixFilterOrdering();
             shadows.setFadeLastFilter();
             transitionInProgress = false;
+	    crosshairManager.showCrosshair();
+
+
+
         }, 0);
+
     }
    
     private void transitionIntoCardState() {

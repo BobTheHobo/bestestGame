@@ -113,6 +113,8 @@ public class SceneAppState extends AbstractAppState {
             this.app.getContext().getSettings(),
             this.app.getGuiNode()
         );
+	crosshairManager.hideCrosshair();
+		
 
         // Initialize the interaction manager
         interactionManager = new PlayerInteractionManager(
