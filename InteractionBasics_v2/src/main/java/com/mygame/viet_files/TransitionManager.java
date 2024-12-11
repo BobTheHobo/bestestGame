@@ -257,7 +257,7 @@ public final class TransitionManager {
 
             fadef.setDuration(2);
             fadef.fadeIn();
-        }, 2f);
+        }, 1f);
         
         enqueueRunnable(()->{
             crosshairManager.showCrosshair();

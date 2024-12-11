@@ -72,7 +72,7 @@ public class UIManager {
 	this.guiNode = guiNode;
         this.viewPort = viewPort;
 
-	initUI();
+	//initUI();
     }
 
     public void updateUI() {

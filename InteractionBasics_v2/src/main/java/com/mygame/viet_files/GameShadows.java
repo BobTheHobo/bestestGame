@@ -40,10 +40,10 @@ public class GameShadows {
 
     // The number of shadow maps rendered(more shadow maps = better quality, but slower).
     // Only affects shadow renderers, not filters
-    private int shadowmaps = 3;
+    private int shadowmaps = 4;
 
     // Shadow intensity (1 = black, 0 = invis)
-    private float shadowIntensity = 0.6f;
+    private float shadowIntensity = 0.45f;
 
     // Defines how shadows are filtered
     private EdgeFilteringMode edgeFiltering = EdgeFilteringMode.PCFPOISSON;
