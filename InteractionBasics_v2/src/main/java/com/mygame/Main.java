@@ -31,8 +31,11 @@ public class Main extends SimpleApplication {
         // Application settings
         settings = new AppSettings(true);
         settings.setResolution(1280, 960);
-        settings.setFullscreen(false);
+        settings.setFullscreen(true);
         settings.setTitle("InteractionBasics");
+	    app.setDisplayFps(false);
+
+	    app.setDisplayStatView(false);
 
         app.setSettings(settings);
         app.setShowSettings(false);  // Skip the JMonkeyEngine settings dialog

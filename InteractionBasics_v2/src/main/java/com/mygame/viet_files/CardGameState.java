@@ -181,7 +181,7 @@ public class CardGameState extends AbstractAppState {
                             break;
                         case MAPPING_BACK:
                             if (position == 0 && transitionManager.canTransition()) {//Sitting in chair
-                                //transitionManager.transitionTo(TransitionManager.Transition.TOWALKING);
+                                transitionManager.transitionTo(TransitionManager.Transition.TOWALKING);
                                 flyCam.setEnabled(true);
 				playerManager.setWalkingEnabled(true);
                                 position = -1;
@@ -296,7 +296,7 @@ public class CardGameState extends AbstractAppState {
                         case MAPPING_RESET:
                             
                             if (position == -1 && transitionManager.canTransition()) {// Sits back in chair, currently mapped to 'q'
-                                //transitionManager.transitionTo(TransitionManager.Transition.TOCARD);
+                                transitionManager.transitionTo(TransitionManager.Transition.TOCARD);
                                 cam.setLocation(seatedPos);
                                 cam.setRotation(seatedAng);
                                 flyCam.setEnabled(false);

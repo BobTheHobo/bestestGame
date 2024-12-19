@@ -113,7 +113,7 @@ public class SceneAppState extends AbstractAppState {
             this.app.getContext().getSettings(),
             this.app.getGuiNode()
         );
-	crosshairManager.hideCrosshair();
+	//crosshairManager.hideCrosshair();
 		
 
         // Initialize the interaction manager
@@ -279,6 +279,8 @@ public class SceneAppState extends AbstractAppState {
 
     private void resetScene() {
         System.out.println("Resetting scene...");
+
+	stateManager.detach(state);
 
         // Detach the current app state
         stateManager.detach(this);

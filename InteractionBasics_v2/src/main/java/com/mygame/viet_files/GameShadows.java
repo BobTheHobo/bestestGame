@@ -134,15 +134,18 @@ public class GameShadows {
         //Enables particles and other translucent effects to show through everything
         //except solid objects and gui
 	TranslucentBucketFilter translucentBucketFilter = fpp.getFilter(TranslucentBucketFilter.class);
-	fpp.removeFilter(translucentBucketFilter); // Remove then readd
-	fpp.addFilter(translucentBucketFilter);
+	try {
+		if (translucentBucketFilter == null) {
+			fpp.removeFilter(translucentBucketFilter); // Remove then readd
+			fpp.addFilter(translucentBucketFilter);
+		}
+	} catch(Exception ex) {}
     }
     
     public void setFadeLastFilter() {
-        FogFilter fogFilter = fpp.getFilter(FogFilter.class);
-        fpp.removeFilter(fogFilter);
-        fpp.addFilter(fogFilter);
-        
+        FadeFilter fadeFilter = getFadeFilter();
+        fpp.removeFilter(fadeFilter);
+        fpp.addFilter(fadeFilter);
     }
 
     // Handlers for directional light shadows
